@@ -1,0 +1,26 @@
+{
+  "name": "engineering",
+  "version": "0.1.0",
+  "description": "Curated Matt Pocock-derived engineering and workflow skills packaged for Codex.",
+  "author": {
+    "name": "Danny"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Engineering",
+    "shortDescription": "Curated engineering workflows and compact utility skills for Codex.",
+    "longDescription": "A local Codex plugin bundling the Matt Pocock-derived skills already installed in this environment, including grilling, TDD, diagnosis, planning, triage, architecture, handoff, and a few utility workflows.",
+    "developerName": "Danny",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Stress-test this design before we implement it.",
+      "Debug this systematically and keep the fix reviewable.",
+      "Set up the repo so the engineering workflow skills have the right context."
+    ]
+  }
+}
