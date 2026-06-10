@@ -6,10 +6,9 @@ description: Use when adopting an agent in a new or existing repo, when agents r
 # Setup Codex Development Harness
 
 Create or refresh a repo-local harness so agents start from a durable map
-instead of re-exploring. The harness owns three layers — **state**
-(`docs/work-ledger/`), **index + routing** (`docs/harness/index.md`), and a
-**bootloader block** — and delegates the workflow layer to whatever process
-system the environment has. Never duplicate content, never prescribe workflow.
+instead of re-exploring. Three layers: **state** (`docs/work-ledger/`),
+**index + routing** (`docs/harness/index.md`), **bootloader block**. Workflow
+stays with the environment's process system.
 
 ## Doctrine
 
@@ -20,99 +19,99 @@ system the environment has. Never duplicate content, never prescribe workflow.
 
 ## Mode Selection
 
-- `codex-harness` markers anywhere in repo → **refresh mode**.
-- Harness-shaped files (`docs/harness/`, `docs/work-ledger/`) without markers → **v1 migration** (refresh variant).
+- `codex-harness` markers anywhere → **refresh mode**.
+- Harness-shaped files (`docs/harness/`, `docs/work-ledger/`) without markers → **v1 migration**.
 - Otherwise → **setup mode**.
 
 ## Setup Mode
 
 ### 1. Explore
 
-Four detections (dispatch read-only subagents per area in large repos):
+Four detections (large repos: read-only subagents per area):
 
 - **Structure** — source tree, build/test commands, module and runtime boundaries.
-- **Docs** — classify every existing doc (spec, PRD, ADR, CONTEXT, dev logs,
-  memory-bank-like) as source-of-truth / stale / historical. Staleness test:
-  sample its concrete claims (module names, APIs, flows) against the code.
-- **Environment** — available workflow skills *with their actual namespaces*;
-  issue tracker (`docs/agents/` config or live GitHub issues); bootloaders
-  (AGENTS.md / CLAUDE.md / GEMINI.md — which exist, whether they mirror each
-  other, whether the mirrors have drifted).
-- **History** — `git log` read for milestone-level events (backfill input).
+- **Docs** — classify each doc (spec, PRD, ADR, CONTEXT, dev logs,
+  memory-bank-like) as source-of-truth/stale/historical. Staleness test:
+  sample concrete claims (modules, APIs, flows) against code.
+- **Environment** — workflow skills *with actual namespaces*; issue tracker
+  (`docs/agents/` config or live GitHub issues); bootloaders
+  (AGENTS.md/CLAUDE.md/GEMINI.md): which exist, mirrored, drifted.
+- **History** — `git log` for milestone-level events.
 
 ### 2. Absorb
 
-Classify each coexisting system; never rewrite a foreign system's content:
+Classify coexisting systems; never rewrite a foreign system's content:
 
 | Class | Example | Disposition |
 |---|---|---|
 | Orthogonal | workflow/process skills | compose into index.md Task Routing |
 | Overlapping | old state notes in CLAUDE.md, memory-bank files | truth moves to harness; foreign file gets a one-line pointer — ask before editing any foreign file |
-| Conflicting | a rival state system in active use | list the differences; the user decides which survives |
+| Conflicting | rival state system in active use | list differences; user decides which survives |
 
 ### 3. Propose
 
-Present: detection summary, topology verdict (core, unless extended
-thresholds already met), absorption dispositions, tracker variant
+Present: detection summary, topology verdict (core unless extended thresholds
+met), absorption dispositions, tracker variant
 (see [ledger-conventions.md](ledger-conventions.md)). **Wait for approval
-before writing anything.**
+before writing.**
 
 ### 4. Write
 
 Generate from [core-templates.md](core-templates.md) (plus
-[extended-templates.md](extended-templates.md) only if extended was approved).
-Every file gets the generated header. Backfill `completed.md` from git
-milestones. Tracker present → ref-variant entries.
+[extended-templates.md](extended-templates.md) if approved). Every file gets
+the generated header. Backfill `completed.md` from git milestones. Tracker
+present → ref-variant entries.
 
 ### 5. Bootloaders
 
 The harness block lives in exactly **one** file — default `AGENTS.md`; if only
-other bootloaders exist, ask which should host it; if none exist, ask which to
-create. Every other bootloader gets the one-line pointer. Mirror drift between
-bootloaders: warn in the final report, do not fix.
+others exist, ask which hosts it; if none, ask which to create. Every other
+bootloader gets the one-line pointer. Mirror drift: warn in the report, do
+not fix.
 
 ### 6. Validate
 
-Hard gates — all must pass before reporting done:
+All hard gates must pass before reporting done:
 
 - [ ] every path referenced in block and index exists
 - [ ] exactly one harness block in the repo
-- [ ] routing skill names resolve in this environment, or are written as generic fallbacks
-- [ ] harness docs committed — commit harness paths only, never sweep unrelated dirty files
+- [ ] routing skill names resolve in this environment, or are generic fallbacks
+- [ ] harness docs committed (harness paths only — never sweep unrelated dirty files)
 
-Report: created / refreshed / left for later / warnings (e.g. mirror drift).
+Report: created, refreshed, left for later, warnings.
 
 ## Topology
 
-Two legal forms. Day-to-day agents append content inside existing files; only
-this skill changes topology.
+Two legal forms. Day-to-day agents append inside existing files; only this
+skill changes topology.
 
 - **Core** (every repo starts here): bootloader block + `docs/harness/index.md`
   (all routing inline) + the four ledger files.
-- **Extended** — upgrade only when: `index.md` > ~150 lines, or modules > 10,
-  or ≥ 2 runtime boundaries, or real material exists for an optional track.
-  A split **moves** the section and leaves a one-line pointer. Never copy.
+- **Extended** — upgrade only when: `index.md` >~150 lines, or modules >10,
+  or ≥2 runtime boundaries, or real material exists for an optional track.
+  A split **moves** the section, leaving a one-line pointer — never copy.
 
 ## Refresh Mode
 
-1. **Drift scan** — module-map vs actual tree; active entries vs recent git
-   log (finished but still listed?); `Last verified` overdue (> 90 days);
-   bootloader pointer liveness.
+1. **Drift scan** — module-map vs tree; active entries vs git log (finished
+   but still listed?); `Last verified` overdue (>90 days); bootloader pointer
+   liveness.
 2. **Present drift summary. Wait for approval.**
 3. **Execute** — patch only inside markers; archive roll-off per conventions;
    topology upgrade check; `completed.md` gap-fill from git log.
 
-**v1 migration** (harness files, no markers): same flow; propose consolidating
-all routing into `index.md`, slimming the bootloader block to the core
-template, adding markers, and backfilling history. Anything not clearly
-generated by v1 is user-authored — ask before touching.
+**v1 migration**: same flow; propose consolidating routing into `index.md`,
+slimming the bootloader block to the core template, adding markers,
+re-detecting skill names (v1 harnesses often hardcode dead ones), and
+backfilling history. Anything not clearly generated by v1 is user-authored —
+ask before touching.
 
 ## Edge Rules
 
 | Case | Rule |
 |---|---|
 | Greenfield repo | core; ledger structurally complete but empty; `project-started` entry; no backfill |
-| No git / shallow clone | skip backfill; mine existing docs for history; note the gap in the report |
+| No git/shallow clone | skip backfill; mine existing docs for history; note gap in report |
 | User content in generated files without markers | user-authored; ask before touching |
 | Monorepo | one root harness; module-map sectioned by package; per-package harnesses out of scope |
 | Dirty git state | commit harness paths only |

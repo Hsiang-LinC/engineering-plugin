@@ -3,6 +3,7 @@
 Everything the **core** topology generates: bootloader block, pointer line,
 `docs/harness/index.md`, and the four ledger files. `{...}` braces = fill at
 generation time. Entry formats come from [ledger-conventions.md](ledger-conventions.md).
+`{variant}` substitutes the literal `tracker` or `no-tracker` (see ledger-conventions).
 
 ## Bootloader block (single residence, ~15 lines max)
 
@@ -103,7 +104,7 @@ Newest first. Entry format: see `docs/harness/index.md` § Conventions.
 ## project-started
 - done: {date of first commit, or today for greenfield}
 - summary: project started
-- verified: backfilled from git history
+- verified: {backfilled from git history | greenfield init}
 - follow-ups: none
 ```
 
