@@ -29,7 +29,9 @@ missing field is visibly absent (table columns get silently dropped).
 
 Status, priority, and detail live in the tracker. Never copy them into the
 ledger. Adopting a tracker later: refresh mode demotes existing full entries
-to this variant.
+to this variant. Item with no matching issue yet: keep the full no-tracker
+format for that entry and put filing the issue in `next:` — never invent
+placeholder IDs.
 
 ### `completed.md`
 
