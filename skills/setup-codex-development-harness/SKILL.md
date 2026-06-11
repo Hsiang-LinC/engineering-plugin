@@ -122,8 +122,10 @@ Triggered when the user asks to switch trackers. Steps:
    `active.md`/`follow-ups.md` from open tracker items; local→remote
    converts them to one-line pointers once migration completes.
 5. Validate (all setup gates). **Success criterion: no file outside
-   `tracker.md` and the migrating ledger files changed.** Swap is not done
-   while the unmigrated list is non-empty — report it.
+   `tracker.md` and the migrating ledger files changed.** Flag any now-stale
+   `index.md` § Conventions entries (e.g. live-entry format listed when the
+   new mode is remote) in the report for cleanup at next refresh. Swap is
+   not done while the unmigrated list is non-empty — report it.
 
 ## Refresh Mode
 
@@ -144,7 +146,8 @@ remote availability.
 **v2 migration**: markers exist but no `tracker.md`. Extract tracker facts
 from `index.md` § Conventions into a generated `tracker.md` (matching
 preset, else custom); replace the bootloader block with the v3 template;
-regenerate `index.md` inside markers (tracker-agnostic wording); demote live
+regenerate `index.md` in full — the entire file is generated content; the
+file-level header is its marker (tracker-agnostic wording); demote live
 ledger files if the mode is remote; ensure `abandoned.md` exists. Anything
 not clearly generated is user-authored — ask before touching.
 
@@ -177,3 +180,4 @@ skill changes topology.
 | No preset for chosen tracker | generate from the custom skeleton with the user; gates apply unchanged |
 | Orchestrator config conflicts with `tracker.md` | warn only; never edit foreign config |
 | Swap with unmigrated entries | keep old format, list in report; swap incomplete until the list is empty |
+| Tracker detail undetectable at generation (e.g. JIRA state names) | ask the user to supply it before writing tracker.md; never generate with braces unfilled |
