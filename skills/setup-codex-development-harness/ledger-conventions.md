@@ -9,7 +9,10 @@ repos must not depend on this plugin file at runtime.
 Section entries, never tables. Rationale: append-only, merge-friendly, and a
 missing field is visibly absent (table columns get silently dropped).
 
-### `active.md` / `follow-ups.md` — no-tracker variant (ledger is full truth)
+### `active.md` / `follow-ups.md` — local mode only
+
+Remote-tracker modes do not generate these files; live state lives in the
+tracker per `docs/harness/tracker.md`.
 
 ```markdown
 ## <kebab-slug>
@@ -19,31 +22,18 @@ missing field is visibly absent (table columns get silently dropped).
 - updated: YYYY-MM-DD
 ```
 
-### `active.md` / `follow-ups.md` — tracker variant (tracker is truth)
-
-```markdown
-## <kebab-slug>
-- source: <tracker id, e.g. gh#142>
-- summary: <one line>
-```
-
-Status, priority, and detail live in the tracker. Never copy them into the
-ledger. Adopting a tracker later: refresh mode demotes existing full entries
-to this variant. Item with no matching issue yet: keep the full no-tracker
-format for that entry and put filing the issue in `next:` — never invent
-placeholder IDs.
-
-### `completed.md`
+### `completed.md` — archive, all modes
 
 ```markdown
 ## <kebab-slug>
 - done: YYYY-MM-DD
 - summary: <what changed>
-- verified: <test command run / evidence; "backfilled from git history" for backfill entries>
-- follow-ups: <ref into follow-ups.md, or none>
+- verified: <test command run / evidence; "backfilled from git history" or
+  "backfilled from <tracker> <id>" for backfill entries>
+- follow-ups: <ref into follow-ups.md or the tracker, or none>
 ```
 
-### `abandoned.md`
+### `abandoned.md` — archive, all modes
 
 ```markdown
 ## <kebab-slug>
@@ -51,6 +41,10 @@ placeholder IDs.
 - why: <reason>
 - resume-if: <condition that would make it viable again>
 ```
+
+Remote-tracker modes: archive entries may carry the tracker work-item ID in
+`verified:`/`why:` — IDs inside entries are data, not tracker identity, and
+do not violate the tracker-leak gate.
 
 ## Markers
 
