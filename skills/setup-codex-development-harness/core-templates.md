@@ -93,7 +93,7 @@ repo-specific ones found during exploration.
 - Tracker: `docs/harness/tracker.md` — the only file that names the tracker.
 - Archives: `completed.md` / `abandoned.md` exist in every mode; entries
   written per `tracker.md` § Archive Policy.
-- Entry formats: {paste the applicable formats from ledger-conventions:
+- Entry formats: {paste the applicable formats from ledger-conventions as fenced blocks:
   archives always; live entries in local mode only}
 - Markers: `codex-harness` comments delimit generated regions. Edit outside
   them freely; refresh never touches user-authored content.
@@ -135,7 +135,7 @@ Archive — newest first. Entry format: see `docs/harness/index.md` § Conventio
  items in remote modes — newest first}
 
 ## project-started
-- done: {date of first commit, or today for greenfield}
+- done: {date of first commit; today only if the repo has no commits}
 - summary: project started
 - verified: {backfilled from git history | greenfield init}
 - follow-ups: none

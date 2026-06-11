@@ -3,7 +3,10 @@
 Presets for `docs/harness/tracker.md`. Generation picks one preset, fills
 `{...}` braces from detection, and writes it as `docs/harness/tracker.md`
 with the standard generated header and `Last verified:` line. Generated
-repos must not depend on this plugin file at runtime.
+repos must not depend on this plugin file at runtime. Hint braces (e.g.
+`{extend per repo}`) must also be resolved at generation — replace with
+concrete values or delete the hint; a generated `tracker.md` contains no
+braces of any kind.
 
 ## The Contract
 
@@ -57,8 +60,8 @@ States live in the `status:` field of `active.md` / `follow-ups.md` entries.
 {repo-specific labels, else "none"}
 
 ## Dispatch Eligibility
-An item is dispatchable when its `active.md` entry has `status: planned`,
-no `blocked-by:` field, and a concrete action in `next:`.
+An item is dispatchable when its `active.md` entry has `status: planned`
+and a concrete action in `next:`.
 
 ## Read / Write
 - read: open `docs/work-ledger/active.md`, find your entry
