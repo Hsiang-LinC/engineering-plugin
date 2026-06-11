@@ -30,7 +30,7 @@ tracker per `docs/harness/tracker.md`.
 - summary: <what changed>
 - verified: <test command run / evidence; "backfilled from git history" or
   "backfilled from <tracker> <id>" for backfill entries>
-- follow-ups: <ref into follow-ups.md or the tracker, or none>
+- follow-ups: <ref into follow-ups.md (local mode) or the tracker (remote modes), or none>
 ```
 
 ### `abandoned.md` — archive, all modes
