@@ -25,7 +25,8 @@ Hard rules:
    create one per `tracker.md` (interactive sessions included). Pure
    reading, discussion, or Q&A is not tracker-worthy.
 3. Definition of done includes the tracker update defined in `tracker.md`
-   and updating durable repo docs when facts changed.
+   and updating durable repo docs when facts changed. A change without its
+   tracker update is incomplete work.
 4. Routing tables live only in `docs/harness/index.md`. Do not duplicate them here.
 <!-- codex-harness:end -->
 ```
