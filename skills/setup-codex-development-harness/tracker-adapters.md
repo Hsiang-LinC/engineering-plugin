@@ -25,9 +25,10 @@ whole integration.
    authority**: who may set the Done-equivalent state. Two profiles,
    chosen at generation: **human-gated** (default — a human accepts) and
    **agent-gated** (a reviewer agent distinct from the author accepts,
-   with verification evidence; humans handle escalations only). Invariant
-   in both profiles: the agent that authored a change never accepts its
-   own item.
+   with verification evidence; humans handle escalations only). Two
+   invariants in both profiles: the agent that authored a change never
+   accepts its own item, and a human may set any state — profiles grant
+   agent authority, they never revoke human authority.
 3. **Labels** — actor / work-type / gate classifications ("none" is valid).
 4. **Work Item Format** — required content of a dispatch-eligible item:
    source ref (the approved spec/plan, or conversation), acceptance
@@ -82,6 +83,7 @@ Last verified: {DATE}
 | abandoned | dropped; entry moves to `abandoned.md` with `resume-if:` | human, or agent with human approval |
 
 States live in the `status:` field of `active.md` / `follow-ups.md` entries.
+A human may set any state in either profile.
 
 ## Labels
 {repo-specific labels, else "none"}
@@ -153,7 +155,7 @@ Last verified: {DATE}
 The author of a change never closes its own issue as completed.
 {human-gated: human review closes. | agent-gated: an independent reviewer
 agent closes from `in-review`; `needs-human` is reserved for escalations
-the reviewer cannot resolve.}
+the reviewer cannot resolve.} A human may set any state in either profile.
 
 ## Labels
 - actor: `agent`, `human` {extend per repo}
@@ -227,6 +229,7 @@ Last verified: {DATE}
 The author of a change never accepts it. {human-gated: human review is the
 acceptance gate. | agent-gated: an independent reviewer agent accepts from
 `In Review`; `Human Review` is reserved for items the reviewer escalates.}
+A human may set any state in either profile.
 
 ## Labels
 - actor: `agent`, `human`, `pairing`
@@ -299,6 +302,7 @@ JIRA workflows are instance-specific — fill from the actual board:
 The author of a change never accepts it. {human-gated: human review is the
 acceptance gate. | agent-gated: an independent reviewer agent accepts; the
 escalation state is reserved for items the reviewer cannot resolve.}
+A human may set any state in either profile.
 
 ## Labels
 - actor: `agent`, `human` {map to labels or components per instance}
@@ -360,8 +364,9 @@ Last verified: {DATE}
 
 ## State Machine
 {states table: name / meaning / who may set. Encode the acceptance
-authority per the chosen profile — human-gated or agent-gated — and the
-author-never-accepts invariant.}
+authority per the chosen profile — human-gated or agent-gated — plus both
+invariants: the author never accepts its own item; a human may set any
+state.}
 
 ## Labels
 {classifications, or "none"}

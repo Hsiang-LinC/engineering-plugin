@@ -85,8 +85,9 @@ And **acceptance authority** for the generated state machine: human-gated
 reviewer agent distinct from the author accepts, with verification
 evidence; humans handle escalations only). Recommend human-gated unless an
 orchestrator was detected or the user asked for autonomous operation. Both
-profiles keep the invariant: the author of a change never accepts its own
-item.
+profiles keep two invariants: the author of a change never accepts its own
+item, and a human may set any state — profiles grant agent authority, they
+never revoke human authority.
 
 **Wait for approval before writing.**
 
