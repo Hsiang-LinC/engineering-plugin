@@ -1,6 +1,6 @@
 ---
 name: setup-codex-development-harness
-description: Use when adopting an agent in a new or existing repo, when agents re-explore the codebase every session, when project state (done/doing/abandoned) is scattered or stale, when switching issue trackers (local ledger, GitHub, Linear, JIRA), or when an existing harness needs refresh or a drift check.
+description: Use when adopting an agent in a new or existing repo, when agents re-explore the codebase every session, when project state (done/doing/abandoned) is scattered or stale, when switching issue trackers (local ledger, GitHub, Linear, JIRA), when wiring an orchestrator to dispatch agent work autonomously (acceptance gates, failure states, dependency unblocking), or when an existing harness needs refresh or a drift check.
 ---
 
 # Setup Codex Development Harness
@@ -22,6 +22,8 @@ with the environment's process system; orchestrators integrate by reading
   every mode.
 - Tracker identity lives in exactly one file. Switching trackers must not
   touch routing.
+- Autonomy is a contract fact: who may accept work lives in `tracker.md`'s
+  state machine. Orchestrators read it; they never decide it.
 
 ## Mode Selection
 
@@ -78,6 +80,14 @@ thresholds met), absorption dispositions, and **tracker adjudication**:
 - multiple → list differences; user decides.
 - trace-only (unverified) candidates: state the uncertainty in the proposal.
 
+And **acceptance authority** for the generated state machine: human-gated
+(default — a human accepts the Done-equivalent state) or agent-gated (a
+reviewer agent distinct from the author accepts, with verification
+evidence; humans handle escalations only). Recommend human-gated unless an
+orchestrator was detected or the user asked for autonomous operation. Both
+profiles keep the invariant: the author of a change never accepts its own
+item.
+
 **Wait for approval before writing.**
 
 ### 4. Write
@@ -109,8 +119,13 @@ All hard gates must pass before reporting done:
       `tracker.md` pointer; work-item IDs inside archive entries are data —
       exempt; naming a platform for non-tracker purposes (e.g. CI, hosting)
       in Coexisting Systems is exempt
-- [ ] `tracker.md` has all eight contract sections filled, no `{...}` braces left
-- [ ] dispatch eligibility reads as one machine-checkable rule
+- [ ] `tracker.md` has all ten contract sections filled, no `{...}` braces left
+- [ ] dispatch eligibility reads as one machine-checkable rule referencing
+      § Work Item Format and the dependency encoding
+- [ ] failure handling is one rule: evidence posted + failure state set —
+      no path leaves an item in the claimed state after its worker exits
+- [ ] no state allows the agent that authored a change to accept its own
+      item (holds in both acceptance profiles)
 - [ ] `completed.md` and `abandoned.md` exist regardless of mode
 
 Report: created, refreshed, left for later, warnings.
@@ -147,8 +162,13 @@ Triggered when the user asks to switch trackers. Steps:
    but still listed?); `Last verified` overdue (>90 days); bootloader pointer
    liveness; **archive backfill gap** (tracker Done/Canceled items missing
    from `completed.md`/`abandoned.md`); **orchestrator consistency**
-   (state/label names in detected orchestrator config match `tracker.md` —
-   mismatch: warn only); **tracker-leak scan**.
+   (state/label names and the transitions the orchestrator performs in
+   detected orchestrator config match `tracker.md` — mismatch: warn only);
+   **contract gap** (a `tracker.md` generated before the ten-section
+   contract lacks § Work Item Format / § Failure Handling — generate the
+   missing sections from the matching preset, asking the user for the
+   acceptance profile; preserve existing sections verbatim);
+   **tracker-leak scan**.
 2. **Present drift summary. Wait for approval.**
 3. **Execute** — patch only inside markers; batch-backfill archives;
    archive roll-off per conventions; topology upgrade check.
@@ -196,5 +216,6 @@ skill changes topology.
 | Tracker unreachable | skip tracker-dependent checks; note gap; never block |
 | No preset for chosen tracker | generate from the custom skeleton with the user; gates apply unchanged |
 | Orchestrator config conflicts with `tracker.md` | warn only; never edit foreign config |
+| Acceptance authority change (human-gated ↔ agent-gated) | edit `tracker.md` only — State Machine authority rows and Read/Write allowed transitions; no other file changes |
 | Swap with unmigrated entries | keep old format, list in report; swap incomplete until the list is empty |
 | Tracker detail undetectable at generation (e.g. JIRA state names, GitHub owner/repo) | ask the user to supply it before writing tracker.md; never generate with braces unfilled |

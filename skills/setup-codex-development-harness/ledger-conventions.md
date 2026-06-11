@@ -22,6 +22,11 @@ tracker per `docs/harness/tracker.md`.
 - updated: YYYY-MM-DD
 ```
 
+Entries intended for orchestrated dispatch additionally carry `blocked-by:`
+(slugs; omit when none), `acceptance:` (observable outcomes), and `verify:`
+(commands + expected outcomes) — fields defined in `tracker.md` § Work Item
+Format.
+
 ### `completed.md` — archive, all modes
 
 ```markdown

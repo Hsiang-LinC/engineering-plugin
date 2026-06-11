@@ -46,7 +46,7 @@ in `docs/harness/tracker.md`.
 
 Generated from the chosen preset in [tracker-adapters.md](tracker-adapters.md)
 — the **only** file in the generated repo that names the concrete tracker.
-All eight contract sections filled; no braces left.
+All ten contract sections filled; no braces left.
 
 ## `docs/harness/index.md`
 
@@ -74,6 +74,7 @@ never copy these tables elsewhere. Tracker identity lives only in
 | Task type | Read first | Workflow | Completion update |
 |---|---|---|---|
 | New feature | {repo-specific docs/dirs} | {detected design+planning skills, else "design before code"} | tracker update per `tracker.md`; durable docs if facts changed |
+| Plan intake (approved spec/plan → work items) | the approved spec/plan | {detected issueization skill, else split per `tracker.md` § Work Item Format} | work items created, dependencies encoded, each linking the source plan |
 | Bug / regression | {repo-specific docs/tests} | {detected debugging skill, else "reproduce before fixing"} | regression test; tracker update per `tracker.md` |
 | Unfamiliar area | {architecture docs if extended, else key source dirs} | {detected exploration skill, else targeted reading} | index/map update if stable knowledge gained |
 | Architecture decision | {CONTEXT.md / docs/adr/ if present} | {detected decision skill, else "write an ADR"} | the decision doc; tracker update per `tracker.md` |
