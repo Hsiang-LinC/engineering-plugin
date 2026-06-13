@@ -2,9 +2,10 @@
 
 Everything the **core** topology generates: bootloader block, pointer line,
 `docs/harness/index.md`, `docs/harness/tracker.md` (from a
-[tracker-adapters.md](tracker-adapters.md) preset), and the work-ledger
-files. `{...}` braces = fill at generation time. Entry formats come from
-[ledger-conventions.md](ledger-conventions.md).
+[tracker-adapters.md](tracker-adapters.md) preset), `docs/harness/roadmap.md`,
+the work-ledger files, and — when design-workflow skills are detected — the
+`docs/agents/` files. `{...}` braces = fill at generation time. Entry formats
+come from [ledger-conventions.md](ledger-conventions.md).
 
 Ledger files by mode: **local** generates all four; **remote trackers**
 generate only the two archives (`completed.md`, `abandoned.md`).
@@ -64,9 +65,11 @@ never copy these tables elsewhere. Tracker identity lives only in
 
 1. Read `docs/harness/tracker.md`; read your work item per its Read/Write
    section.
-2. Identify your task type in the routing table.
-3. Read the listed context; use the listed workflow.
-4. Before closing: post completion evidence and the state update per
+2. Read `docs/harness/roadmap.md` § Current Node — know where this work
+   sits in the long-horizon sequence.
+3. Identify your task type in the routing table.
+4. Read the listed context; use the listed workflow.
+5. Before closing: post completion evidence and the state update per
    `tracker.md`; update durable repo docs when facts changed.
 
 ## Task Routing
@@ -83,6 +86,21 @@ never copy these tables elsewhere. Tracker identity lives only in
 Rows are a starting set — keep only the ones meaningful for this repo, add
 repo-specific ones found during exploration.
 
+## Work Production
+
+How new work enters the tracker. User-in-the-loop by design — orchestrated
+agents consume the output of this pipeline; they never run it:
+
+1. Position: read `roadmap.md` — which node is current, is it specced?
+2. Design: {detected grilling/design skill, else "stress-test the plan with
+   the user"} — resolved terms land in the glossary, hard decisions in ADRs.
+3. PRD: {detected PRD skill, else "write a PRD; user approves"}.
+4. Issueize: {detected issueization skill, else split per `tracker.md`
+   § Work Item Format} — dependencies encoded; items become
+   dispatch-eligible per `tracker.md` § Dispatch Eligibility.
+5. Node close: when the current node's items are all terminal, propose the
+   roadmap advance to the user (see `roadmap.md` header rule).
+
 ## Coexisting Systems
 
 | System | Class | Truth |
@@ -93,6 +111,11 @@ repo-specific ones found during exploration.
 ## Conventions
 
 - Tracker: `docs/harness/tracker.md` — the only file that names the tracker.
+- Roadmap: `docs/harness/roadmap.md` — long-horizon direction; node
+  transitions are user decisions (agents propose with evidence, never
+  advance alone).
+- Workflow-skill config: {`docs/agents/` files — tracker/label facts there
+  are pointers into `tracker.md`, never copies | omit when not generated}
 - Archives: `completed.md` / `abandoned.md` exist in every mode; entries
   written per `tracker.md` § Archive Policy.
 - Entry formats: {paste the applicable formats from ledger-conventions as fenced blocks:
@@ -101,6 +124,95 @@ repo-specific ones found during exploration.
   them freely; refresh never touches user-authored content.
 - Quality gates: {repo test/lint commands} must pass before completion
   evidence is posted.
+```
+
+## `docs/harness/roadmap.md`
+
+The layer above the tracker: milestone sequence and current position.
+Backlog items live in the tracker; direction lives here. Written at node
+boundaries only — exactly when the user is in the loop — so write-cost
+stays human-supervised.
+
+```markdown
+<!-- codex-harness: generated {DATE} -->
+# Roadmap
+
+Last verified: {DATE}
+
+Long-horizon direction. Work items live in the tracker
+(`docs/harness/tracker.md`); this file holds the milestone sequence and the
+current position. Node transitions are user decisions made in interactive
+sessions: an agent may propose advancing — with evidence that the current
+node's items are all terminal — but never advances a node alone.
+
+## Current Node
+
+{milestone-id} — {one-line goal}
+
+## Milestones
+
+### {milestone-id}: {name}
+- status: done | current | next | later
+- goal: {one line}
+- spec: {PRD / spec / ADR refs, or "not yet specced"}
+- items: {how this node's work items are found in the tracker — label,
+  milestone, or project ref — or "not yet issueized"}
+
+{one section per milestone, in sequence order; greenfield repos get a
+single current milestone capturing the project's first goal}
+
+## Direction Notes
+
+{cross-node intent, constraints, deliberately-not-doing — or nothing}
+```
+
+## `docs/agents/` files (only when design-workflow skills are detected)
+
+Generated when Environment detection finds the design-workflow chain
+(grilling / PRD / issueization / triage skills) in the environment — those
+skills read these paths. Tracker and label facts stay in `tracker.md`;
+two of the three files are pure pointers.
+
+### `docs/agents/issue-tracker.md`
+
+```markdown
+<!-- codex-harness: generated {DATE} -->
+# Issue Tracker
+
+Managed by the development harness. Tracker identity, states, work-item
+format, and read/write paths live in `docs/harness/tracker.md` — read that
+file and follow it.
+```
+
+### `docs/agents/triage-labels.md`
+
+```markdown
+<!-- codex-harness: generated {DATE} -->
+# Triage Labels
+
+Managed by the development harness. The triage vocabulary lives in
+`docs/harness/tracker.md` § Labels — read it there; do not duplicate it here.
+```
+
+### `docs/agents/domain.md`
+
+```markdown
+<!-- codex-harness: generated {DATE} -->
+# Domain Docs
+
+Layout: {single-context | multi-context}.
+
+- Glossary: {`CONTEXT.md` at the repo root | `CONTEXT-MAP.md` at the root
+  pointing to per-context `CONTEXT.md` files}
+- ADRs: {`docs/adr/` | per-context `docs/adr/` plus system-wide `docs/adr/`}
+
+Consumer rules:
+- Read the glossary before naming things; use its terms in code, issues,
+  and docs.
+- Check ADRs in the area you touch before proposing architectural change.
+- Resolved terms go into the glossary as they crystallise. Decisions that
+  are hard to reverse, surprising without context, and a real trade-off
+  get an ADR.
 ```
 
 ## `docs/work-ledger/active.md` (local mode only)

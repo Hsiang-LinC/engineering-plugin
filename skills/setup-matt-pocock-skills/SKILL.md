@@ -1,7 +1,7 @@
 ---
 name: setup-matt-pocock-skills
-description: Sets up an `## Agent skills` block in AGENTS.md/CLAUDE.md and `docs/agents/` so the engineering skills know this repo's issue tracker (GitHub or local markdown), triage label vocabulary, and domain doc layout. Run before first use of `to-issues`, `to-prd`, `triage`, `diagnose`, `tdd`, `improve-codebase-architecture`, or `zoom-out` — or if those skills appear to be missing context about the issue tracker, triage labels, or domain docs.
-disable-model-invocation: true
+description: Sets up an `## Agent skills` block in AGENTS.md/CLAUDE.md and `docs/agents/` so the engineering skills know this repo's issue tracker (GitHub or local markdown), triage label vocabulary, and domain doc layout. Run before first use of `to-issues`, `to-prd`, `triage`, `diagnose`, `tdd`, `improve-codebase-architecture`, or `zoom-out` — or if those skills appear to be missing context about the issue tracker, triage labels, or domain docs. In repos with a codex development harness (`docs/harness/tracker.md`), tracker and triage-label config is harness-managed — this skill then only fills domain-doc gaps; prefer `setup-codex-development-harness` for full setup.
+disable-model-invocation: false
 ---
 
 # Setup Matt Pocock's Skills
@@ -20,12 +20,28 @@ This is a prompt-driven skill, not a deterministic script. Explore, present what
 
 Look at the current repo to understand its starting state. Read whatever exists; don't assume:
 
+- `docs/harness/tracker.md` — does this repo have a codex development
+  harness? (See the harness rule below.)
 - `git remote -v` and `.git/config` — is this a GitHub repo? Which one?
 - `AGENTS.md` and `CLAUDE.md` at the repo root — does either exist? Is there already an `## Agent skills` section in either?
 - `CONTEXT.md` and `CONTEXT-MAP.md` at the repo root
 - `docs/adr/` and any `src/*/docs/adr/` directories
 - `docs/agents/` — does this skill's prior output already exist?
 - `.scratch/` — sign that a local-markdown issue tracker convention is already in use
+
+**Harness rule.** If `docs/harness/tracker.md` exists, the tracker and
+triage-label facts are managed by the development harness
+(`setup-codex-development-harness`), which also generates the
+`docs/agents/` files. In that case:
+
+- **Skip Sections A and B entirely.** Do not write tracker or label facts
+  anywhere — the single residence is `docs/harness/tracker.md`.
+- Verify `docs/agents/issue-tracker.md` and `docs/agents/triage-labels.md`
+  exist as pointer files. Missing or stale → tell the user to run the
+  harness skill's refresh mode; do not regenerate them here.
+- Run Section C only if `docs/agents/domain.md` is missing.
+- The `## Agent skills` block (step 4) then carries only the Domain docs
+  subsection.
 
 ### 2. Present findings and ask
 

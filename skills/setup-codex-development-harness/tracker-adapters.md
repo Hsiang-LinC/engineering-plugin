@@ -8,6 +8,12 @@ repos must not depend on this plugin file at runtime. Hint braces (e.g.
 concrete values or delete the hint; a generated `tracker.md` contains no
 braces of any kind.
 
+Label names in presets are defaults. When the repo or its detected
+workflow skills already use a different vocabulary (e.g. `ready-for-agent`
+where a preset says `agent`), substitute consistently across **all**
+sections at generation — one fact, one label; never leave two labels
+meaning the same thing.
+
 ## The Contract
 
 Every adapter fills the same ten sections, in this order. A missing or
@@ -29,7 +35,12 @@ whole integration.
    invariants in both profiles: the agent that authored a change never
    accepts its own item, and a human may set any state — profiles grant
    agent authority, they never revoke human authority.
-3. **Labels** — actor / work-type / gate classifications ("none" is valid).
+3. **Labels** — actor / work-type / gate classifications ("none" is
+   valid). When design-workflow skills are detected, this section also
+   carries the triage vocabulary those skills apply (defaults:
+   `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`,
+   `wontfix`) — mapped to the repo's existing labels and reconciled with
+   the dispatch/actor labels per the substitution rule above.
 4. **Work Item Format** — required content of a dispatch-eligible item:
    source ref (the approved spec/plan, or conversation), acceptance
    criteria, verification commands with expected outcomes, dependencies in
@@ -162,6 +173,8 @@ the reviewer cannot resolve.} A human may set any state in either profile.
 - work-type: {repo-specific, else omit}
 - gate: `needs-plan`, `needs-review` {extend per repo}
 - lifecycle: `in-progress`, `in-review`, `blocked`{agent-gated: , `needs-human`}
+- triage: {the five triage roles when design-workflow skills detected,
+  mapped per the substitution rule | omit}
 
 ## Work Item Format
 A dispatch-eligible issue's body contains:
@@ -235,6 +248,8 @@ A human may set any state in either profile.
 - actor: `agent`, `human`, `pairing`
 - work-type: {repo-specific}
 - gate: `needs-plan`, `needs-review` {extend per repo}
+- triage: {the five triage roles when design-workflow skills detected,
+  mapped per the substitution rule | omit}
 
 ## Work Item Format
 A dispatch-eligible issue's body contains:
@@ -307,6 +322,8 @@ A human may set any state in either profile.
 ## Labels
 - actor: `agent`, `human` {map to labels or components per instance}
 - work-type / gate: {repo-specific}
+- triage: {the five triage roles when design-workflow skills detected,
+  mapped per the substitution rule | omit}
 
 ## Work Item Format
 A dispatch-eligible issue's description contains:
