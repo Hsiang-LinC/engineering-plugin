@@ -33,21 +33,21 @@ before the verify step.
 - The skill did NOT run `symphony tracker states ensure` or start a daemon — they
   appear as printed manual follow-ups.
 
-## Fixture B — no-harness (gate 1) ⬜
+## Fixture B — no-harness (gate 1) ✅
 
 **Setup:** a git repo with NO `docs/harness/tracker.md`.
 **Run:** invoke the skill.
 **Expected:** stops at Hard Gate 1; message names `setup-codex-development-harness`;
 no `WORKFLOW.md` / `REVIEW.md` / `.env` written.
 
-## Fixture C — github-tracker (gate 2) ⬜
+## Fixture C — github-tracker (gate 2) ✅
 
 **Setup:** repo whose `docs/harness/tracker.md` § Identity has `- kind: github`.
 **Run:** invoke the skill.
 **Expected:** stops at Hard Gate 2; message says Linear-only and names the
 `symphony/tracker/factory.py` extension point; no files written.
 
-## Fixture D — rerun-idempotent ⬜
+## Fixture D — rerun-idempotent ✅
 
 **Setup:** Fixture A's end state, with a hand-edited line added inside the
 `REPO-SPECIFIC RULES` block of `WORKFLOW.md`.
