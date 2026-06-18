@@ -123,10 +123,14 @@ cd "$CODEX_SYMPHONY_DIR" && python3 -m venv .venv
 ```
 Expected: `Successfully installed codex-symphony-0.1.0 …` (pydantic, PyYAML, Jinja2, python-dotenv, requests resolved).
 
-Note: the `templates/` dir referenced by `force-include` does not exist until
-Task 1.6. Editable installs (`-e`) symlink the source tree and do not run the
-wheel `force-include` step, so this install succeeds without it. Only a real
-wheel build (`hatch build`) needs `templates/` present — do that after Task 1.6.
+**IMPORTANT (corrected during execution):** hatchling DOES evaluate
+`force-include` during editable metadata generation (confirmed on hatchling +
+Python 3.13.5) — a missing `templates/` is a HARD install failure, not a no-op.
+Therefore **Task 1.6 (create `templates/`) must run before this install
+succeeds.** Recommended order: 1.2 Step 1/1b (pyproject + README stub, commit),
+then Task 1.6 (templates), then return here to run the editable install +
+`symphony --help`. The metadata commit can land before the install verifies; the
+deps + `--help` smoke test pass only once `templates/` exists.
 
 - [ ] **Step 3: Confirm the console entry point resolves**
 
@@ -286,9 +290,20 @@ git commit -m "feat: tracker-client factory seam (linear shipped, others as exte
 
 ---
 
-### Task 1.4: Thin `validate` command
+### Task 1.4: `validate` command — ALREADY PRESENT UPSTREAM (verify only)
 
-A no-side-effect command that loads WORKFLOW.md through the engine and reports OK/error. This is the skill's verify step (Phase 2). No live tracker call.
+**Corrected during execution:** the lifted engine already ships a `validate`
+command (`symphony/cli.py`). Interface: `symphony validate [workflow]` — the
+workflow path is a **positional** arg (default `WORKFLOW.md`), NOT `--workflow`.
+It loads via `load_workflow` + `load_config`, prints `ok`, returns 0 on success;
+a `SymphonyError` is caught → message + exit 1; a pydantic `ValidationError`
+surfaces as a traceback + exit 1 (functional for the skill, which checks the exit
+code). It is already covered by `tests/test_symphony_cli.py::test_validate_command_passes_with_workflow_and_env`.
+
+**No implementation needed.** Do NOT add a command or a `test_symphony_cli_validate.py`.
+The Phase 2 skill verify step must use `symphony validate WORKFLOW.md` (positional)
+and expect `ok` / exit 0 — not `--workflow` and not `OK: WORKFLOW.md is valid`.
+The original step-by-step below is superseded; skip it.
 
 **Files:**
 - Create: `$CODEX_SYMPHONY_DIR/tests/test_symphony_cli_validate.py`

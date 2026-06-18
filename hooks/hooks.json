@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks-handlers/context7-routing-reminder.sh\"",
+            "async": false
+          }
+        ]
+      }
+    ]
+  }
+}
