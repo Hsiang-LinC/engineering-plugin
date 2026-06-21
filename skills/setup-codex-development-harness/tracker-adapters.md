@@ -105,9 +105,11 @@ state roles `needs-triage`, `needs-info`, `ready-for-agent`,
 
 ## Work Item Format
 Every entry carries `status:`, `source:`, `next:`, `updated:` per
-`docs/harness/index.md` § Conventions. Entries intended for orchestrated
-dispatch additionally carry `acceptance:` (observable outcomes), `verify:`
-(commands + expected outcomes), and `blocked-by:` (slugs; omit when none).
+`docs/harness/index.md` § Conventions. Entries tied to a roadmap node carry
+`parent:` with that node's slug; preserve it when moving entries to
+`completed.md` or `abandoned.md`. Entries intended for orchestrated dispatch
+additionally carry `acceptance:` (observable outcomes), `verify:` (commands +
+expected outcomes), and `blocked-by:` (slugs; omit when none).
 
 ## Dispatch Eligibility
 An item is dispatchable when its `active.md` entry has `status: planned`, a

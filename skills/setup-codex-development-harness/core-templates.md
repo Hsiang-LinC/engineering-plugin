@@ -99,7 +99,8 @@ and where it goes.
    the user"} — resolved terms land in the glossary, hard decisions in ADRs.
 3. PRD: {detected PRD skill, else "write a PRD; user approves"}.
 4. Issueize: {detected issueization skill, else split per `tracker.md`
-   § Work Item Format} — dependencies encoded; items become
+   § Work Item Format} — current-node items carry the roadmap node `parent:`,
+   dependencies encoded; items become
    dispatch-eligible per `tracker.md` § Dispatch Eligibility.
 5. Triage: {detected triage skill, else classify readiness manually} —
    apply the category/state roles mapped in `tracker.md` § Labels.
@@ -168,9 +169,11 @@ Last verified: {DATE}
 
 Long-horizon direction. Work items live in the tracker
 (`docs/harness/tracker.md`); this file holds the milestone sequence and the
-current position. Node transitions are user decisions made in interactive
-sessions: an agent may propose advancing — with evidence that the current
-node's items are all terminal — but never advances a node alone.
+current position. In local mode, current-node slices are found by matching
+work-ledger entries with `parent: <milestone-id>`. Node transitions are user
+decisions made in interactive sessions: an agent may propose advancing — with
+evidence that the current node's items are all terminal — but never advances a
+node alone.
 
 ## Current Node
 
@@ -183,7 +186,8 @@ node's items are all terminal — but never advances a node alone.
 - goal: {one line}
 - spec: {PRD / spec / ADR refs, or "not yet specced"}
 - items: {how this node's work items are found in the tracker — label,
-  milestone, or project ref — or "not yet issueized"}
+  milestone, project ref, or local `parent: <milestone-id>` — or "not yet
+  issueized"}
 
 {one section per milestone, in sequence order; greenfield repos get a
 single current milestone capturing the project's first goal}

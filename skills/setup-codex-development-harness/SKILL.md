@@ -220,8 +220,9 @@ Triggered when the user asks to switch trackers. Steps:
    missing sections from the matching preset, asking the user for the
    acceptance profile; preserve existing sections verbatim);
    **roadmap drift** (current node's items all terminal but the node not
-   advanced — flag and propose the advance to the user, never advance
-   alone; no roadmap residence in an existing harness — offer to
+   advanced — local mode checks entries with matching `parent:`; flag and
+   propose the advance to the user, never advance alone; no roadmap residence
+   in an existing harness — offer to
    generate); **workflow-config drift** (`index.md` missing workflow-skill
    routing, artifact adapters, Domain Docs, or Quality Gates); **tracker
    label drift** (workflow skills present but `tracker.md` lacks their

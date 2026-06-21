@@ -17,6 +17,7 @@ tracker per `docs/harness/tracker.md`.
 ```markdown
 ## <kebab-slug>
 - status: planned | in-progress | blocked
+- parent: <roadmap node slug, if this belongs to a node>
 - source: <spec / plan / conversation ref>
 - next: <single concrete next action>
 - updated: YYYY-MM-DD
@@ -32,6 +33,7 @@ Format.
 ```markdown
 ## <kebab-slug>
 - done: YYYY-MM-DD
+- parent: <roadmap node slug, if carried from the live item>
 - summary: <what changed>
 - verified: <test command run / evidence; "backfilled from git history" or
   "backfilled from <tracker> <id>" for backfill entries>
@@ -43,6 +45,7 @@ Format.
 ```markdown
 ## <kebab-slug>
 - abandoned: YYYY-MM-DD
+- parent: <roadmap node slug, if carried from the live item>
 - why: <reason>
 - resume-if: <condition that would make it viable again>
 ```
