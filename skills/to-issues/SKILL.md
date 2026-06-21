@@ -1,19 +1,25 @@
 ---
 name: to-issues
-description: Break a plan, spec, or PRD into independently-grabbable issues on the project issue tracker using tracer-bullet vertical slices. Use when user wants to convert a plan into issues, create implementation tickets, or break down work into issues.
+description: Break a plan, spec, or PRD into independently-grabbable work artifacts through the repo harness using tracer-bullet vertical slices. Use when user wants to convert a plan into issues, create implementation tickets, or break down work into issues.
 ---
 
 # To Issues
 
 Break a plan into independently-grabbable issues using vertical slices (tracer bullets).
 
-The issue tracker and triage label vocabulary should have been provided to you — run `/setup-matt-pocock-skills` if not.
+Before publishing, read the repo harness: `docs/harness/index.md`,
+`docs/harness/tracker.md`, `docs/harness/quality-gates.md`, and the Domain
+Docs routes named by the index. If the harness is missing or does not name
+where issueization outputs go, run or ask to run `setup-codex-development-harness`.
 
 ## Process
 
 ### 1. Gather context
 
-Work from whatever is already in the conversation context. If the user passes an issue reference (issue number, URL, or path) as an argument, fetch it from the issue tracker and read its full body and comments.
+Work from whatever is already in the conversation context. If the user
+passes a tracker item reference (issue number, URL, Linear ID, local ledger
+slug, or path) as an argument, fetch it using `docs/harness/tracker.md` and
+read its full body and comments.
 
 ### 2. Explore the codebase (optional)
 
@@ -49,16 +55,28 @@ Ask the user:
 
 Iterate until the user approves the breakdown.
 
-### 5. Publish the issues to the issue tracker
+### 5. Publish through the harness adapter
 
-For each approved slice, publish a new issue to the issue tracker. Use the issue body template below. These issues are considered ready for AFK agents, so publish them with the correct triage label unless instructed otherwise.
+For each approved slice, publish the output named by `docs/harness/index.md`
+§ Artifact Adapters. This may be tracker issues, local ledger entries, an
+automation graph, or another repo-specific work artifact. Use the issue body
+template below when the adapter is a tracker item.
 
-Publish issues in dependency order (blockers first) so you can reference real issue identifiers in the "Blocked by" field.
+These items are considered ready for AFK agents unless the approved
+breakdown says otherwise, so apply the mapped `ready-for-agent` state role
+from `docs/harness/tracker.md` § Labels. If the adapter feeds an automation
+runtime, also encode the harness-required dispatch boundary from
+`tracker.md` § Dispatch Eligibility.
+
+Publish items in dependency order (blockers first) so you can reference real
+item identifiers in the "Blocked by" field or the tracker-native dependency
+encoding.
 
 <issue-template>
 ## Parent
 
-A reference to the parent issue on the issue tracker (if the source was an existing issue, otherwise omit this section).
+A reference to the parent tracker item (if the source was an existing item,
+otherwise omit this section).
 
 ## What to build
 

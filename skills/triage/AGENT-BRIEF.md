@@ -1,12 +1,15 @@
 # Writing Agent Briefs
 
-An agent brief is a structured comment posted on a GitHub issue when it moves to `ready-for-agent`. It is the authoritative specification that an AFK agent will work from. The original issue body and discussion are context — the agent brief is the contract.
+An agent brief is a structured note posted on the repo's tracker item when
+it moves to the mapped `ready-for-agent` state role. It is the authoritative
+specification that an AFK agent will work from. The original item body and
+discussion are context — the agent brief is the contract.
 
 ## Principles
 
 ### Durability over precision
 
-The issue may sit in `ready-for-agent` for days or weeks. The codebase will change in the meantime. Write the brief so it stays useful even as files are renamed, moved, or refactored.
+The tracker item may sit in `ready-for-agent` for days or weeks. The codebase will change in the meantime. Write the brief so it stays useful even as files are renamed, moved, or refactored.
 
 - **Do** describe interfaces, types, and behavioral contracts
 - **Do** name specific types, function signatures, or config shapes that the agent should look for or modify
@@ -27,12 +30,16 @@ Describe **what** the system should do, not **how** to implement it. The agent w
 
 The agent needs to know when it's done. Every agent brief must have concrete, testable acceptance criteria. Each criterion should be independently verifiable.
 
-- **Good:** "Running `gh issue list --label needs-triage` returns issues that have been through initial classification"
+- **Good:** "Querying the tracker for the mapped `needs-triage` state role returns items that have been through initial classification"
 - **Bad:** "Triage should work correctly"
 
 ### Explicit scope boundaries
 
 State what is out of scope. This prevents the agent from gold-plating or making assumptions about adjacent features.
+
+Use `docs/harness/tracker.md` for the concrete tracker, state, label, and
+dependency syntax. Do not hard-code GitHub, Linear, local ledger, or JIRA
+terms unless that harness maps the role to those terms.
 
 ## Template
 
@@ -111,7 +118,7 @@ and append "..." to indicate truncation.
 **Summary:** Add `.out-of-scope/` directory support for tracking rejected feature requests
 
 **Current behavior:**
-When a feature request is rejected, the issue is closed with a `wontfix` label
+When a feature request is rejected, the tracker item is closed or marked with the mapped `wontfix` role
 and a comment. There is no persistent record of the decision or reasoning.
 Future similar requests require the maintainer to recall or search for the
 prior discussion.
@@ -125,14 +132,14 @@ checked for matches.
 **Key interfaces:**
 - Markdown file format in `.out-of-scope/` — each file should have a
   `# Concept Name` heading, a `**Decision:**` line, a `**Reason:**` line,
-  and a `**Prior requests:**` list with issue links
+  and a `**Prior requests:**` list with tracker item links
 - The triage workflow should read all `.out-of-scope/*.md` files early
   and match incoming issues against them by concept similarity
 
 **Acceptance criteria:**
 - [ ] Closing a feature as wontfix creates/updates a file in `.out-of-scope/`
-- [ ] The file includes the decision, reasoning, and link to the closed issue
-- [ ] If a matching `.out-of-scope/` file already exists, the new issue is
+- [ ] The file includes the decision, reasoning, and link to the closed item
+- [ ] If a matching `.out-of-scope/` file already exists, the new item is
       appended to its "Prior requests" list rather than creating a duplicate
 - [ ] During triage, existing `.out-of-scope/` files are checked and surfaced
       when a new issue matches a prior rejection
