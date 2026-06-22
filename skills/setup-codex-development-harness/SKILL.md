@@ -59,7 +59,9 @@ Six detections (large repos: read-only subagents per area):
   sample concrete claims (modules, APIs, flows) against code. Also record:
   domain layout (`CONTEXT.md` single-context vs `CONTEXT-MAP.md`
   multi-context; `docs/adr/` locations); existing roadmap/milestone docs
-  (`ROADMAP.md`, milestone sections) — roadmap-residence candidates.
+  (`ROADMAP.md`, milestone sections) — roadmap-residence candidates; existing
+  spec/plan/artifact roots (`docs/features/`, `docs/superpowers/plans/`,
+  `docs/specs/`, similar) — artifact-residence candidates.
 - **Environment** — workflow skills *with actual namespaces* (from the
   session's skill listing; if skills cannot be enumerated, use generic
   fallbacks); specifically detect the design-workflow chain — grilling,
@@ -103,6 +105,15 @@ place or migrate into `docs/harness/roadmap.md` (user decides; one
 residence either way, index routes to it); none → generate `roadmap.md` —
 fill milestones from the conversation or git milestones when available,
 else a single current node capturing the project's present goal.
+
+**Artifact residence**: existing per-project/per-slice artifact root found →
+adopt it; none → default to `docs/features/<roadmap-node-slug>/` for large
+node packets, with slice packets under
+`docs/features/<roadmap-node-slug>/<slice-slug>/` only when a slice has real
+artifacts. Workflow-skill default paths (for example
+`docs/superpowers/plans/`) are adopted only when chosen as the artifact
+residence; otherwise record the override in `index.md`. Do not create empty
+packet directories during setup.
 
 **Domain layout**: single-context vs multi-context from the Docs detection;
 confirm the route in `index.md` before writing. Do not create empty domain

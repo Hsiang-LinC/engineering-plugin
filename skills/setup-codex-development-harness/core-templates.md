@@ -97,10 +97,12 @@ and where it goes.
 1. Position: read `roadmap.md` — which node is current, is it specced?
 2. Design: {detected grilling/design skill, else "stress-test the plan with
    the user"} — resolved terms land in the glossary, hard decisions in ADRs.
-3. PRD: {detected PRD skill, else "write a PRD; user approves"}.
+3. PRD/plan: {detected PRD/planning skill, else "write a PRD/plan; user
+   approves"} — artifacts are written to the project or slice packet in
+   Artifact Adapters, overriding any workflow-skill default path.
 4. Issueize: {detected issueization skill, else split per `tracker.md`
    § Work Item Format} — current-node items carry the roadmap node `parent:`,
-   dependencies encoded; items become
+   `source:` links the packet artifact, dependencies encoded; items become
    dispatch-eligible per `tracker.md` § Dispatch Eligibility.
 5. Triage: {detected triage skill, else classify readiness manually} —
    apply the category/state roles mapped in `tracker.md` § Labels.
@@ -111,10 +113,18 @@ and where it goes.
 
 The harness owns these outputs; workflow skills only help produce them.
 
-- PRD/spec artifacts: {tracker issue | repo doc path | external doc path}
+- Artifact root: {`docs/features/` or adopted existing root}
+- Project packet: {`docs/features/<roadmap-node-slug>/` or adopted pattern}
+- Slice packet: {`docs/features/<roadmap-node-slug>/<slice-slug>/` or
+  adopted pattern; create only when a slice has real artifacts}
+- PRD/spec/plan artifacts: {project packet | slice packet | tracker issue |
+  external doc path}
 - Issueization outputs: {tracker issues | local ledger entries | automation graph | task item}
 - Approval points: {where user approval is required before publishing or dispatch}
 - Dispatch boundary: `docs/harness/tracker.md` § Dispatch Eligibility.
+- Workflow-skill path overrides: {for example, `superpowers:writing-plans`
+  saves plans to the selected packet path instead of its default
+  `docs/superpowers/plans/`, or "none"}
 
 ## Domain Docs
 
@@ -143,6 +153,8 @@ completion evidence must name which required checks ran and what happened.
 - Roadmap: `docs/harness/roadmap.md` — long-horizon direction; node
   transitions are user decisions (agents propose with evidence, never
   advance alone).
+- Feature packets: project and slice artifacts live under the Artifact
+  Adapters paths; do not duplicate tracker state there.
 - Workflow skills: configured by this index plus `tracker.md`; no shadow
   per-skill config files.
 - Archives: `completed.md` / `abandoned.md` exist in every mode; entries
@@ -184,7 +196,7 @@ node alone.
 ### {milestone-id}: {name}
 - status: done | current | next | later
 - goal: {one line}
-- spec: {PRD / spec / ADR refs, or "not yet specced"}
+- spec: {project packet PRD/spec/plan refs, ADR refs, or "not yet specced"}
 - items: {how this node's work items are found in the tracker — label,
   milestone, project ref, or local `parent: <milestone-id>` — or "not yet
   issueized"}
