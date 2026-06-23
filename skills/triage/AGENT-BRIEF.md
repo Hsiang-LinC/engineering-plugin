@@ -38,8 +38,8 @@ The agent needs to know when it's done. Every agent brief must have concrete, te
 State what is out of scope. This prevents the agent from gold-plating or making assumptions about adjacent features.
 
 Use `docs/harness/tracker.md` for the concrete tracker, state, label, and
-dependency syntax. Do not hard-code GitHub, Linear, local ledger, or JIRA
-terms unless that harness maps the role to those terms.
+dependency syntax. Do not hard-code GitHub, Linear, local ledger, or custom
+tracker terms unless that harness maps the role to those terms.
 
 ## Template
 

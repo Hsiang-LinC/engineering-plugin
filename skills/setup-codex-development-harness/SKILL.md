@@ -1,6 +1,6 @@
 ---
 name: setup-codex-development-harness
-description: Use when adopting an agent in a new or existing repo, when agents re-explore the codebase every session, when project state (done/doing/abandoned) is scattered or stale, when switching issue trackers (local ledger, GitHub, Linear, JIRA), when wiring an orchestrator to dispatch agent work autonomously (acceptance gates, failure states, dependency unblocking), when a long-horizon roadmap or milestone sequence needs a durable home agents pick up every session, when workflow skills (to-issues, to-prd, triage) need tracker/label/artifact/domain-doc/quality-gate config, or when an existing harness needs refresh or a drift check.
+description: Use when adopting an agent in a new or existing repo, when agents re-explore the codebase every session, when project state (done/doing/abandoned) is scattered or stale, when switching issue trackers (local ledger, GitHub, Linear, custom), when wiring an orchestrator to dispatch agent work autonomously (acceptance gates, failure states, dependency unblocking), when a long-horizon roadmap or milestone sequence needs a durable home agents pick up every session, when workflow skills (to-issues, to-prd, triage) need tracker/label/artifact/domain-doc/quality-gate config, or when an existing harness needs refresh or a drift check.
 ---
 
 # Setup Codex Development Harness
@@ -70,7 +70,7 @@ Six detections (large repos: read-only subagents per area):
   exist, mirrored, drifted.
 - **History** — `git log` for milestone-level events.
 - **Tracker** — candidates in order: existing `tracker.md`; live GitHub
-  issues; Linear/JIRA traces (configs, issue-ref formats, prior docs);
+  issues; Linear/custom-tracker traces (configs, issue-ref formats, prior docs);
   existing `docs/work-ledger/`. Also detect the access path
   (MCP tools, `gh` CLI, none). A remote candidate needs structural evidence
   (a configured remote, tracker config, or live issues) — CLI auth alone is
@@ -95,7 +95,7 @@ Present: detection summary, topology verdict (core unless extended
 thresholds met), absorption dispositions, and **tracker adjudication**:
 
 - exactly one candidate → propose adopting it;
-- none → ask the user (local / GitHub / Linear / JIRA / custom), with a
+- none → ask the user (local / GitHub / Linear / custom), with a
   recommendation (local, unless detection found remote-tracker evidence);
 - multiple → list differences; user decides.
 - trace-only (unverified) candidates: state the uncertainty in the proposal.
@@ -290,4 +290,4 @@ skill changes topology.
 | Orchestrator config conflicts with `tracker.md` | warn only; never edit foreign config |
 | Acceptance authority change (human-gated ↔ agent-gated) | edit `tracker.md` only — State Machine authority rows and Read/Write allowed transitions; no other file changes |
 | Swap with unmigrated entries | keep old format, list in report; swap incomplete until the list is empty |
-| Tracker detail undetectable at generation (e.g. JIRA state names, GitHub owner/repo) | ask the user to supply it before writing tracker.md; never generate with braces unfilled |
+| Tracker detail undetectable at generation (e.g. custom state names, GitHub owner/repo) | ask the user to supply it before writing tracker.md; never generate with braces unfilled |

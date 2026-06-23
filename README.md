@@ -8,7 +8,6 @@ routing, artifact, and quality-gate context.
 
 - `caveman`
 - `diagnose`
-- `git-guardrails-claude-code`
 - `grill-me`
 - `grill-with-docs`
 - `handoff`
@@ -32,12 +31,11 @@ routing, artifact, and quality-gate context.
 - Workflow skills are harness-native. `grill-with-docs` → `to-prd` → `to-issues` → `triage` read `docs/harness/index.md` and `docs/harness/tracker.md` instead of per-skill shadow config.
 - SMDA automation belongs in the SMDA plugin/runtime. It should consume the Engineering harness contract and own only SMDA-specific runtime setup, role bindings, and scheduler routing.
 - This plugin intentionally uses a Codex-native `.codex-plugin/plugin.json` manifest rather than the upstream `.claude-plugin` format.
-- `git-guardrails-claude-code` is included as-is even though parts of it reference Claude-specific settings paths.
 
 ## Install as a marketplace
 
-Use the marketplace root one level above this plugin:
+Use the marketplace root that contains this plugin:
 
 ```bash
-codex plugin marketplace add /Users/danny/Documents/Codex/2026-06-05/codex-cli-slash-command/outputs/engineering-marketplace
+codex plugin marketplace add /Users/danny/codex-local-marketplace
 ```
