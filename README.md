@@ -1,41 +1,68 @@
 # Engineering Plugin
 
-This local Codex plugin bundles engineering workflow skills for Codex,
-including the generic development harness those skills read for tracker,
-routing, artifact, and quality-gate context.
+I maintain this plugin as a personal collection of development skills I have gathered, adapted, and curated through day-to-day software work. It captures the workflows I want available across repositories: establishing durable project context, challenging designs, diagnosing failures, shaping work, and implementing changes behind explicit quality gates.
 
-## Included skills
+The collection is intentionally practical. Each skill handles a recognizable task, while the development harness gives workflow-oriented skills a shared understanding of the repository.
+
+## Workflow
+
+I start by running `setup-codex-development-harness` when adopting a new or existing repository. It establishes a durable repository contract for project direction, tracker rules, documentation and artifact routes, and quality gates. This keeps agents from rediscovering the same context in every session and gives later skills a consistent foundation.
+
+From there, I use focused skills as the work requires:
+
+| Skill | Purpose |
+| --- | --- |
+| `setup-codex-development-harness` | Bootstrap or refresh the repository context that the workflow relies on. |
+| `grill-me`, `grill-with-docs` | Pressure-test a plan, resolve ambiguous decisions, and align terminology with domain documentation. |
+| `zoom-out`, `improve-codebase-architecture` | Map unfamiliar code or identify focused opportunities to deepen module boundaries. |
+| `diagnose`, `tdd` | Reproduce difficult failures, identify root causes, and leave regression coverage through red-green-refactor. |
+| `prototype` | Build a deliberately throwaway implementation when a state model or UI direction needs evidence. |
+| `to-prd`, `to-issues`, `triage` | Turn an understood problem into durable product context, vertical-slice work items, and tracker-ready work. |
+| `swift-dev-guideline` | Apply modern Swift, SwiftUI, SwiftData, concurrency, and Xcode verification conventions. |
+| `handoff` | Preserve enough context for another agent or session to continue cleanly. |
+
+## Usage
+
+Set up the repository contract first:
+
+```text
+$setup-codex-development-harness Set up this repository around its existing tracker and documentation. Show me the proposed harness before writing it.
+```
+
+Shape a feature into executable work:
+
+```text
+$grill-with-docs Stress-test this feature against the current domain model.
+$to-prd Turn our decisions into a PRD.
+$to-issues Break the PRD into tracer-bullet issues.
+```
+
+Diagnose and fix a regression:
+
+```text
+$diagnose Reproduce this failure, isolate the root cause, and fix it with $tdd.
+```
+
+Apply the Swift conventions:
+
+```text
+$swift-dev-guideline Review this SwiftUI change and replace legacy APIs without changing behavior.
+```
+
+## Additional skills
+
+The plugin also includes focused utilities for communication, repository setup, course authoring, test-data migration, and skill creation:
 
 - `caveman`
-- `diagnose`
-- `grill-me`
-- `grill-with-docs`
-- `handoff`
-- `improve-codebase-architecture`
 - `migrate-to-shoehorn`
-- `prototype`
 - `scaffold-exercises`
-- `setup-codex-development-harness`
 - `setup-pre-commit`
-- `tdd`
-- `to-issues`
-- `to-prd`
-- `triage`
 - `write-a-skill`
-- `zoom-out`
 
-## Notes
+## Installation
 
-- Source of truth for the skill contents in this bundle is the copied local skill directories under `skills/`.
-- `setup-codex-development-harness` is the primary per-repo setup: it owns tracker identity, triage labels/states, the long-horizon `roadmap.md`, `docs/harness/quality-gates.md`, Work Production routing, Artifact Adapters, and Domain Docs routing.
-- Workflow skills are harness-native. `grill-with-docs` → `to-prd` → `to-issues` → `triage` read `docs/harness/index.md` and `docs/harness/tracker.md` instead of per-skill shadow config.
-- SMDA automation belongs in the SMDA plugin/runtime. It should consume the Engineering harness contract and own only SMDA-specific runtime setup, role bindings, and scheduler routing.
-- This plugin intentionally uses a Codex-native `.codex-plugin/plugin.json` manifest rather than the upstream `.claude-plugin` format.
-
-## Install as a marketplace
-
-Use the marketplace root that contains this plugin:
+Add the local marketplace that contains this plugin:
 
 ```bash
-codex plugin marketplace add /Users/danny/codex-local-marketplace
+codex plugin marketplace add /path/to/codex-local-marketplace
 ```

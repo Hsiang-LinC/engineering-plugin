@@ -1,0 +1,4 @@
+interface:
+  display_name: "Swift Dev Guideline"
+  short_description: "Modern SwiftUI and SwiftData engineering guidance"
+  default_prompt: "Use $swift-dev-guideline to build this iOS feature with current Swift APIs."
