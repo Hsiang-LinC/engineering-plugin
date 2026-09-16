@@ -10,8 +10,8 @@ instead of re-exploring. Core artifacts: **tracker contract**
 (`docs/harness/tracker.md`), **direction** (`docs/harness/roadmap.md`),
 **quality gates** (`docs/harness/quality-gates.md`), **archives**
 (`docs/work-ledger/`), **index + routing** (`docs/harness/index.md`), and
-the **bootloader block**. Workflow stays with the environment's process
-system; orchestrators and workflow skills integrate by reading
+the **bootloader block**. The harness owns project workflow routing and
+handoffs; selected skills supply methodology; orchestrators and workflow skills integrate by reading
 `tracker.md` + `index.md` + `quality-gates.md` — the skill never generates
 orchestrator config or per-skill shadow config.
 
@@ -50,6 +50,12 @@ orchestrator config or per-skill shadow config.
 ## Setup Mode
 
 ### 1. Explore
+
+Record a compact project profile in the index: actors/goals, important state
+transitions, data invariants, external side effects and operational risks. Map
+only applicable risks to design examples and verification (for example, UI
+cancel/undo, retry/idempotency for integrations, dry-run/rollback for scripts).
+Use observed evidence; distinguish unknowns from confirmed requirements.
 
 Six detections (large repos: read-only subagents per area):
 
@@ -129,8 +135,9 @@ any existing repo labels (see tracker-adapters substitution rule).
 And **acceptance authority** for the generated state machine: human-gated
 (default — a human accepts the Done-equivalent state) or agent-gated (a
 reviewer agent distinct from the author accepts, with verification
-evidence; humans handle escalations only). Recommend human-gated unless an
-orchestrator was detected or the user asked for autonomous operation. Both
+evidence; humans handle escalations only). Default to human-gated unless the user explicitly authorizes agent acceptance;
+an installed orchestrator does not grant that authority. Child acceptance and
+parent/release acceptance may differ; record each boundary in the tracker. Both
 profiles keep two invariants: the author of a change never accepts its own
 item, and a human may set any state — profiles grant agent authority, they
 never revoke human authority.
@@ -160,10 +167,12 @@ warn in the report, do not fix.
 
 ### 6. Validate
 
-All hard gates must pass before reporting done:
+All hard gates must pass before reporting done. Exercise the scenarios in
+[behavioral-checks.md](behavioral-checks.md) against the generated instance;
+file presence alone does not verify agent behavior:
 
 - [ ] every path referenced in block and index exists
-- [ ] exactly one harness block in the repo
+- [ ] exactly one full harness block; other bootloaders contain pointers only
 - [ ] routing skill names resolve in this environment, or are generic fallbacks
 - [ ] harness docs committed (harness paths only — never sweep unrelated dirty files)
 - [ ] tracker-leak: in instruction files (bootloader, `index.md`, split
@@ -220,6 +229,12 @@ Triggered when the user asks to switch trackers. Steps:
 
 ## Refresh Mode
 
+Compare this setup skill and its current templates directly with the existing
+harness, actual code/tests, installed toolbox and recent work evidence. An
+architecture-improvement review is optional input, never a prerequisite.
+Refresh repairs documented drift; it does not refactor application code or
+promote the current implementation into intended product behavior.
+
 1. **Drift scan** — module-map vs tree; active items vs git log (finished
    but still listed?); `Last verified` overdue (>90 days); bootloader pointer
    liveness; **archive backfill gap** (tracker Done/Canceled items missing
@@ -228,8 +243,9 @@ Triggered when the user asks to switch trackers. Steps:
    detected orchestrator config match `tracker.md` — mismatch: warn only);
    **contract gap** (a `tracker.md` generated before the ten-section
    contract lacks § Work Item Format / § Failure Handling — generate the
-   missing sections from the matching preset, asking the user for the
-   acceptance profile; preserve existing sections verbatim);
+   missing sections from the matching preset; also check existing readiness,
+   acceptance, dependency and skill handoff semantics for contradictions.
+   Preserve project decisions; do not overwrite them with template defaults);
    **roadmap drift** (current node's items all terminal but the node not
    advanced — local mode checks entries with matching `parent:`; flag and
    propose the advance to the user, never advance alone; no roadmap residence
@@ -238,9 +254,13 @@ Triggered when the user asks to switch trackers. Steps:
    routing, artifact adapters, Domain Docs, or Quality Gates); **tracker
    label drift** (workflow skills present but `tracker.md` lacks their
    category/state roles); **tracker-leak scan**.
-2. **Present drift summary. Wait for approval.**
+2. **Present drift summary** with evidence, proposed changes and retained
+   project decisions. Existing explicit authorization to refresh covers these
+   changes; ask only for unresolved scope or authority decisions.
 3. **Execute** — patch only inside markers; batch-backfill archives;
-   archive roll-off per conventions; topology upgrade check.
+   archive roll-off per conventions; topology upgrade check. Re-run setup
+   validation and behavioral checks; record what could not be verified.
+   Do not infer acceptance from git history, or advance the roadmap implicitly.
 
 If the tracker is unreachable (API down, no credentials): skip
 tracker-dependent checks, note the gap in the report — never block on

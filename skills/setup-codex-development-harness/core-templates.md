@@ -61,23 +61,36 @@ Single residence of routing facts for this repo. Bootloaders point here;
 never copy these tables elsewhere. Tracker identity lives only in
 `docs/harness/tracker.md`.
 
+## Project Profile
+
+{observed actors/goals, state transitions, data invariants, external effects
+and operational risks; applicable design examples and verification routes only}
+
 ## Start Sequence
 
 1. Read `docs/harness/tracker.md`; read your work item per its Read/Write
    section.
-2. Read `docs/harness/roadmap.md` § Current Node — know where this work
+2. Read `{approved roadmap path}` § Current Node — know where this work
    sits in the long-horizon sequence.
 3. Read `docs/harness/quality-gates.md`.
-4. Identify your task type in the routing table.
-5. Read the listed context; use the listed workflow.
-6. Before closing: post completion evidence and the state update per
-   `tracker.md`; update durable repo docs when facts changed.
+4. Identify the execution owner from the work item and, when supplied, its
+   runtime assignment. An installed runtime alone does not own this item.
+5. Follow Work Production's shared phase contract. Interactive work resumes
+   the recorded phase and selects the routed skill. Runtime-assigned work
+   performs only the assigned role using its context, methodology and output
+   schema; do not independently select another phase or start another pipeline.
+6. Missing decisions return to clarification through the execution owner:
+   ask the user interactively, or report through runtime escalation.
+7. Return evidence to the execution owner. Interactive agents update the
+   tracker within their authority; runtime workers return role artifacts and
+   leave lifecycle writes/publication to the runtime. Update durable docs only
+   within the assigned scope.
 
 ## Task Routing
 
 | Task type | Read first | Workflow | Completion update |
 |---|---|---|---|
-| New feature | Domain Docs; `roadmap.md` § Current Node; {repo-specific docs/dirs} | {detected design+planning skills, else "design before code"} | tracker update per `tracker.md`; durable docs if facts changed |
+| New feature | Domain Docs; `{approved roadmap path}` § Current Node; {repo-specific docs/dirs} | {detected design+planning skills, else "design before code"} | tracker update per `tracker.md`; durable docs if facts changed |
 | Plan intake (approved spec/plan → work items) | Work Production; Artifact Adapters; the approved spec/plan | {detected issueization skill, else split per `tracker.md` § Work Item Format} | work items created, dependencies encoded, each linking the source plan |
 | Bug / regression | `quality-gates.md`; {repo-specific docs/tests} | {detected debugging skill, else "reproduce before fixing"} | regression test; tracker update per `tracker.md` |
 | Unfamiliar area | {architecture docs if extended, else key source dirs} | {detected exploration skill, else targeted reading} | index/map update if stable knowledge gained |
@@ -89,25 +102,65 @@ repo-specific ones found during exploration.
 
 ## Work Production
 
-How new work enters the tracker. User-in-the-loop by design — orchestrated
-agents consume the output of this pipeline; they never run it. Workflow
-skills provide methodology; this harness decides what artifact is written
-and where it goes.
+One phase contract serves interactive and runtime execution. The execution
+owner advances it; skills supply the method, not a second controller.
 
-1. Position: read `roadmap.md` — which node is current, is it specced?
-2. Design: {detected grilling/design skill, else "stress-test the plan with
-   the user"} — resolved terms land in the glossary, hard decisions in ADRs.
-3. PRD/plan: {detected PRD/planning skill, else "write a PRD/plan; user
-   approves"} — artifacts are written to the project or slice packet in
-   Artifact Adapters, overriding any workflow-skill default path.
-4. Issueize: {detected issueization skill, else split per `tracker.md`
-   § Work Item Format} — current-node items carry the roadmap node `parent:`,
-   `source:` links the packet artifact, dependencies encoded; items become
-   dispatch-eligible per `tracker.md` § Dispatch Eligibility.
-5. Triage: {detected triage skill, else classify readiness manually} —
-   apply the category/state roles mapped in `tracker.md` § Labels.
-6. Node close: when the current node's items are all terminal, propose the
-   roadmap advance to the user (see `roadmap.md` header rule).
+| Responsibility | Interactive execution | Runtime execution |
+|---|---|---|
+| Phase and next action | Agent reads the work item | Runtime supplies its authoritative assignment |
+| Method | Agent loads the selected skill | Role uses injected/assigned methodology mapped to this contract |
+| Gates and acceptance | Agent checks evidence; designated authority accepts | Runtime enforces supported checks and routes the designated acceptance decision |
+| State and publication | Authorized agent writes tracker | Runtime writes its ledger and projects tracker updates |
+| Uncertainty | Agent asks the decision maker | Worker reports; runtime pauses/escalates affected work |
+
+Runtime states may refine a shared phase into several roles; they need not
+match phase names one-to-one. Setup verifies that role methods and gates satisfy
+this contract; unsupported mappings are reported, not silently substituted.
+Execution ownership changes require an explicit handoff of source revision,
+phase, evidence and next action, with the previous owner no longer active.
+
+Select the smallest
+applicable path; a clear bug goes directly to diagnosis, regression check and
+acceptance, without a PRD. A bounded investigation has its own question, limits
+and evidence deliverable; unknowns do not make exploration impossible.
+
+| Phase | Entry / selected workflow | Exit evidence |
+|---|---|---|
+| Clarify | Unresolved goal, term, scope or behavior → {one installed grilling/design skill, else explicit interview fallback} | Confirmed scope, non-goals, rules/examples, unresolved questions in the selected spec; glossary terms and consequential ADRs linked |
+| Specify | Product behavior understood → {one installed PRD skill, else scoped written plan} | Reviewed behavior examples or prototype when useful; approved source revision and remaining assumptions distinguished |
+| Slice | Approved scope → {one installed issueization skill, else tracker work-item format} | Verifiable slices, source revision, dependencies, acceptance/verification; triage before readiness |
+| Implement | Tracker eligibility holds → {one installed implementation/debugging skill, else reproduce/test/change/check} | Changed artifact revision and criterion-level evidence |
+| Accept | Implementation evidence exists → {one installed review/verification skill, else documented review} | Authorized decision per tracker; passing tests alone do not accept work |
+
+Resolve every workflow cell to one actual skill name and read that skill before
+acting; no manual invocation from the user is needed. If unavailable, report
+that fact and use the recorded fallback. Do not silently invent a replacement
+method or invoke every installed skill. The execution owner persists phase,
+source and next action in its authoritative state, exposing a reference from
+the work item when runtime-owned. Keep decisions/questions in the spec, not
+the glossary. A worker must not create a parallel phase ledger.
+
+During clarification, use a small set of rules, concrete examples and open
+questions. Walk through the normal path and relevant empty, error, cancel,
+retry and permission cases; a sketch or prototype is useful when words leave
+interaction ambiguous. Review examples in small groups, not just a long PRD.
+
+Re-enter clarification whenever implementation reveals a material uncertainty.
+Record changed decisions and invalidate only affected readiness, approvals and
+evidence; unaffected work can continue. Scope, product behavior, public-contract
+or authority changes need the designated decision maker. Repeated failure or a
+missing capability blocks the smallest affected item with evidence and a
+specific question; retries cannot silently relax scope or gates.
+
+Graph production has exactly one owner per item: normal work uses the selected
+issueization skill; SMDA-managed work hands the approved spec to SMDA’s
+reviewed decomposition/publication path. Skills invoked inside a runtime role
+produce only its requested artifact; they do not independently publish issues
+or run a second interactive pipeline. An external graph import is permitted
+only when the installed adapter explicitly supports reviewed import.
+
+At node closure, check accepted outcomes and explicitly dropped scope, not just
+terminal item counts; propose roadmap advancement to the user.
 
 ## Artifact Adapters
 
@@ -150,7 +203,7 @@ completion evidence must name which required checks ran and what happened.
 ## Conventions
 
 - Tracker: `docs/harness/tracker.md` — the only file that names the tracker.
-- Roadmap: `docs/harness/roadmap.md` — long-horizon direction; node
+- Roadmap: `{approved roadmap path}` — long-horizon direction; node
   transitions are user decisions (agents propose with evidence, never
   advance alone).
 - Feature packets: project and slice artifacts live under the Artifact
@@ -233,10 +286,16 @@ Required before completion evidence is posted.
 
 Completion evidence must include:
 
+- work item, source revision and changed artifact revision;
+- acceptance criteria mapped to observed results (including behavior examples);
 - commands run and outcomes;
 - checks intentionally skipped, with the reason;
 - remaining risk or "none";
 - follow-up refs or "none".
+
+Repository quality gates are the shared definition of done; each item’s
+acceptance criteria define its behavior. Acceptance authority is a separate
+tracker decision. Evidence from an older revision must be rechecked for impact.
 
 ## Failure Rule
 

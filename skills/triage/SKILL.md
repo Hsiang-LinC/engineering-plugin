@@ -3,6 +3,13 @@ name: triage
 description: Triage tracker items through a state machine driven by harness-mapped triage roles. Use when user wants to create an issue, triage issues, review incoming bugs or feature requests, prepare work for an AFK agent, or manage issue workflow.
 ---
 
+Harness readiness is authoritative: an actor/ready label or maintainer override
+is not evidence that implementation inputs, dependencies and acceptance gates
+are satisfied. Preserve explicit user direction, but record missing inputs and
+route unresolved decisions before implementation. An AGENT-BRIEF may refine
+execution detail; changing approved product scope requires a source amendment.
+
+
 # Triage
 
 Move tracker items through a small state machine of triage roles.

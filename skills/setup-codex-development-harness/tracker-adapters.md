@@ -18,12 +18,13 @@ meaning the same thing.
 
 Every adapter fills the same ten sections, in this order. A missing or
 brace-containing section fails validation. This file is simultaneously the
-agent's tracker manual and any orchestrator's integration interface: an
-orchestrator derives everything it needs — what to dispatch (§5), which
-transitions it may perform (§2), how to read and write items (§6), what to
-do on failure (§8) — from the generated `tracker.md` alone. The harness
-never generates orchestrator config; conforming to `tracker.md` is the
-whole integration.
+agent's tracker manual and project policy boundary. A runtime adapter must
+map this policy to its supported controls; prose alone does not enforce it.
+The harness never generates an orchestration engine. In SMDA mode, name its
+operating contract and runtime ledger as execution truth; tracker state is a
+projection. Replace generic dispatch predicates for SMDA-owned items with
+runtime eligibility, typed dependencies and serialized acceptance. Do not
+claim that ordinary closed-item checks enforce SMDA's execution model.
 
 1. **Identity** — kind, where truth lives, work-item ID format.
 2. **State Machine** — states: name / meaning / which actor may set it.
@@ -71,6 +72,40 @@ Profile braces (`{human-gated: ... | agent-gated: ...}`) resolve at
 generation to the chosen profile's text only — like every other brace,
 none survive into the generated file.
 
+
+## Shared rules to materialize in every generated adapter
+
+Place these rules in the corresponding ten sections, including custom adapters;
+generated repos must not require this source file at runtime.
+
+- **Work Item Format:** all executable work, interactive or automated, has a
+  source revision/decision reference, scope/non-goals, observable acceptance,
+  verification method and dependencies. Persist current phase and next action;
+  unresolved decisions link to the spec. A small bug can hold all of this in
+  its item. Investigation criteria describe the bounded evidence to produce.
+- **Dispatch Eligibility:** require authorized scope/current roadmap node (or
+  an explicit standalone-work exception), current source, complete work-item
+  content, no unresolved implementation-blocking question and no needs-plan,
+  needs-info, needs-triage, needs-review or human-action gate. Recheck before
+  starting; publication or an actor label is not readiness. Dependencies must
+  satisfy their required outcome; abandoned/canceled is not success. An
+  authorized waiver or recorded supersession must explain how the obligation
+  is satisfied. Look in rolled-off archives too. Interactive agents apply the
+  same readiness check before implementation; clarification can start earlier.
+- **Completion Evidence:** identify item and artifact revision, criterion-level
+  results and applicable quality gates. Record acceptance separately: actor,
+  decision, object/revision, evidence reference and date. Human presence,
+  silence or “thanks” is not approval. Explicit acceptance in the conversation
+  may be recorded; the author may transcribe it, not invent it. Agent-gated
+  acceptance requires an independent reviewer within the delegated authority.
+  Acceptance of a spec, child integration, parent and release are distinct.
+- **Failure Handling:** scope/behavior/public-contract or authority changes,
+  repeated failures and missing capabilities route to the designated decision
+  maker. Record evidence, affected scope and the precise unblock question.
+  Invalidate impacted readiness/approval/evidence after material changes;
+  never resolve failure by weakening a gate. Runtime-owned items use runtime
+  recovery and escalation, not ad hoc tracker-state edits.
+
 ## Preset: local
 
 ```markdown
@@ -90,8 +125,9 @@ Last verified: {DATE}
 |---|---|---|
 | planned | scoped, not started | anyone |
 | in-progress | being worked | the agent working it |
+| in-review | verification evidence posted; acceptance pending | working agent |
 | blocked | needs human decision or external change | anyone |
-| done | verified complete; entry moves to `completed.md` | {human-gated: the agent, with evidence — the human in the loop is the gate | agent-gated: a reviewer agent distinct from the author, with evidence} |
+| done | verified complete; entry moves to `completed.md` | {human-gated: human acceptance recorded; agent may transcribe the decision | agent-gated: a reviewer agent distinct from the author, with evidence} |
 | abandoned | dropped; entry moves to `abandoned.md` with `resume-if:` | human, or agent with human approval |
 
 States live in the `status:` field of `active.md` / `follow-ups.md` entries.
@@ -107,14 +143,15 @@ state roles `needs-triage`, `needs-info`, `ready-for-agent`,
 Every entry carries `status:`, `source:`, `next:`, `updated:` per
 `docs/harness/index.md` § Conventions. Entries tied to a roadmap node carry
 `parent:` with that node's slug; preserve it when moving entries to
-`completed.md` or `abandoned.md`. Entries intended for orchestrated dispatch
-additionally carry `acceptance:` (observable outcomes), `verify:` (commands +
+`completed.md` or `abandoned.md`. All executable entries
+carry `acceptance:` (observable outcomes), `verify:` (commands +
 expected outcomes), and `blocked-by:` (slugs; omit when none).
 
 ## Dispatch Eligibility
-An item is dispatchable when its `active.md` entry has `status: planned`, a
+Subject to the shared readiness rules materialized here, an item is dispatchable when its `active.md` entry has `status: planned`, a
 concrete action in `next:`, `acceptance:` and `verify:` filled, and every
-`blocked-by:` slug already present in `completed.md`. Re-evaluated every
+`blocked-by:` outcome satisfied by accepted completion (including rolled-off
+archives) or an authorized waiver/supersession recorded per the shared rules. Re-evaluated every
 dispatch pass — completing a blocker unblocks dependents implicitly.
 
 ## Read / Write
@@ -193,8 +230,10 @@ A dispatch-eligible issue's body contains:
 - dependencies: one `Blocked by #<n>` line per blocker (none when independent)
 
 ## Dispatch Eligibility
-open, labeled `agent`, no lifecycle label (`in-progress` / `in-review` /
-`blocked`), every `Blocked by #<n>` reference closed, body satisfies
+Subject to the shared readiness rules materialized here: open, labeled `agent`, no lifecycle label (`in-progress` / `in-review` /
+`blocked` / `needs-human`), no unresolved gate or triage label, every
+`Blocked by #<n>` outcome satisfied by closed-completed or an authorized
+waiver/supersession recorded per the shared rules, body satisfies
 § Work Item Format. Re-evaluated every dispatch pass — closing a blocker
 unblocks dependents implicitly.
 
@@ -271,8 +310,9 @@ A dispatch-eligible issue's body contains:
 Dependencies are Linear blocking relations ("blocked by"), not body text.
 
 ## Dispatch Eligibility
-state `Todo`, labeled `agent`, every blocking relation in a terminal state
-(`Done` / `Canceled`), body satisfies § Work Item Format. Re-evaluated every
+Subject to the shared readiness rules materialized here: state `Todo`, labeled `agent`, no unresolved gate or triage label, every
+blocking outcome satisfied by `Done` or an authorized waiver/supersession
+recorded per the shared rules, body satisfies § Work Item Format. Re-evaluated every
 dispatch pass — a blocker reaching `Done` unblocks dependents implicitly.
 
 ## Read / Write

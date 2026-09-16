@@ -10,6 +10,15 @@ Before publishing, read the repo harness: `docs/harness/index.md`,
 Docs routes named by the index. If the harness is missing or does not name
 where PRD/spec artifacts go, run or ask to run `setup-codex-development-harness`.
 
+## Handoff contract
+
+Use confirmed decisions from the selected spec/design record. Separate user
+confirmed requirements, agent proposals and unresolved assumptions. Material
+unknowns return to the harness clarification route; synthesis cannot approve
+its own additions. In a runtime role, use the supplied role contract and output
+schema: return the requested artifact without independent publication or an
+interactive interview; report unresolved decisions through that role.
+
 ## Process
 
 1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the PRD, and respect any ADRs in the area you're touching.
@@ -20,9 +29,9 @@ Check with the user that these seams match their expectations.
 
 3. Write the PRD using the template below, then publish it to the artifact
    destination named by `docs/harness/index.md` § Artifact Adapters. If that
-   destination is a tracker item, apply the mapped `ready-for-agent` state
-   role from `docs/harness/tracker.md` § Labels unless the harness says the
-   PRD requires a separate approval gate.
+   destination is a tracker item, preserve the approval/readiness gates from
+   `tracker.md`. Writing a PRD does not approve its scope or make it dispatchable.
+   Record the source revision, approval reference and next phase in the item.
 
 <prd-template>
 
@@ -36,7 +45,7 @@ The solution to the problem, from the user's perspective.
 
 ## User Stories
 
-A LONG, numbered list of user stories. Each user story should be in the format of:
+A numbered list of user stories within the confirmed scope. Each user story should be in the format of:
 
 1. As an <actor>, I want a <feature>, so that <benefit>
 
@@ -44,7 +53,9 @@ A LONG, numbered list of user stories. Each user story should be in the format o
 1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
 </user-story-example>
 
-This list of user stories should be extremely extensive and cover all aspects of the feature.
+Cover the agreed feature without inventing adjacent requirements. Include
+concrete behavior examples and boundary cases reviewed during design; mark
+unreviewed proposals and open questions explicitly.
 
 ## Implementation Decisions
 

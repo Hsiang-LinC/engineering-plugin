@@ -3,6 +3,23 @@ name: grill-with-docs
 description: Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions.
 ---
 
+## Harness handoff
+
+When the repo has a harness, follow its spec/artifact route. This interview can
+be re-entered for a feature or newly discovered uncertainty at any phase.
+Persist confirmed product rules, concrete examples, non-goals, assumptions and
+unresolved questions in the selected spec; glossary terms belong in CONTEXT,
+consequential decisions in ADRs. Before handing off, record the source revision,
+what was approved, remaining questions and next phase/action in the work item.
+A plausible summary is not approval; review ambiguous interactions with a
+small walkthrough, sketch or prototype where useful.
+
+When invoked by an automation runtime as a review role, apply the questioning
+method to the supplied evidence and return findings in that role’s schema.
+Do not independently interview the user, change approved decisions or publish
+docs; unresolved questions go through the role’s escalation mechanism.
+
+
 <what-to-do>
 
 Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.

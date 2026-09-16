@@ -16,14 +16,15 @@ tracker per `docs/harness/tracker.md`.
 
 ```markdown
 ## <kebab-slug>
-- status: planned | in-progress | blocked
+- status: planned | in-progress | in-review | blocked
+- phase: clarify | specify | slice | implement | accept
 - parent: <roadmap node slug, if this belongs to a node>
 - source: <spec / plan / conversation ref>
 - next: <single concrete next action>
 - updated: YYYY-MM-DD
 ```
 
-Entries intended for orchestrated dispatch additionally carry `blocked-by:`
+All executable entries carry `blocked-by:`
 (slugs; omit when none), `acceptance:` (observable outcomes), and `verify:`
 (commands + expected outcomes) — fields defined in `tracker.md` § Work Item
 Format.
@@ -37,6 +38,7 @@ Format.
 - summary: <what changed>
 - verified: <test command run / evidence; "backfilled from git history" or
   "backfilled from <tracker> <id>" for backfill entries>
+- accepted: <actor, decision, object/revision, evidence reference and date; unknown for historical backfill>
 - follow-ups: <ref into follow-ups.md (local mode) or the tracker (remote modes), or none>
 ```
 
@@ -59,8 +61,10 @@ do not violate the tracker-leak gate.
 - Every generated file starts with: `<!-- codex-harness: generated YYYY-MM-DD -->`
 - The bootloader block is wrapped in `<!-- codex-harness:begin -->` /
   `<!-- codex-harness:end -->`
-- Refresh mode patches **only inside markers**. Content outside markers is
-  user-authored and untouchable without asking.
+- Refresh patches generated instructions only. A file-level generated header
+  identifies the generated template, not permission to replace work entries
+  or user additions. Preserve entries and project decisions; explicit begin/end
+  markers delimit mixed-file generated blocks. Ask when ownership is unclear.
 
 ## Staleness
 

@@ -2,8 +2,9 @@
 
 An agent brief is a structured note posted on the repo's tracker item when
 it moves to the mapped `ready-for-agent` state role. It is the authoritative
-specification that an AFK agent will work from. The original item body and
-discussion are context — the agent brief is the contract.
+execution brief that an AFK agent will work from, subordinate to the approved
+source revision and harness gates. Link the source; a brief cannot silently
+override approved product behavior. Amend the source when scope changes.
 
 ## Principles
 
@@ -48,6 +49,9 @@ tracker terms unless that harness maps the role to those terms.
 
 **Category:** bug / enhancement
 **Summary:** one-line description of what needs to happen
+**Source:** approved source revision and decision reference
+**Verification:** commands/review steps and expected results
+**Dependencies:** required outcomes, using the harness encoding
 
 **Current behavior:**
 Describe what happens now. For bugs, this is the broken behavior.
