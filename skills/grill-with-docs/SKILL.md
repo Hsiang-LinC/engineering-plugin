@@ -20,6 +20,10 @@ Do not independently interview the user, change approved decisions or publish
 docs; unresolved questions go through the role’s escalation mechanism.
 
 
+The interview, document edits and handoff-record updates below apply to
+interactive sessions. Runtime review roles use the domain checks as read-only
+review criteria under the handoff contract above.
+
 <what-to-do>
 
 Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.

@@ -25,9 +25,13 @@ interactive interview; report unresolved decisions through that role.
 
 2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can.
 
-Check with the user that these seams match their expectations.
+Reuse approved testing decisions. If a proposed seam changes an unresolved
+material product or verification decision, return it through the harness
+clarification route; runtime roles report it through their output schema.
 
-3. Write the PRD using the template below, then publish it to the artifact
+3. Write the PRD using the template below. Runtime roles return only the
+   assigned artifact through their output schema. For interactive work,
+   publish it to the artifact
    destination named by `docs/harness/index.md` § Artifact Adapters. If that
    destination is a tracker item, preserve the approval/readiness gates from
    `tracker.md`. Writing a PRD does not approve its scope or make it dispatchable.

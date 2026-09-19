@@ -19,15 +19,15 @@ generate only the two archives (`completed.md`, `abandoned.md`).
 Before any development task, read `docs/harness/index.md` and follow its routing.
 
 Hard rules:
-1. Work state lives in the tracker — read `docs/harness/tracker.md` before
-   starting work.
+1. Read `docs/harness/tracker.md` for work-state ownership and write authority.
 2. Bright line: any work that changes code, contracts, or docs is
    tracker-worthy — before the first edit, confirm a work item covers it or
-   create one per `tracker.md` (interactive sessions included). Pure
+   create one per `tracker.md` in interactive work. Runtime workers use the
+   assigned item and report missing coverage to the execution owner. Pure
    reading, discussion, or Q&A is not tracker-worthy.
-3. Definition of done includes the tracker update defined in `tracker.md`
-   and updating durable repo docs when facts changed. A change without its
-   tracker update is incomplete work.
+3. Completion requires evidence and durable doc updates when facts change.
+   The execution owner applies tracker updates per `tracker.md`; runtime
+   workers return artifacts without independently changing lifecycle state.
 4. Routing tables live only in `docs/harness/index.md`. Do not duplicate them here.
 <!-- codex-harness:end -->
 ```

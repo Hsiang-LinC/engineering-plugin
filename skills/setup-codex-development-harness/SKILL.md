@@ -142,6 +142,16 @@ profiles keep two invariants: the author of a change never accepts its own
 item, and a human may set any state — profiles grant agent authority, they
 never revoke human authority.
 
+When agent delivery is authorized, record the merge target, required checks,
+human-only exception paths/actions, and escalation conditions. An independent
+reviewer and verification must cover the exact revision delivered. New product
+scope, changed approved UX/contracts or missing decisions return to clarification;
+AFK/readiness alone grants no extra authority. Merge and release/deployment are
+separate permissions. With a runtime, reference its checked project acceptance
+artifact from `tracker.md` as the single residence of executable values; without
+one, keep the same policy in `tracker.md`. Never install a scheduler-specific
+workflow engine into the generic harness. Refuse unsupported policy mappings.
+
 **Wait for approval before writing.**
 
 ### 4. Write
@@ -308,6 +318,6 @@ skill changes topology.
 | Tracker unreachable | skip tracker-dependent checks; note gap; never block |
 | No preset for chosen tracker | generate from the custom skeleton with the user; gates apply unchanged |
 | Orchestrator config conflicts with `tracker.md` | warn only; never edit foreign config |
-| Acceptance authority change (human-gated ↔ agent-gated) | edit `tracker.md` only — State Machine authority rows and Read/Write allowed transitions; no other file changes |
+| Acceptance authority change (human-gated ↔ agent-gated) | update the authoritative policy residence; `tracker.md` references checked runtime values when present. Refresh runtime validation and invalidate stale acceptance evidence; otherwise update the tracker authority rows directly |
 | Swap with unmigrated entries | keep old format, list in report; swap incomplete until the list is empty |
 | Tracker detail undetectable at generation (e.g. custom state names, GitHub owner/repo) | ask the user to supply it before writing tracker.md; never generate with braces unfilled |

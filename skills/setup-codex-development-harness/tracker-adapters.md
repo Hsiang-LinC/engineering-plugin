@@ -99,6 +99,13 @@ generated repos must not require this source file at runtime.
   may be recorded; the author may transcribe it, not invent it. Agent-gated
   acceptance requires an independent reviewer within the delegated authority.
   Acceptance of a spec, child integration, parent and release are distinct.
+- **Acceptance authority:** explicitly authorized agent delivery may merge the
+  named target after independent review and required checks of the delivered
+  revision. Record human-only exceptions and escalation conditions. Merge does
+  not authorize deployment. When a runtime consumes a checked project policy,
+  reference that artifact as the authority for its values instead of copying a
+  second policy here; interactive work follows it too. Unsupported mappings block
+  automation, and policy/source changes invalidate earlier acceptance evidence.
 - **Failure Handling:** scope/behavior/public-contract or authority changes,
   repeated failures and missing capabilities route to the designated decision
   maker. Record evidence, affected scope and the precise unblock question.

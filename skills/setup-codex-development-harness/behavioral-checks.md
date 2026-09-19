@@ -16,3 +16,6 @@ outcomes. These are scenario checks, not claims of deterministic enforcement.
 | Tiny bug with clear reproduction | Bounded item, diagnosis/regression check, evidence, authority gate; no mandatory PRD |
 | Scoped investigation with unknown answer | May investigate within limits; cannot treat findings as approved product changes |
 | Approved behavior changes during implementation | Reopen affected clarification/approval/evidence only; retain unaffected progress |
+| Runtime implementer has approved interface and acceptance cases | Reuse settled decisions; execute one behavior/test/implementation cycle at a time without a new interview |
+| Runtime implementer changes README links only | Use link and required repo checks; explain behavioral TDD is not applicable, then submit evidence for review |
+| YAML retry behavior changes but intended value is unspecified | Configuration is behavioral; report the missing decision through the role escalation result, do not guess or bypass tests |

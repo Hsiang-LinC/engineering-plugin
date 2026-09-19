@@ -5,6 +5,30 @@ description: Test-driven development with red-green-refactor loop. Use when user
 
 # Test-Driven Development
 
+## Applicability and harness handoff
+
+First identify the effect of the assigned change, not its file extension.
+Behavior-changing code, scripts and configuration use the red-green-refactor
+loop below. Pure documentation, formatting or nonbehavioral configuration work
+uses its acceptance criteria and applicable checks (links, schema/config
+validation, build or smoke checks); do not invent code tests merely to run TDD.
+Record the chosen verification and why a behavioral test is not applicable.
+Required repo gates still apply. If a configuration edit changes behavior, test
+that behavior; calling it "configuration-only" is not an exemption.
+
+In a delegated/runtime role, use the approved source, interface decisions and
+acceptance criteria supplied by the task as planning inputs. Existing explicit
+approval satisfies the corresponding confirmations below; do not reopen settled
+decisions or start a new interview. Choose implementation/test details within
+that scope. Assignment alone does not approve new product decisions. If a
+material behavior, interface or required decision is missing or contradictory,
+report the precise gap through the role's blocked/escalation result and stop
+only affected work. Do not guess the requirement or silently expand scope.
+
+Return changed files, criterion-level verification and remaining risks in the
+assigned role artifact. The runtime owns phase transitions, tracker publication
+and acceptance; passing tests is evidence, not authority to accept or merge.
+
 ## Philosophy
 
 **Core principle**: Tests should verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't.
@@ -46,18 +70,18 @@ RIGHT (vertical):
 
 When exploring the codebase, use the project's domain glossary so that test names and interface vocabulary match the project's language, and respect ADRs in the area you're touching.
 
-Before writing any code:
+Before behavior-changing implementation:
 
-- [ ] Confirm with user what interface changes are needed
-- [ ] Confirm with user which behaviors to test (prioritize)
+- [ ] Identify approved interface changes; clarify only missing decisions
+- [ ] Derive prioritized test behaviors from the approved acceptance criteria
 - [ ] Identify opportunities for [deep modules](deep-modules.md) (small interface, deep implementation)
 - [ ] Design interfaces for [testability](interface-design.md)
 - [ ] List the behaviors to test (not implementation steps)
-- [ ] Get user approval on the plan
+- [ ] Reuse existing approval for covered decisions; obtain any missing required approval via the harness/role route
 
-Ask: "What should the public interface look like? Which behaviors are most important to test?"
+When these decisions are unresolved in an interactive session, ask: "What should the public interface look like? Which behaviors are most important to test?" Runtime roles report unresolved decisions through their assigned escalation path.
 
-**You can't test everything.** Confirm with the user exactly which behaviors matter most. Focus testing effort on critical paths and complex logic, not every possible edge case.
+**You can't test everything.** Prioritize the agreed behaviors; clarify material gaps through the applicable route. Focus testing effort on critical paths and complex logic, not every possible edge case.
 
 ### 2. Tracer Bullet
 
