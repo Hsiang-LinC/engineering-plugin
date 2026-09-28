@@ -17,19 +17,22 @@ tracker per `docs/harness/tracker.md`.
 ```markdown
 ## <kebab-slug>
 - status: planned | in-progress | in-review | blocked
-- phase: clarify | specify | slice | implement | accept
+- phase: clarify | specify | slice | implement | accept (interactive); runtime:<ledger-ref> (runtime-owned)
+- owner: unassigned | interactive | runtime:<assignment-ref>
 - parent: <roadmap node slug, if this belongs to a node>
 - source: <spec / plan / conversation ref>
 - next: <single concrete next action>
 - updated: YYYY-MM-DD
 ```
 
+Runtime-owned entries refer to the runtime ledger for authoritative phase and
+next action; the tracker records ownership without starting a second controller.
 All executable entries carry `blocked-by:`
 (slugs; omit when none), `acceptance:` (observable outcomes), and `verify:`
 (commands + expected outcomes) — fields defined in `tracker.md` § Work Item
 Format.
 
-### `completed.md` — archive, all modes
+### `completed.md` — local archive or retained remote archive
 
 ```markdown
 ## <kebab-slug>
@@ -42,7 +45,7 @@ Format.
 - follow-ups: <ref into follow-ups.md (local mode) or the tracker (remote modes), or none>
 ```
 
-### `abandoned.md` — archive, all modes
+### `abandoned.md` — local archive or retained remote archive
 
 ```markdown
 ## <kebab-slug>
@@ -68,12 +71,11 @@ do not violate the tracker-leak gate.
 
 ## Staleness
 
-- Every generated doc carries `Last verified: YYYY-MM-DD` directly under its
-  title. Refresh updates it after re-verifying the file's claims.
-- Refresh flags any file overdue by more than 90 days.
+- A factual doc may carry a verification date. Refresh verifies changed claims;
+  preserve existing dates until those claims are checked. No fixed age expires a doc.
 
 ## Archive Policy
 
-When `completed.md` exceeds ~200 entries or spans more than 1 year, refresh
+When an authoritative local `completed.md` exceeds ~200 entries or spans more than 1 year, refresh
 rolls the oldest entries into `docs/work-ledger/archive/completed-YYYY.md`
 (same entry format, one file per year).

@@ -7,9 +7,9 @@ description: Use when adopting an agent in a new or existing repo, when agents r
 
 Create or refresh a repo-local harness so agents start from a durable map
 instead of re-exploring. Core artifacts: **tracker contract**
-(`docs/harness/tracker.md`), **direction** (`docs/harness/roadmap.md`),
-**quality gates** (`docs/harness/quality-gates.md`), **archives**
-(`docs/work-ledger/`), **index + routing** (`docs/harness/index.md`), and
+(`docs/harness/tracker.md`), **quality gates**
+(`docs/harness/quality-gates.md`), **index + routing**
+(`docs/harness/index.md`), and
 the **bootloader block**. The harness owns project workflow routing and
 handoffs; selected skills supply methodology; orchestrators and workflow skills integrate by reading
 `tracker.md` + `index.md` + `quality-gates.md` — the skill never generates
@@ -20,9 +20,9 @@ orchestrator config or per-skill shadow config.
 - Write-cost first: judge every addition by whether agents will keep it updated.
 - One fact, one residence. A fact in two generated places is a bug.
 - Detection over mandate: absorb existing systems; require none.
-- Uncommitted memory is not memory. Remote trackers hold live state; the
-  git-resident archives (`completed.md`, `abandoned.md`) hold history in
-  every mode.
+- Uncommitted memory is not memory. Local ledgers keep live and terminal
+  history in Git; remote trackers retain their own terminal history. Preserve
+  existing archives, but do not generate duplicate remote archives by default.
 - Tracker identity lives in exactly one file. Switching trackers must not
   touch routing.
 - Workflow skills are methodology providers, not artifact owners. The
@@ -30,13 +30,11 @@ orchestrator config or per-skill shadow config.
   roles, and quality gates.
 - Autonomy is a contract fact: who may accept work lives in `tracker.md`'s
   state machine. Orchestrators read it; they never decide it.
-- Direction is user-owned: `roadmap.md` holds the milestone sequence and
-  current node. It changes only at node boundaries — in interactive
-  sessions — so its write-cost is human-supervised. Agents propose
-  advances with evidence; they never advance a node alone.
-- Three write cadences, three residences: direction (`roadmap.md`, per
-  node), specs/PRDs/ADRs (repo docs, per node), work items (tracker, high
-  frequency). A fact at the wrong cadence rots.
+- When multi-milestone direction exists, its roadmap residence is user-owned.
+  Agents propose node advances with evidence; they never advance one alone.
+  A single backlog needs no synthetic roadmap.
+- Keep direction, specs/decisions and work-item state at their respective
+  write cadences; do not create a residence for facts the repo does not have.
 
 ## Mode Selection
 
@@ -97,8 +95,8 @@ Classify coexisting systems; never rewrite a foreign system's content:
 
 ### 3. Propose
 
-Present: detection summary, topology verdict (core unless extended
-thresholds met), absorption dispositions, and **tracker adjudication**:
+Present: detection summary, topology verdict (core unless observed navigation
+difficulty warrants extended), absorption dispositions, and **tracker adjudication**:
 
 - exactly one candidate → propose adopting it;
 - none → ask the user (local / GitHub / Linear / custom), with a
@@ -108,14 +106,13 @@ thresholds met), absorption dispositions, and **tracker adjudication**:
 
 **Roadmap residence**: existing roadmap/milestone doc found → adopt in
 place or migrate into `docs/harness/roadmap.md` (user decides; one
-residence either way, index routes to it); none → generate `roadmap.md` —
-fill milestones from the conversation or git milestones when available,
-else a single current node capturing the project's present goal.
+residence either way, index routes to it). If none exists, create one only
+for a real multi-milestone sequence; otherwise keep the backlog in the tracker.
 
 **Artifact residence**: existing per-project/per-slice artifact root found →
-adopt it; none → default to `docs/features/<roadmap-node-slug>/` for large
-node packets, with slice packets under
-`docs/features/<roadmap-node-slug>/<slice-slug>/` only when a slice has real
+adopt it; none → default to `docs/features/<project-or-roadmap-slug>/` for large
+project packets, with slice packets under
+`docs/features/<project-or-roadmap-slug>/<slice-slug>/` only when a slice has real
 artifacts. Workflow-skill default paths (for example
 `docs/superpowers/plans/`) are adopted only when chosen as the artifact
 residence; otherwise record the override in `index.md`. Do not create empty
@@ -132,11 +129,12 @@ category roles (`bug`, `enhancement`) and state roles (`needs-triage`,
 `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`) mapped to
 any existing repo labels (see tracker-adapters substitution rule).
 
-And **acceptance authority** for the generated state machine: human-gated
-(default — a human accepts the Done-equivalent state) or agent-gated (a
-reviewer agent distinct from the author accepts, with verification
-evidence; humans handle escalations only). Default to human-gated unless the user explicitly authorizes agent acceptance;
-an installed orchestrator does not grant that authority. Child acceptance and
+And **acceptance authority** for the generated state machine: agent-gated
+(default — a reviewer agent distinct from the author accepts, with verification
+evidence; humans handle escalations only) or human-gated (a human accepts the
+Done-equivalent state). Record the selected profile explicitly; an installed
+orchestrator does not change it. Existing human-gated projects retain their
+policy until the owner explicitly changes it. Child acceptance and
 parent/release acceptance may differ; record each boundary in the tracker. Both
 profiles keep two invariants: the author of a change never accepts its own
 item, and a human may set any state — profiles grant agent authority, they
@@ -159,11 +157,11 @@ workflow engine into the generic harness. Refuse unsupported policy mappings.
 Generate from [core-templates.md](core-templates.md) and the chosen preset
 in [tracker-adapters.md](tracker-adapters.md) (plus
 [extended-templates.md](extended-templates.md) if approved). Every file gets
-the generated header. Local mode writes all four ledger files; remote modes
-write the two archives only. Backfill `completed.md` from git milestones —
-and from the tracker's Done/Canceled items in remote modes. Write
-`roadmap.md` per the approved roadmap residence (skip only when an
-existing doc was adopted in place). Always write
+the generated header. Local mode writes all four ledger files. Remote mode
+uses tracker terminal history; preserve existing archives and create an export
+only when offline history or migration requires one. Backfill local
+`completed.md` from git milestones. Write `roadmap.md` only for an approved
+roadmap residence. Always write
 `docs/harness/quality-gates.md`. Record workflow-skill routing, artifact
 adapters, Domain Docs routing, and Quality Gates routing in
 `docs/harness/index.md`; do not generate `docs/agents/*`.
@@ -197,9 +195,8 @@ file presence alone does not verify agent behavior:
       no path leaves an item in the claimed state after its worker exits
 - [ ] no state allows the agent that authored a change to accept its own
       item (holds in both acceptance profiles)
-- [ ] roadmap residence exists and is routed from `index.md`; a generated
-      `roadmap.md` has § Current Node naming a milestone defined in
-      § Milestones (a single greenfield milestone is valid)
+- [ ] if a roadmap exists, its residence is routed from `index.md` and its
+      current node names a defined milestone
 - [ ] `docs/harness/quality-gates.md` exists and is routed from `index.md`
 - [ ] `index.md` contains Work Production, Artifact Adapters, Domain Docs,
       and Quality Gates routing
@@ -207,7 +204,8 @@ file presence alone does not verify agent behavior:
       category/state vocabulary those skills apply, mapped to real tracker
       labels/states
 - [ ] no `docs/agents/*` files were generated by this skill
-- [ ] `completed.md` and `abandoned.md` exist regardless of mode
+- [ ] local mode has `completed.md` and `abandoned.md`; remote mode retains
+      terminal history in its tracker and preserves any existing archives
 
 Report: created, refreshed, left for later, warnings.
 
@@ -222,9 +220,10 @@ Triggered when the user asks to switch trackers. Steps:
    issues, each annotated with its new ID; reverse direction symmetric).
    Never invent placeholder IDs; an unmigratable entry keeps the local
    format with the blocker noted in `next:`.
-4. Promote/demote ledger files on mode change: remote→local regenerates
-   `active.md`/`follow-ups.md` from open tracker items; local→remote
-   converts them to one-line pointers once migration completes. While the
+4. Promote/demote ledger files on mode change: remote→local regenerates the
+   local ledger, including terminal history, from tracker items; local→remote
+   preserves existing archives and converts live files to one-line pointers
+   once migration completes. While the
    unmigrated list is non-empty, `active.md` stays a live ledger file —
    demote only when the list empties; retained unmigrated entries count as
    open items for any later reverse swap.
@@ -246,9 +245,9 @@ Refresh repairs documented drift; it does not refactor application code or
 promote the current implementation into intended product behavior.
 
 1. **Drift scan** — module-map vs tree; active items vs git log (finished
-   but still listed?); `Last verified` overdue (>90 days); bootloader pointer
-   liveness; **archive backfill gap** (tracker Done/Canceled items missing
-   from `completed.md`/`abandoned.md`); **orchestrator consistency**
+   but still listed?); changed factual claims; bootloader pointer
+   liveness; **archive backfill gap** (local authoritative archives only);
+   **orchestrator consistency**
    (state/label names and the transitions the orchestrator performs in
    detected orchestrator config match `tracker.md` — mismatch: warn only);
    **contract gap** (a `tracker.md` generated before the ten-section
@@ -256,18 +255,18 @@ promote the current implementation into intended product behavior.
    missing sections from the matching preset; also check existing readiness,
    acceptance, dependency and skill handoff semantics for contradictions.
    Preserve project decisions; do not overwrite them with template defaults);
-   **roadmap drift** (current node's items all terminal but the node not
+   **roadmap drift** (when a roadmap exists, current node's items all terminal but the node not
    advanced — local mode checks entries with matching `parent:`; flag and
    propose the advance to the user, never advance alone; no roadmap residence
-   in an existing harness — offer to
-   generate); **workflow-config drift** (`index.md` missing workflow-skill
+   in an existing harness — leave absent unless real milestones require one);
+   **workflow-config drift** (`index.md` missing workflow-skill
    routing, artifact adapters, Domain Docs, or Quality Gates); **tracker
    label drift** (workflow skills present but `tracker.md` lacks their
    category/state roles); **tracker-leak scan**.
 2. **Present drift summary** with evidence, proposed changes and retained
    project decisions. Existing explicit authorization to refresh covers these
    changes; ask only for unresolved scope or authority decisions.
-3. **Execute** — patch only inside markers; batch-backfill archives;
+3. **Execute** — patch only inside markers; backfill authoritative archives;
    archive roll-off per conventions; topology upgrade check. Re-run setup
    validation and behavioral checks; record what could not be verified.
    Do not infer acceptance from git history, or advance the roadmap implicitly.
@@ -282,9 +281,9 @@ preset, else custom); run the six Explore detections first; replace the
 bootloader block with the v3 template; regenerate `index.md` in full — the
 entire file is generated content; the file-level header is its marker
 (tracker-agnostic wording); demote live ledger files if the mode is remote;
-ensure `abandoned.md` exists; refresh ledger-file generated headers to the
-v3 templates, preserving entries verbatim; backfill `completed.md` gaps from
-git history. Anything not clearly generated is user-authored — ask before
+ensure both local archives exist in local mode; preserve existing remote
+archives and entries; backfill authoritative local archives from git history.
+Anything not clearly generated is user-authored — ask before
 touching.
 
 **v1 migration**: same flow as v2 migration, preceded by v1→v2 steps: move
@@ -298,17 +297,17 @@ Two legal forms. Day-to-day agents append inside existing files; only this
 skill changes topology.
 
 - **Core** (every repo starts here): bootloader block + `docs/harness/index.md`
-  + `docs/harness/tracker.md` + `docs/harness/quality-gates.md` + roadmap
-  residence + ledger files per mode.
-- **Extended** — upgrade only when: `index.md` >~150 lines, or modules >10,
-  or ≥2 runtime boundaries, or real material exists for an optional track.
+  + `docs/harness/tracker.md` + `docs/harness/quality-gates.md` + ledger
+  files per mode; add a roadmap only for real multi-milestone sequencing.
+- **Extended** — upgrade only when observed navigation difficulty or real
+  material warrants an optional track.
   A split **moves** the section, leaving a one-line pointer — never copy.
 
 ## Edge Rules
 
 | Case | Rule |
 |---|---|
-| Greenfield repo | core; ledger structurally complete but empty; `project-started` entry; no backfill; `roadmap.md` gets a single current milestone |
+| Greenfield repo | core; local ledger structurally complete but empty with `project-started` entry; no backfill; add a roadmap only for real milestones |
 | Design-workflow skills absent | Work Production pipeline uses generic fallbacks; still record artifact adapters, Domain Docs, and Quality Gates routing |
 | Existing roadmap doc actively maintained | adopt in place — index routes to it; never create a duplicate `roadmap.md` |
 | No git/shallow clone | skip backfill; mine existing docs for history; note gap in report |

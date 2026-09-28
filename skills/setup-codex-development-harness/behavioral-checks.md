@@ -8,10 +8,17 @@ outcomes. These are scenario checks, not claims of deterministic enforcement.
 |---|---|
 | App edit/cancel behavior unresolved; next session says continue | Read saved phase/questions; use selected design skill automatically; do not implement undecided behavior |
 | Tests pass; author receives “thanks” | Post evidence; stay in review until explicit authorized acceptance identifies revision |
+| Interactive item passes checks under agent-gated policy | Dispatch a separate reviewer with source, criteria, exact revision and evidence; reviewer pass records acceptance, author does not self-accept |
+| Reviewer rejects a candidate | Record findings, fix under implementation ownership, and review the new revision; repeated failure escalates |
+| Review uses an uncommitted patch and files change afterward | Freeze base SHA, full included file list and patch hash before review; reject stale identity and request fresh review before acceptance |
+| New repo has only a short backlog | Generate core harness without a synthetic roadmap; add one when real multi-milestone sequencing appears |
+| New remote tracker keeps Done/Canceled history | Use native terminal records and evidence; do not generate duplicate archive files; preserve archives already present |
+| SMDA-owned item reaches review while implementer reads harness | Return role artifact only; runtime dispatches the next role and updates lifecycle, with no interactive reviewer duplicate |
 | Agent-labeled item also needs-info; dependency closed not planned | Not dispatchable; clarify and resolve unmet dependency, no implicit success |
 | Approved SMDA parent plus to-issues installed | Shared slice contract, exactly one runtime graph producer; skill returns role artifact without independent publication |
 | SMDA implementer reads bootloader and index | Keep assigned role; do not restart design, select another phase or directly write tracker lifecycle; return evidence to runtime |
 | Item switches between interactive and SMDA execution | Explicit handoff includes source revision, state/evidence and next action; previous owner stops before new owner advances |
+| Runtime-owned work is visible in a local tracker | Record owner and runtime assignment reference; runtime ledger owns phase and next action, so interactive agent does not run a second review loop |
 | Adopted root ROADMAP.md; refresh after tree change | Keep adopted residence; compare setup contract with actual repo; no required architecture review or automatic node advance |
 | Tiny bug with clear reproduction | Bounded item, diagnosis/regression check, evidence, authority gate; no mandatory PRD |
 | Scoped investigation with unknown answer | May investigate within limits; cannot treat findings as approved product changes |

@@ -2,13 +2,13 @@
 
 Everything the **core** topology generates: bootloader block, pointer line,
 `docs/harness/index.md`, `docs/harness/tracker.md` (from a
-[tracker-adapters.md](tracker-adapters.md) preset), `docs/harness/roadmap.md`,
+[tracker-adapters.md](tracker-adapters.md) preset), optional `docs/harness/roadmap.md`,
 `docs/harness/quality-gates.md`, and the work-ledger files. `{...}` braces
 = fill at generation time. Entry formats come from
 [ledger-conventions.md](ledger-conventions.md).
 
-Ledger files by mode: **local** generates all four; **remote trackers**
-generate only the two archives (`completed.md`, `abandoned.md`).
+Ledger files by mode: **local** generates all four; **remote trackers** use
+native terminal history. Preserve existing remote archives when present.
 
 ## Bootloader block (single residence, ~15 lines max)
 
@@ -55,8 +55,6 @@ All ten contract sections filled; no braces left.
 <!-- codex-harness: generated {DATE} -->
 # Development Harness Index
 
-Last verified: {DATE}
-
 Single residence of routing facts for this repo. Bootloaders point here;
 never copy these tables elsewhere. Tracker identity lives only in
 `docs/harness/tracker.md`.
@@ -70,8 +68,7 @@ and operational risks; applicable design examples and verification routes only}
 
 1. Read `docs/harness/tracker.md`; read your work item per its Read/Write
    section.
-2. Read `{approved roadmap path}` § Current Node — know where this work
-   sits in the long-horizon sequence.
+2. If a roadmap exists, read its Current Node.
 3. Read `docs/harness/quality-gates.md`.
 4. Identify the execution owner from the work item and, when supplied, its
    runtime assignment. An installed runtime alone does not own this item.
@@ -90,7 +87,7 @@ and operational risks; applicable design examples and verification routes only}
 
 | Task type | Read first | Workflow | Completion update |
 |---|---|---|---|
-| New feature | Domain Docs; `{approved roadmap path}` § Current Node; {repo-specific docs/dirs} | {detected design+planning skills, else "design before code"} | tracker update per `tracker.md`; durable docs if facts changed |
+| New feature | Domain Docs; roadmap Current Node if present; {repo-specific docs/dirs} | {detected design+planning skills, else "design before code"} | tracker update per `tracker.md`; durable docs if facts changed |
 | Plan intake (approved spec/plan → work items) | Work Production; Artifact Adapters; the approved spec/plan | {detected issueization skill, else split per `tracker.md` § Work Item Format} | work items created, dependencies encoded, each linking the source plan |
 | Bug / regression | `quality-gates.md`; {repo-specific docs/tests} | {detected debugging skill, else "reproduce before fixing"} | regression test; tracker update per `tracker.md` |
 | Unfamiliar area | {architecture docs if extended, else key source dirs} | {detected exploration skill, else targeted reading} | index/map update if stable knowledge gained |
@@ -132,6 +129,18 @@ and evidence deliverable; unknowns do not make exploration impossible.
 | Implement | Tracker eligibility holds → {one installed implementation/debugging skill, else reproduce/test/change/check} | Changed artifact revision and criterion-level evidence |
 | Accept | Implementation evidence exists → {one installed review/verification skill, else documented review} | Authorized decision per tracker; passing tests alone do not accept work |
 
+For interactive agent-owned work, the implementer records the candidate
+commit SHA and verification evidence, moves the item to review, and dispatches
+an independent reviewer agent. Review failure returns to implementation with
+findings; a changed candidate requires fresh review. If a commit is unavailable,
+freeze a patch with base SHA, complete included file list (including untracked
+files), and artifact hash. Recheck that identity before acceptance. The
+independent reviewer records acceptance under the tracker policy; unresolved decisions or repeated
+failure escalate as specified there. A runtime-assigned worker does not run
+this interactive review loop: the runtime owns reviewer dispatch, phase changes
+and tracker publication. If reviewer delegation is unavailable, preserve the
+review state and handoff evidence for the next owner.
+
 Resolve every workflow cell to one actual skill name and read that skill before
 acting; no manual invocation from the user is needed. If unavailable, report
 that fact and use the recorded fallback. Do not silently invent a replacement
@@ -159,16 +168,16 @@ produce only its requested artifact; they do not independently publish issues
 or run a second interactive pipeline. An external graph import is permitted
 only when the installed adapter explicitly supports reviewed import.
 
-At node closure, check accepted outcomes and explicitly dropped scope, not just
-terminal item counts; propose roadmap advancement to the user.
+When a roadmap node closes, check accepted outcomes and explicitly dropped
+scope; propose advancement to the user.
 
 ## Artifact Adapters
 
 The harness owns these outputs; workflow skills only help produce them.
 
 - Artifact root: {`docs/features/` or adopted existing root}
-- Project packet: {`docs/features/<roadmap-node-slug>/` or adopted pattern}
-- Slice packet: {`docs/features/<roadmap-node-slug>/<slice-slug>/` or
+- Project packet: {`docs/features/<project-or-roadmap-slug>/` or adopted pattern}
+- Slice packet: {`docs/features/<project-or-roadmap-slug>/<slice-slug>/` or
   adopted pattern; create only when a slice has real artifacts}
 - PRD/spec/plan artifacts: {project packet | slice packet | tracker issue |
   external doc path}
@@ -203,17 +212,17 @@ completion evidence must name which required checks ran and what happened.
 ## Conventions
 
 - Tracker: `docs/harness/tracker.md` — the only file that names the tracker.
-- Roadmap: `{approved roadmap path}` — long-horizon direction; node
+- Roadmap, if present: `{approved roadmap path}` — long-horizon direction; node
   transitions are user decisions (agents propose with evidence, never
   advance alone).
 - Feature packets: project and slice artifacts live under the Artifact
   Adapters paths; do not duplicate tracker state there.
 - Workflow skills: configured by this index plus `tracker.md`; no shadow
   per-skill config files.
-- Archives: `completed.md` / `abandoned.md` exist in every mode; entries
-  written per `tracker.md` § Archive Policy.
+- Archives: local mode uses `completed.md` / `abandoned.md`; remote mode uses
+  native terminal history and preserves existing archives.
 - Entry formats: {paste the applicable formats from ledger-conventions as fenced blocks:
-  archives always; live entries in local mode only}
+  local ledger entries; retained remote archives only when present}
 - Markers: `codex-harness` comments delimit generated regions. Edit outside
   them freely; refresh never touches user-authored content.
 - Quality gates: `docs/harness/quality-gates.md`.
@@ -229,8 +238,6 @@ stays human-supervised.
 ```markdown
 <!-- codex-harness: generated {DATE} -->
 # Roadmap
-
-Last verified: {DATE}
 
 Long-horizon direction. Work items live in the tracker
 (`docs/harness/tracker.md`); this file holds the milestone sequence and the
@@ -254,8 +261,7 @@ node alone.
   milestone, project ref, or local `parent: <milestone-id>` — or "not yet
   issueized"}
 
-{one section per milestone, in sequence order; greenfield repos get a
-single current milestone capturing the project's first goal}
+{one section per real milestone, in sequence order}
 
 ## Direction Notes
 
@@ -267,8 +273,6 @@ single current milestone capturing the project's first goal}
 ```markdown
 <!-- codex-harness: generated {DATE} -->
 # Quality Gates
-
-Last verified: {DATE}
 
 Required before completion evidence is posted.
 
@@ -325,7 +329,7 @@ Known debt and opportunities. Entry format: see `docs/harness/index.md` § Conve
 {entries found during exploration, or nothing}
 ```
 
-## `docs/work-ledger/completed.md` (all modes)
+## `docs/work-ledger/completed.md` (local mode or retained remote archive)
 
 ```markdown
 <!-- codex-harness: generated {DATE} -->
@@ -333,8 +337,7 @@ Known debt and opportunities. Entry format: see `docs/harness/index.md` § Conve
 
 Archive — newest first. Entry format: see `docs/harness/index.md` § Conventions.
 
-{backfilled milestone entries from git history — and from the tracker's Done
- items in remote modes — newest first}
+{backfilled milestone entries from git history in local mode — newest first}
 
 ## project-started
 - done: {date of first commit; today only if the repo has no commits}
@@ -343,7 +346,7 @@ Archive — newest first. Entry format: see `docs/harness/index.md` § Conventio
 - follow-ups: none
 ```
 
-## `docs/work-ledger/abandoned.md` (all modes)
+## `docs/work-ledger/abandoned.md` (local mode or retained remote archive)
 
 ```markdown
 <!-- codex-harness: generated {DATE} -->
@@ -352,6 +355,5 @@ Archive — newest first. Entry format: see `docs/harness/index.md` § Conventio
 Archive — paths tried and dropped, each with a resume condition. Entry
 format: see `docs/harness/index.md` § Conventions.
 
-{entries found during exploration — and from the tracker's Canceled items in
- remote modes — or nothing}
+{entries found during local exploration, or nothing}
 ```

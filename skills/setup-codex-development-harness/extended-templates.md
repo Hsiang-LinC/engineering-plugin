@@ -1,12 +1,11 @@
 # Extended Templates
 
 Read only when refresh mode upgrades a repo to the **extended** topology, or
-when setup detects thresholds already exceeded (then propose extended at
-setup). A split **moves** a section out of `index.md` and leaves a one-line
+when setup observes a real navigation problem or track content. A split **moves** a section out of `index.md` and leaves a one-line
 pointer in its place — it never copies.
 
 Every generated file gets the standard header
-`<!-- codex-harness: generated {DATE} -->` and `Last verified: {DATE}` line.
+`<!-- codex-harness: generated {DATE} -->` line.
 
 ## `docs/architecture/index.md`
 
@@ -87,7 +86,7 @@ What to read before touching an area. Split out of `index.md`; the index links h
 
 ## Optional track indexes
 
-Create a track only when real material for it exists (threshold rule). Each
+Create a track only when real material for it exists. Each
 follows the same shape — an index of facts with residences, not prose:
 
 `docs/product/index.md` — capability / user value / status / related docs.
