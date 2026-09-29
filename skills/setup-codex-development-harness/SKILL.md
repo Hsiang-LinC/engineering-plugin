@@ -124,6 +124,12 @@ docs during setup: create `CONTEXT.md` / `CONTEXT-MAP.md` lazily when a
 term is resolved, and create ADRs lazily when a decision is hard to
 reverse, surprising without context, and a real trade-off.
 
+Route boundary discovery through the detected design skill when new work adds
+or changes a subsystem, persisted state, external dependency, state owner, or
+cross-component interface. The harness states when to invoke it and where
+confirmed decisions live; the skill supplies the questioning method. With no
+such skill, use the brief boundary trace in `core-templates.md`.
+
 **Workflow labels** (when workflow skills are detected): propose the
 category roles (`bug`, `enhancement`) and state roles (`needs-triage`,
 `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`) mapped to
@@ -139,6 +145,14 @@ parent/release acceptance may differ; record each boundary in the tracker. Both
 profiles keep two invariants: the author of a change never accepts its own
 item, and a human may set any state — profiles grant agent authority, they
 never revoke human authority.
+
+For user-facing product slices, also choose whether human product acceptance
+is required. If required, keep the slice item pending after independent
+technical review; deliver a usable candidate and
+observable scenarios, then record the human decision or return feedback to
+implementation. Record this boundary in `tracker.md` without making every
+technical item human-gated. Do not add a ceremonial gate to projects without
+user-facing slices.
 
 When agent delivery is authorized, record the merge target, required checks,
 human-only exception paths/actions, and escalation conditions. An independent
@@ -195,6 +209,9 @@ file presence alone does not verify agent behavior:
       no path leaves an item in the claimed state after its worker exits
 - [ ] no state allows the agent that authored a change to accept its own
       item (holds in both acceptance profiles)
+- [ ] when human product-slice acceptance was selected, a technical reviewer
+      cannot set a user-facing slice to Done; the human decision and feedback
+      transition are represented in the tracker
 - [ ] if a roadmap exists, its residence is routed from `index.md` and its
       current node names a defined milestone
 - [ ] `docs/harness/quality-gates.md` exists and is routed from `index.md`

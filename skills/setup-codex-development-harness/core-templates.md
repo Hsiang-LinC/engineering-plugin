@@ -97,6 +97,15 @@ and operational risks; applicable design examples and verification routes only}
 Rows are a starting set — keep only the ones meaningful for this repo, add
 repo-specific ones found during exploration.
 
+For new features that add or change a subsystem, persisted state, external
+dependency, state owner, or cross-component interface, route to the selected
+design skill before implementation. Trace one user path through the existing
+code and docs: origin, changes, storage, readers, failure/retry, and external
+effects. Record existing boundaries, proposed changes, and blocking unknowns
+in the selected spec; place confirmed contracts through Domain Docs. Ask the
+product owner about behavior trade-offs; the agent resolves local technical
+choices. No boundary change means no extra document or phase.
+
 ## Work Production
 
 One phase contract serves interactive and runtime execution. The execution
@@ -128,6 +137,15 @@ and evidence deliverable; unknowns do not make exploration impossible.
 | Slice | Approved scope → {one installed issueization skill, else tracker work-item format} | Verifiable slices, source revision, dependencies, acceptance/verification; triage before readiness |
 | Implement | Tracker eligibility holds → {one installed implementation/debugging skill, else reproduce/test/change/check} | Changed artifact revision and criterion-level evidence |
 | Accept | Implementation evidence exists → {one installed review/verification skill, else documented review} | Authorized decision per tracker; passing tests alone do not accept work |
+
+If the project requires human acceptance of a user-facing product slice,
+the independent reviewer records a technical pass; keep the slice item pending;
+provide a usable candidate, the key user scenarios, and known limitations.
+Record the human's explicit product decision against that candidate. Feedback
+returns the affected slice to implementation and a changed candidate receives
+fresh technical review. A technical pass alone does not mark the product slice
+accepted. This gate is selected during setup and recorded in `tracker.md`;
+do not add it to projects without user-facing slices.
 
 For interactive agent-owned work, the implementer records the candidate
 commit SHA and verification evidence, moves the item to review, and dispatches

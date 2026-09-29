@@ -90,6 +90,20 @@ When domain relationships are being discussed, stress-test them with specific sc
 
 When the user states how something works, check whether the code agrees. If you find a contradiction, surface it: "Your code cancels entire Orders, but you just said partial cancellation is possible — which is right?"
 
+### Trace boundaries when the change creates one
+
+For a new subsystem, persisted state, external dependency, state owner, or
+cross-component interface, trace one concrete user path through existing code
+and docs: who starts it, where data comes from, who changes and stores it, who
+reads it, and what happens on failure or retry. At each crossing, identify the
+owner of the data and rule, the exchanged contract, and the side effect.
+Separate existing boundaries, proposed changes, and unknowns that block
+implementation. Check the repo first; ask the user about product trade-offs
+or missing intent using one concrete scenario at a time. Record confirmed
+behavior in the selected spec, stable contracts in their existing residence,
+and ADRs only under the criteria below. A local change that crosses none of
+these boundaries needs no boundary inventory.
+
 ### Update CONTEXT.md inline
 
 When a term is resolved, update `CONTEXT.md` right there. Don't batch these up — capture them as they happen. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).

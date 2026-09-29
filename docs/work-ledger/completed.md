@@ -3,6 +3,13 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## product-boundary-and-slice-acceptance-guidance
+- done: 2026-09-29
+- summary: added conditional boundary discovery to grill-with-docs and setup templates; distinguished technical review from human acceptance of user-facing slices.
+- verified: matching and nonmatching route checks passed; Engineering and SMDA harness policies compared; git diff --check passed in both repos.
+- accepted: independent reviewer PASS on 2026-09-29 for source patch SHA-256 `98ec2bdeacf61b812b77619abdbcaac67f868641c325d5dd6ffffcc71f1b736b`; tracker archive move excluded.
+- follow-ups: none
+
 ## adopt-engineering-plugin-harness
 - done: 2026-09-28
 - summary: installed a repo-local development harness with stage and skill routing, independent review, quality gates, and a durable work ledger; preserved existing plugin files and unrelated `.gitignore`.

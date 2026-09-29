@@ -73,6 +73,14 @@ Profile braces (`{human-gated: ... | agent-gated: ...}`) resolve at
 generation to the chosen profile's text only — like every other brace,
 none survive into the generated file.
 
+When human product-slice acceptance is selected, state separately in § State
+Machine that the selected reviewer records technical approval while the slice
+item remains pending for human product acceptance. Specify its pending state,
+who may accept it, usable candidate and scenario evidence, human decision, and feedback
+transition. Qualify the preset's generic agent-gated Done row so an agent
+cannot close a user-facing product slice; the human decision closes that item.
+Do not impose the product gate on unrelated maintenance items.
+
 
 ## Shared rules to materialize in every generated adapter
 

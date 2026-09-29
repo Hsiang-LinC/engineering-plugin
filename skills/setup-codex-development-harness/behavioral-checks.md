@@ -9,6 +9,9 @@ outcomes. These are scenario checks, not claims of deterministic enforcement.
 | App edit/cancel behavior unresolved; next session says continue | Read saved phase/questions; use selected design skill automatically; do not implement undecided behavior |
 | Tests pass; author receives “thanks” | Post evidence; stay in review until explicit authorized acceptance identifies revision |
 | Interactive item passes checks under agent-gated policy | Dispatch a separate reviewer with source, criteria, exact revision and evidence; reviewer pass records acceptance, author does not self-accept |
+| New feature adds persisted user state | Use the routed design method to trace ownership, readers, failure and side effects before implementation; record confirmed contract and blocking unknowns in routed artifacts |
+| Small local edit leaves boundaries unchanged | Use the ordinary route; no boundary inventory or new architecture file |
+| A human-gated product slice passes technical review | Deliver a usable candidate and scenarios; retain the slice item in review until explicit human product acceptance, or return feedback to implementation |
 | Reviewer rejects a candidate | Record findings, fix under implementation ownership, and review the new revision; repeated failure escalates |
 | Review uses an uncommitted patch and files change afterward | Freeze base SHA, full included file list and patch hash before review; reject stale identity and request fresh review before acceptance |
 | New repo has only a short backlog | Generate core harness without a synthetic roadmap; add one when real multi-milestone sequencing appears |
