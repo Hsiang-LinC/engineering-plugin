@@ -3,6 +3,13 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## track-ds-store-ignore
+- done: 2026-09-29
+- summary: tracked the existing `.gitignore` containing the `.DS_Store` pattern.
+- verified: `git check-ignore -v` matched root and nested `.DS_Store`; tracked plugin files were not ignored; `git diff --check` and new-file whitespace check passed.
+- accepted: independent reviewer PASS on 2026-09-29 for the `.gitignore` content and tracker scope; archive move excluded.
+- follow-ups: none
+
 ## engineering-plugin-0-2-2-local-upgrade
 - done: 2026-09-29
 - summary: bumped Engineering to 0.2.2, pushed Engineering and SMDA changes, refreshed the local Engineering marketplace, and installed the new plugin version.
