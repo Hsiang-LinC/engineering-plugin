@@ -135,8 +135,12 @@ and evidence deliverable; unknowns do not make exploration impossible.
 | Clarify | Unresolved goal, term, scope or behavior → {one installed grilling/design skill, else explicit interview fallback} | Confirmed scope, non-goals, rules/examples, unresolved questions in the selected spec; glossary terms and consequential ADRs linked |
 | Specify | Product behavior understood → {one installed PRD skill, else scoped written plan} | Reviewed behavior examples or prototype when useful; approved source revision and remaining assumptions distinguished |
 | Slice | Approved scope → {one installed issueization skill, else tracker work-item format} | Verifiable slices, source revision, dependencies, acceptance/verification; triage before readiness |
-| Implement | Tracker eligibility holds → {one installed implementation/debugging skill, else reproduce/test/change/check} | Changed artifact revision and criterion-level evidence |
+| Implement | Tracker eligibility holds; agent checks that the plan covers approved acceptance, affected boundaries and verification before using {one installed implementation/debugging skill, else reproduce/test/change/check} | Changed artifact revision and criterion-level evidence |
 | Accept | Implementation evidence exists → {one installed review/verification skill, else documented review} | Authorized decision per tracker; passing tests alone do not accept work |
+
+Fix plan gaps before implementation. Return new product decisions or scope changes
+to the designated decision maker; a bounded plan within approved scope needs
+no separate human plan approval.
 
 If the project requires human acceptance of a user-facing product slice,
 the independent reviewer records a technical pass; keep the slice item pending;

@@ -11,6 +11,7 @@ outcomes. These are scenario checks, not claims of deterministic enforcement.
 | Interactive item passes checks under agent-gated policy | Dispatch a separate reviewer with source, criteria, exact revision and evidence; reviewer pass records acceptance, author does not self-accept |
 | New feature adds persisted user state | Use the routed design method to trace ownership, readers, failure and side effects before implementation; record confirmed contract and blocking unknowns in routed artifacts |
 | Small local edit leaves boundaries unchanged | Use the ordinary route; no boundary inventory or new architecture file |
+| Bounded plan is ready, but its verification omits an acceptance case | Agent fixes the plan gap before implementation; no routine human plan approval. If the gap requires a new product decision, return it to the designated decision maker |
 | A human-gated product slice passes technical review | Deliver a usable candidate and scenarios; retain the slice item in review until explicit human product acceptance, or return feedback to implementation |
 | Reviewer rejects a candidate | Record findings, fix under implementation ownership, and review the new revision; repeated failure escalates |
 | Review uses an uncommitted patch and files change afterward | Freeze base SHA, full included file list and patch hash before review; reject stale identity and request fresh review before acceptance |

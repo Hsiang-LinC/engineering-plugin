@@ -3,6 +3,13 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## pre-implementation-plan-self-check
+- done: 2026-09-29
+- summary: setup template now requires an agent plan self-check before implementation; added a behavioral scenario for plan gaps and new product decisions.
+- verified: Python scenario assertions passed against template, Engineering harness, and SMDA harness; `git diff --check` passed; no executable script or manifest checks applied. Generated consumers need refresh to receive the new guidance.
+- accepted: independent reviewer PASS on 2026-09-29 for base `168a258a8dad06d05905ac8261cdcd3e55ef38c1`, three-file patch SHA-256 `21438794c8d71c73e8070ce87fca3cc130c0162b633667202885369f6bf8d9ad`; archive move excluded.
+- follow-ups: none
+
 ## track-ds-store-ignore
 - done: 2026-09-29
 - summary: tracked the existing `.gitignore` containing the `.DS_Store` pattern.
