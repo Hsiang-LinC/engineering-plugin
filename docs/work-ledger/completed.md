@@ -3,6 +3,13 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## engineering-plugin-0-2-2-local-upgrade
+- done: 2026-09-29
+- summary: bumped Engineering to 0.2.2, pushed Engineering and SMDA changes, refreshed the local Engineering marketplace, and installed the new plugin version.
+- verified: Engineering origin/main `a71f0fe` and SMDA origin/main `fdfb1a0` checked with `git ls-remote`; source, marketplace, and installed cache matched for six plugin files; installed version 0.2.2 enabled; manifest parse and `git diff --check` passed. SMDA release workflow is manual and was not triggered by the docs-only push.
+- accepted: independent reviewer PASS on 2026-09-29 for source HEAD `a71f0fe` and installed Engineering 0.2.2; tracker archive move excluded.
+- follow-ups: none
+
 ## product-boundary-and-slice-acceptance-guidance
 - done: 2026-09-29
 - summary: added conditional boundary discovery to grill-with-docs and setup templates; distinguished technical review from human acceptance of user-facing slices.
