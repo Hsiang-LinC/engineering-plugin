@@ -182,7 +182,7 @@ Entry format: `docs/harness/index.md` § Conventions.
 
 ## release-0-3-1-exercise-update
 - status: in-progress
-- phase: implement
+- phase: deliver
 - owner: interactive
 - source: conversation 2026-09-30 — `remote-marketplace-distribution` shipped
   0.3.0 but left three reviewer Minors unaddressed and the two-step update
@@ -195,8 +195,8 @@ Entry format: `docs/harness/index.md` § Conventions.
 - branch: claude/release-0-3-1
 - checkout: /Users/danny/dev/GitHub/engineering-plugin
 - blocked-by: none
-- next: apply the scope, bump both manifests, commit, freeze the candidate and
-  dispatch an independent reviewer
+- next: owner instruction to merge and push; then run the post-publish update
+  exercise against the preserved 0.3.0 baseline homes and record the versions
 - updated: 2026-09-30
 - scope: (1) `docs/harness/index.md` § Artifact Adapters names every
   distribution manifest (`.codex-plugin/plugin.json`,
@@ -234,3 +234,28 @@ Entry format: `docs/harness/index.md` § Conventions.
   the `superpowers:code-reviewer` agent type was unavailable mid-session and the
   reviews here ran through a general-purpose agent. Decide whether to correct
   that route in this release or leave it.
+- candidate: committed. Head 833efa263d3154aa004f45ac87884dc7480f40f4 on
+  `claude/release-0-3-1`, compared with 97d586b; three files
+  (`.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`,
+  `docs/harness/index.md`); patch sha256
+  6dd4529335b052d169d9111c34696652795daf048aeb9dc2f0739a0769c68893.
+- accepted: independent reviewer agent, ACCEPT, 2026-09-30, on exactly that head
+  and patch hash (re-verified by the reviewer). No Critical or Important
+  findings. It compared both manifests structurally against the base (only
+  `version` and the Codex `longDescription` changed), found no other place
+  stating the version, ran `claude plugin validate`, and installed a
+  `git archive` snapshot in isolated homes for both agents at 0.3.1 with 18
+  skills. Covers source only, not the published result.
+- minors-deferred: the `index.md` manifest list restates the name/version rule
+  and four paths that also live in `quality-gates.md` and the README, so it
+  could drift if a manifest is added; a pointer would be more drift-proof.
+  Rated a nit; not changed, to keep the accepted identity.
+- baseline: 0.3.0 was installed from the real remote BEFORE publishing, in
+  isolated homes under the session scratchpad (`up-cc`, `up-cx`), each reporting
+  0.3.0. The update exercise must run against those; they cannot be recreated
+  after the push because the remote will no longer serve 0.3.0 from `main`.
+- delivery: not started. Nothing is merged or pushed; GitHub `main` is 9a740af.
+  The stack is linear: `main` -> `claude/record-remote-delivery` ->
+  `claude/release-0-3-1`. Owner instruction is required for merge and push;
+  index.md records no standing grant.
+- not-verified: the real-remote update path, which is this release's purpose.
