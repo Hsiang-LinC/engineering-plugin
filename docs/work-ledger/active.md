@@ -250,3 +250,57 @@ Entry format: `docs/harness/index.md` § Conventions.
   published version); the `owner/repo` shorthand; auto-update; Claude Code
   loading these skills in a running session; the owner's migration and a
   fresh-session smoke test in either agent.
+
+## release-0-3-1-exercise-update
+- status: planned
+- phase: implement
+- owner: unassigned
+- source: conversation 2026-09-30 — `remote-marketplace-distribution` shipped
+  0.3.0 but left three reviewer Minors unaddressed and the two-step update
+  unverified against the real remote; a real release is the only way to
+  exercise it. Minors and non-reproducible pin claim are recorded in that item.
+- base: main @ 9a740af (independent: nothing here depends on the unmerged
+  `claude/record-remote-delivery` ledger branch)
+- branch: not yet created
+- checkout: /Users/danny/dev/GitHub/engineering-plugin
+- blocked-by: none
+- next: create the candidate branch from `main`, apply the scope below, bump
+  both plugin manifests to `0.3.1`, freeze the candidate, dispatch an
+  independent reviewer
+- updated: 2026-09-30
+- scope: (1) `docs/harness/index.md` § Artifact Adapters names every
+  distribution manifest (`.codex-plugin/plugin.json`,
+  `.claude-plugin/plugin.json`, both marketplace manifests) or points to the
+  quality-gates row, instead of only the Codex one; (2) the stale "A local Codex
+  plugin" opening of `.codex-plugin/plugin.json` `interface.longDescription`;
+  (3) both plugin manifests to `0.3.1`, equal per the drift-guard gate; (4) the
+  post-publish update exercise below. Reviewer Minor 2 (README lacking a note
+  that the real GitHub path was unexercised) is dropped: installing from the
+  real remote in both agents was done after the 0.3.0 push, and the update path
+  stays covered by README § Release step 4.
+- non-goals: skill behavior; restructuring to a nested `plugins/engineering/`
+  layout to avoid the `.git` carried into Codex's installed copy; the
+  `bootloader-guidance-consolidation` wording pass (separate item; if it is
+  accepted first it simply rides in this release); Claude Code invocation
+  syntax in README § Usage, which is Codex-only and unverified for Claude Code;
+  any smda change.
+- acceptance: both plugin manifests read `0.3.1` with equal name and version;
+  the index names the full manifest surface; the description no longer says
+  "local"; after the owner merges and pushes, in isolated homes that hold
+  0.3.0 from the real GitHub remote, Codex reports 0.3.1 after
+  `codex plugin marketplace upgrade` then `codex plugin add`, and Claude Code
+  reports 0.3.1 after `claude plugin marketplace update` then
+  `claude plugin update`, with `codex`/`claude` showing 0.3.0 when only the
+  second step is run; an independent reviewer accepts the exact candidate.
+- verify: JSON-parse the four manifests and compare the pair; `claude plugin
+  validate .`; `git archive` the candidate and install it in isolated homes for
+  both agents; `git diff --check`; grep that no other file states the version.
+  After push: install 0.3.0 from the remote in fresh isolated homes first
+  (before pushing, so the starting point is real), then run the two-step update
+  and record the reported versions. Merge and push need the owner's instruction;
+  index.md records no standing grant.
+- open for the owner: `docs/harness/index.md` § Task Routing "Completion" still
+  names "Codex built-in review" and `superpowers:requesting-code-review`, but
+  the `superpowers:code-reviewer` agent type was unavailable mid-session and the
+  reviews here ran through a general-purpose agent. Decide whether to correct
+  that route in this release or leave it.
