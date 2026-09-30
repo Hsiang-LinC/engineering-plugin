@@ -57,8 +57,9 @@ claim that ordinary closed-item checks enforce SMDA's execution model.
    actually detected in the repo; if none, state "none detected — report
    to user".
 7. **Completion Evidence** — required content: changed files, verification
-   commands and outcomes, remaining risks, follow-up refs.
-8. **Failure Handling** — one rule: on worker or verification failure,
+   commands and outcomes, remaining risks, follow-up refs, and applicable
+   delivery identities/outcomes or a linked delivery item.
+8. **Failure Handling** — one rule: on worker, verification or delivery failure,
    post the evidence (failing command, output, suspected cause) and set
    the failure state. No silent failures; no item left in the claimed
    state after its worker exits. Names who may return a failed item to
@@ -111,6 +112,11 @@ generated repos must not require this source file at runtime.
   may be recorded; the author may transcribe it, not invent it. Agent-gated
   acceptance requires an independent reviewer within the delegated authority.
   Acceptance of a spec, child integration, parent and release are distinct.
+  When integration, release/deployment or installation belongs to the item,
+  record source and landed revisions, CI run, artifact/tag, installed version
+  and post-delivery checks as applicable. An accepted source is not proof of
+  delivery. If later delivery is separate, link its open work item rather than
+  calling it complete.
 - **Interactive review:** when the interactive agent owns the item, it records
   implementation evidence and moves the item to its review state, then assigns
   a separate reviewer agent the source, acceptance criteria, exact candidate
@@ -149,6 +155,10 @@ generated repos must not require this source file at runtime.
   Invalidate impacted readiness/approval/evidence after material changes;
   never resolve failure by weakening a gate. Runtime-owned items use runtime
   recovery and escalation, not ad hoc tracker-state edits.
+  A delivery failure records the last successful stage and its identity,
+  failing command/run and output, recovery owner and safe retry or rollback
+  condition. Keep the affected delivery work open or blocked; never infer that
+  retrying a publish or install is idempotent.
 
 ## Preset: local
 
@@ -205,11 +215,14 @@ dispatch pass — completing a blocker unblocks dependents implicitly.
 ## Completion Evidence
 Moving an entry to `completed.md` requires: `done:` date, `summary:`,
 `verified:` (command run + outcome), `accepted:` (actor, decision, reviewed
-revision, evidence reference and date), `follow-ups:` ref or none.
+revision, evidence reference and date), `follow-ups:` ref or none. Delivery
+in scope also requires its stage identities and checks, or a linked open
+delivery item when later delivery is separately owned.
 
 ## Failure Handling
-On worker or verification failure: set `status: blocked`, record the
-failing command, its output, and the suspected cause in the entry, and put
+On worker, verification or delivery failure: set `status: blocked`, record the
+last successful delivery stage if any, failing command/run, its output,
+suspected cause and recovery owner in the entry, and put
 the unblock condition in `next:`. Never leave an entry `in-progress` after
 its worker exits. Re-dispatch: anyone may return it to `planned` with a
 note on what changed since the failure.
@@ -289,10 +302,12 @@ unblocks dependents implicitly.
 ## Completion Evidence
 Completion comment must include: changed files; candidate revision; verification
 commands and outcomes; independent acceptance actor, decision and date;
-remaining risks; follow-up issue refs.
+remaining risks; follow-up issue refs; applicable delivery identities and
+post-delivery checks or a linked open delivery issue.
 
 ## Failure Handling
-On worker or verification failure: post a comment with the failing command,
+On worker, verification or delivery failure: post a comment with the last
+successful delivery stage, recovery owner, failing command/run,
 its output, and the suspected cause; add `blocked`, remove `in-progress`.
 Never leave `in-progress` after the worker exits. Re-dispatch: a human or
 triage agent removes `blocked` with a note on what changed since the failure.
@@ -370,10 +385,12 @@ dispatch pass — a blocker reaching `Done` unblocks dependents implicitly.
 ## Completion Evidence
 Completion comment must include: changed files; verification commands and
 outcomes; candidate revision; independent acceptance actor, decision and date;
-remaining risks; follow-up issue refs.
+remaining risks; follow-up issue refs; applicable delivery identities and
+post-delivery checks or a linked open delivery issue.
 
 ## Failure Handling
-On worker or verification failure: post a comment with the failing command,
+On worker, verification or delivery failure: post a comment with the last
+successful delivery stage, recovery owner, failing command/run,
 its output, and the suspected cause, then set `Blocked`. Never leave an
 issue `In Progress` after its worker exits. Re-dispatch: a human or triage
 agent returns it to `Todo` with a note on what changed since the failure.
@@ -426,10 +443,12 @@ dependency encoding}
 ## Completion Evidence
 {required content — default: changed files; candidate revision; verification
 commands and outcomes; independent acceptance actor, decision and date;
-remaining risks; follow-up refs}
+remaining risks; follow-up refs; applicable delivery identities/checks or
+linked open delivery item}
 
 ## Failure Handling
-{one rule — default: post failing command + output + suspected cause, set
+{one rule — default: post last successful delivery stage, recovery owner,
+failing command/run + output + suspected cause, set
 the failure state, never leave the claimed state after worker exit; name
 who may re-dispatch}
 
