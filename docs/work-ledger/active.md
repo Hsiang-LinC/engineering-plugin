@@ -201,7 +201,7 @@ Entry format: `docs/harness/index.md` § Conventions.
   Task Routing "Completion" names "Codex built-in review" and
   `superpowers:requesting-code-review`, but every review this session ran
   through a general-purpose agent because `superpowers:code-reviewer` became
-  unavailable; see the open decision below. (9) Coexisting Systems: register
+  unavailable; decided below, to be written into the route. (9) Coexisting Systems: register
   Claude Code and its bundled Engineering plugin, whose ten skills share the
   `engineering:` prefix with this plugin.
 - non-goals: changing any mandate or gate outcome of the skill; the `.git`
@@ -226,10 +226,35 @@ Entry format: `docs/harness/index.md` § Conventions.
   `git diff --check`; for item 7, grep the active and completed ledgers for each
   field name in Conventions and for any field in use that it omits. Merge and
   push need the owner's instruction.
-- open decision (owner), item 8: what the Completion route should say. The
-  author's recommendation: an independent reviewer agent dispatched with the
-  frozen candidate identity (base SHA, file list, patch hash, or a commit SHA),
-  preferring `superpowers:requesting-code-review` when its reviewer agent type is
-  available and otherwise a general-purpose agent given the same brief; keep
-  Codex built-in review as the first choice only where the session is Codex. Not
-  edited until the owner confirms.
+- decided 2026-09-30 by the owner, item 8: a mixed route whose default in a
+  Claude Code session is a Codex review. The author's reading of "mixed plus
+  default to Codex in Claude Code": in a Claude Code session, every change is
+  reviewed by Codex by default (a different model family from the author, which
+  is stronger independence than a second Claude agent); a same-family
+  independent agent is the fallback only when a Codex review cannot run or the
+  owner declines it, using `superpowers:requesting-code-review` when its
+  reviewer agent type is available and otherwise a general-purpose agent given
+  the same brief; in a Codex session the route stays Codex built-in review with
+  the same fallback. The independence rule does not change: the reviewer is not
+  the author and reviews the exact frozen candidate (commit SHA, or base SHA
+  plus file list plus patch hash). The acceptance record must name which
+  reviewer ran and its model family.
+- item 8 constraints, stated so the route does not over-promise:
+  1. A Codex review from Claude Code sends the diff to OpenAI through the Codex
+     CLI, which is an external transfer. The route is this repo's policy and
+     this repo is public; it does not bind other repositories. A private
+     consumer such as smda (its dist repo is described as private) decides for
+     itself in its own harness.
+  2. Feasibility is unverified. The `codex-review:code` skill was listed in the
+     session but never run here. Before the route is written, run it once on
+     this item's own committed candidate and record: whether the CLI is logged
+     in and runs non-interactively; whether it can review a committed range or a
+     frozen patch rather than only a working-tree diff; what it returns; and
+     whether its findings can be tied to the frozen identity. Write the route
+     to match what it actually supports. If it cannot review a frozen candidate,
+     the route must say how the candidate is presented to it.
+  3. If Codex review is unavailable, fails, or is declined, the fallback above
+     applies and the acceptance record says why.
+- verify (item 8 addition): the candidate for this item is reviewed through the
+  new route itself where it can run, which doubles as the feasibility test;
+  otherwise by the fallback, with the reason recorded.
