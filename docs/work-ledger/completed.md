@@ -3,6 +3,14 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## harness-delivery-lifecycle
+- done: 2026-09-30
+- summary: setup and refresh now detect repo-specific Git, CI, release/install and recovery paths, ask about consequential unknowns with suggested defaults, and generate stage-specific delivery routing; refreshed this repo's harness without treating push as merge or local installation.
+- verified: `git diff --check` and staged whitespace check passed; Engineering refresh has Delivery & Recovery and checkout lifecycle routes, ten tracker sections and no unresolved template braces; matching setup/refresh and nonmatching Q&A scenarios checked; independent reviewer exercised Engineering and SMDA release/CI failure and cleanup cases. SMDA was not refreshed.
+- accepted: independent reviewer PASS on 2026-09-30 for source/template/harness patch SHA-256 `166de6a27e2186a10d9a92129146acb9c172893a0750fdfed2e76759b896a1f0`, committed as `ed151d7d12e20e4c9f22a56c628c717b6aafe5e9`; tracker move excluded.
+- delivery: `codex/harness-delivery-lifecycle` pushed to origin and remote SHA verified as `ed151d7d12e20e4c9f22a56c628c717b6aafe5e9`; merge and local plugin installation are separate decisions.
+- follow-ups: none
+
 ## harness-scope-boundaries
 - done: 2026-09-30
 - summary: completed the generated work-item lifecycle from claim through landed verification and cleanup; fenced scope discovered during implementation; clarified Goal-mode and SMDA ownership of one shared project contract; raised Engineering to 0.2.4.
