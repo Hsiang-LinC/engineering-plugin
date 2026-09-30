@@ -109,7 +109,7 @@ Entry format: `docs/harness/index.md` § Conventions.
 
 ## remote-marketplace-distribution
 - status: in-progress
-- phase: implement
+- phase: deliver
 - owner: interactive
 - source: conversation 2026-09-30 — owner decision that development moves to
   local edit -> push to GitHub -> Codex and Claude Code both update from a
@@ -119,10 +119,8 @@ Entry format: `docs/harness/index.md` § Conventions.
 - branch: claude/remote-marketplace-clarify
 - checkout: /Users/danny/dev/GitHub/engineering-plugin
 - blocked-by: none
-- next: add the two `.claude-plugin` manifests and the Codex marketplace manifest,
-  bump both plugin manifests to 0.3.0, add the drift-guard gate, rewrite the
-  README install/update sections and the index Delivery row, verify in
-  isolated homes, then freeze and dispatch an independent reviewer
+- next: owner instruction to merge the stacked branches into `main` in order and
+  push once; then run the post-push verification and the smoke test below
 - updated: 2026-09-30
 - resolved:
   1. Name collision — RESOLVED by the owner: keep `engineering` and accept the
@@ -205,3 +203,41 @@ Entry format: `docs/harness/index.md` § Conventions.
   `CODEX_HOME`; grep the repo for stale `engineering@local` and `local`
   marketplace instructions; `git diff --check`. The real GitHub remote and the
   running-session skill load stay unverified until after push.
+- candidate: committed. Head b44d1c0eb1645280ebd516358bea7ca36a0b0cf5 on
+  `claude/remote-marketplace-clarify`, compared with 7e75a61; eight files
+  (`.agents/plugins/marketplace.json`, `.claude-plugin/{marketplace,plugin}.json`,
+  `.codex-plugin/plugin.json`, `README.md`, `docs/harness/{index,quality-gates}.md`,
+  `docs/work-ledger/follow-ups.md`); patch sha256
+  aeabdf111070898710f257aff03d09182a625cf638c48fc10d1699a32c67860f.
+- accepted: independent reviewer agent, ACCEPT, 2026-09-30, on exactly that head
+  and patch hash (re-verified by the reviewer). No Critical or Important
+  findings. It re-ran the snapshot install in both agents in isolated homes
+  (0.3.0, 18 skills, no `.git`), `claude plugin validate`, and checked every
+  README command against `--help` (`codex plugin remove` and
+  `codex plugin marketplace remove` only read, not run). It confirmed no
+  `skills/` change, no other place stating the version, and that GitHub `main`
+  is still 3101913. Covers source and docs, not the published result.
+- minors-deferred: (1) `docs/harness/index.md` § Artifact Adapters still lists
+  only `.codex-plugin/plugin.json` as the manifest although four files now
+  carry the distribution surface; (2) README § Installation does not say the
+  real GitHub path is unexercised until the first push; (3)
+  `.codex-plugin/plugin.json` `interface.longDescription` still says "A local
+  Codex plugin" (pre-existing wording). Left out to keep the accepted identity
+  unchanged; fix in a follow-up item.
+- reviewer-could-not-reproduce: Claude Code's version pinning. The reviewer's
+  local test was inconclusive (its dumb-HTTP server cannot serve Claude Code's
+  shallow clone). The author's unique-marker test showed it; the README states
+  it as fact and the gate makes always-bump the rule, which is harmless if the
+  pinning claim were wrong. Re-check on the real remote.
+- delivery: not started. Nothing is merged or pushed. Plan agreed with the
+  owner: merge `claude/bootloader-cc-alignment`, `claude/release-0-2-5` and this
+  branch into `main` in that order (they are linear on an unmoved `main`, so
+  fast-forward), push once, then verify against the real GitHub remote. Owner
+  instruction is still required for merge and push; index.md records no standing
+  grant.
+- post-push verification (not yet run): in isolated homes add
+  `https://github.com/Hsiang-LinC/engineering-plugin.git` to each agent and
+  install `engineering@engineering-plugin` at 0.3.0; then bump to a test version
+  on a scratch branch or fork to exercise the two-step update for real; on the
+  owner's machines run the README migration off `engineering@local`; smoke-test
+  a changed skill in a fresh session of each agent.
