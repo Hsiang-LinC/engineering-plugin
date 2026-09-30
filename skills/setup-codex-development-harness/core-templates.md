@@ -119,7 +119,13 @@ only when no tracker item already owns the discovered work.
 
 In Git repositories, plan tasks within one item may share a branch; default
 to a separate branch for another item unless an explicit repo integration
-policy says otherwise. A stacked Git base never waives tracker dependencies.
+policy says otherwise. Before creating it, identify the repo's integration
+target and compare the new item's scope with unmerged work on the current
+branch. An independent item starts from the verified integration target,
+not the current feature tip. Use another item's candidate as the base only
+for a real recorded dependency; record that item, exact base revision and
+integration order. If the target or dependency is uncertain, clarify it
+before choosing a base. A stacked Git base never waives tracker dependencies.
 Before switching to that branch, confirm the other item is dispatch-eligible
 and unowned, then claim it through `tracker.md` and record its base, candidate
 branch and checkout; otherwise report it to its execution owner and stop at

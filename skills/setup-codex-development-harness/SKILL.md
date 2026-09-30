@@ -77,8 +77,10 @@ Explore detections (large repos: read-only subagents per area):
   exist, mirrored, drifted.
 - **History** — `git log` for milestone-level events.
 - **Workspace lifecycle** — inspect existing branch/worktree conventions,
-  pending PRs and in-use checkouts. Identify where independent tracker items
-  share a branch or where completed work leaves unused worktrees behind.
+  integration target, pending PRs and in-use checkouts. Identify unmerged work
+  on the current branch, where independent tracker items share a branch or
+  stacked base without a dependency, and where completed work leaves unused
+  worktrees behind.
 - **Delivery** — inspect Git integration conventions, CI workflows and branch
   protection, release/deployment jobs, package distribution, local installation
   instructions, and recent delivery/failure evidence. Record each applicable
@@ -191,8 +193,14 @@ Generate only stages the repo actually uses or explicitly chooses.
 For interactive work, propose a minimal lifecycle rule in `index.md`: each
 independently accepted item needs an identifiable candidate. In Git repos,
 plan tasks within one item may share a branch; prefer a branch per item unless
-the repo has an explicit integration policy. Reuse a free worktree after
-accounting for prior work; keep one while a process, active review or PR
+the repo has an explicit integration policy. Before creating the next branch,
+compare its item with unmerged work on the current branch. An independent item
+starts from the repo's verified integration target (often `main`), not the
+current feature tip. Stack on another item's exact candidate only for a real
+recorded dependency; record that item, base revision and integration order.
+If the target or dependency cannot be established, clarify it before choosing
+a base. Reuse a free worktree after accounting for prior work; keep one while a
+process, active review or PR
 feedback needs it. Omit Git mechanics for projects without a Git repo.
 Bind every candidate to one item's approved scope and acceptance criteria.
 Discovering another item permits read-only investigation. Record a dependency
@@ -342,7 +350,9 @@ promote the current implementation into intended product behavior.
    label drift** (workflow skills present but `tracker.md` lacks their
    category/state roles); **tracker-leak scan**.
    Check whether interactive work-item boundaries and checkout cleanup guidance
-   are missing or contradict the repo's tracker/skills. Re-detect Git, CI,
+   are missing or contradict the repo's tracker/skills. Check that a new
+   independent item cannot silently inherit the current feature branch as its
+   base; preserve a recorded stacked dependency when real. Re-detect Git, CI,
    release/deployment, installation and recovery sources; compare the recorded
    delivery route, authority and evidence with current practice. Ask with a
    suggested default when consequential practice remains unknown. Preserve

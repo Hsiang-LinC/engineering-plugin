@@ -63,8 +63,13 @@ This repository has no detected orchestration runtime; do not invent one.
 One independently accepted item owns one identifiable candidate. Plan steps
 within that item may share a branch; another item defaults to a separate branch
 even when both reuse the same worktree. Before switching items, preserve the
-current candidate and check the next item's readiness and owner. Record its
-base, branch and checkout; a stacked base does not waive tracker dependencies.
+current candidate, inspect its unmerged changes, and check the next item's
+readiness and owner. An independent item starts from the verified integration
+target (`main` in this repo), not the current feature branch. Stack on another
+item's candidate only for a recorded dependency; record that item, exact base
+revision, branch, checkout and integration order. If the base is uncertain,
+clarify it before creating the branch. A stacked base does not waive tracker
+dependencies.
 Discovering adjacent work permits read-only investigation, not edits to that
 item until separately claimed.
 
