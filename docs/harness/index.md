@@ -109,7 +109,9 @@ from the actual workflow and confirm its normal trigger and authority.
 - Product source: the work item for bounded work; `docs/features/<topic>/`
   only when a multi-item project has actual spec or plan artifacts.
 - Skill outputs: `skills/<name>/SKILL.md` and its needed bundled resources.
-- Manifest: `.codex-plugin/plugin.json`; public usage: `README.md`.
+- Manifests: `.codex-plugin/plugin.json` and `.claude-plugin/plugin.json` (same
+  `name` and `version`, per `quality-gates.md`), `.claude-plugin/marketplace.json`
+  and `.agents/plugins/marketplace.json`; public usage: `README.md`.
 - Issueization: work items per `docs/harness/tracker.md`.
 - No empty project or slice directories during setup.
 

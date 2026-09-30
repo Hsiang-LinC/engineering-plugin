@@ -1,6 +1,6 @@
 {
   "name": "engineering",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Engineering workflow skills and a Codex-native development harness.",
   "author": {
     "name": "Danny"
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "Engineering",
     "shortDescription": "Engineering workflows plus repo harness setup for Codex.",
-    "longDescription": "A local Codex plugin bundling engineering skills for grilling, TDD, diagnosis, planning, triage, architecture, handoff, utility workflows, and the generic repo development harness those workflow skills read for tracker, artifact, domain-doc, and quality-gate context.",
+    "longDescription": "Engineering workflow skills for grilling, TDD, diagnosis, planning, triage, architecture, handoff, utility workflows, and the generic repo development harness those workflow skills read for tracker, artifact, domain-doc, and quality-gate context.",
     "developerName": "Danny",
     "category": "Developer Tools",
     "capabilities": [
