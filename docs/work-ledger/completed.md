@@ -3,6 +3,14 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## integrate-harness-and-runbook
+- done: 2026-09-30
+- summary: merged `codex/harness-delivery-lifecycle` and `codex/local-plugin-update-runbook` into `main`, including earlier harness commits; preserved both completion records and updated the harness route to the new README procedure.
+- verified: completed-ledger conflict resolved with both entries once; no unmerged files; `git diff --cached --check`, manifest and harness/ledger assertions, and README shell syntax passed on the merged tree; independent integration reviewer PASS; origin/main matched landed commit `ec56f98ddddf759db65db51e6b0af2853085efa8`.
+- accepted: user confirmed both branches and their earlier harness commits for main integration on 2026-09-30; independent reviewer PASS on the staged merge resolution and route correction; landed commit `ec56f98ddddf759db65db51e6b0af2853085efa8`.
+- delivery: main pushed and remote SHA verified as `ec56f98ddddf759db65db51e6b0af2853085efa8`; local plugin installation remains a separate versioned release step.
+- follow-ups: none
+
 ## local-plugin-update-runbook
 - done: 2026-09-30
 - summary: documented a versioned local Engineering marketplace update from a committed source snapshot, target validation, installed-cache verification, and recovery with a newer version; this work branched directly from `main`.
