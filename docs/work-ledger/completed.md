@@ -3,6 +3,14 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## release-0-2-5-local-install
+- done: 2026-09-30
+- summary: repaired the stale local Codex install — the marketplace entry was a dangling symlink to a path that no longer existed and the installed plugin was 0.1.1 — by bumping the manifest to 0.2.5, replacing the symlink with a seeded real directory and installing `engineering@local`. Superseded as the install route by `remote-marketplace-distribution`.
+- verified: manifest parses and its `skills` path resolves; `git diff --check` clean; `codex plugin list` showed `engineering@local installed, enabled 0.2.5`; `diff -qr` of the `git archive` against both the installed path and the marketplace copy was identical; the installed `SKILL.md` carried the bootloader guidance.
+- accepted: independent reviewer agent, ACCEPT, head 01afb6d340ef4a740bb75974c0cda6d59b3a96bf, patch sha256 ab601e65167aeccb30673e9723382938c21da17c7a4832703bca5c2e49f646ca (re-verified by the reviewer), no Critical or Important findings, 2026-09-30.
+- delivery: installed from b8e615be168eac1e163d6704fdc163a9f3239f41 with the owner's go-ahead. Fresh-session skill smoke test: the owner reported it passing on 2026-09-30 and asked that it be treated as passed; this was reported by the owner and not observed by the agent. The item's two deferred minors (README lacks a symlink warning for `rsync --delete`; bump check against the installed version is manual) are moot because the README procedure was removed in 0.3.0.
+- follow-ups: none
+
 ## bootloader-import-templates
 - done: 2026-09-30
 - summary: taught `setup-codex-development-harness` that one residence is not one reader — a bootloader whose agent does not auto-load the residence now gets a pointer that inlines it, an absent bootloader for an agent in use gets created, and refresh detects bootloader reach as drift. The block body still lives in exactly one file.

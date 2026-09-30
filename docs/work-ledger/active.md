@@ -36,77 +36,6 @@ Entry format: `docs/harness/index.md` § Conventions.
 - verify: re-read the changed files end to end; confirm every mandate and
   gate still reads the same as the accepted revision.
 
-## release-0-2-5-local-install
-- status: in-progress
-- phase: deliver
-- owner: interactive
-- source: conversation 2026-09-30 — the installed `engineering@local` is 0.1.1
-  while the repo manifest is 0.2.4, and the marketplace entry is a dangling
-  symlink (`docs/work-ledger/follow-ups.md` § codex-local-marketplace-unusable).
-  Skill content changed since 0.2.4 (bootloader inlining), and README forbids
-  reusing a version for changed contents.
-- base: 29b94bc on `claude/bootloader-cc-alignment` (stacked; contains caf2daa and e1cc172)
-- branch: claude/release-0-2-5
-- checkout: /Users/danny/dev/GitHub/engineering-plugin
-- blocked-by: none. Stacked, not blocked: this item depends on the unmerged
-  bootloader commits caf2daa and e1cc172, because the version being released
-  must carry that content. Integration order: that branch lands first; refresh
-  this item's base and verification afterwards.
-- next: smoke-test a changed skill in a fresh Codex session (not yet run);
-  on pass, archive this item with the delivery identities below
-- updated: 2026-09-30
-- scope: manifest version bump to `0.2.5`; independent review of the README
-  update-procedure drift fix (committed in e1cc172 without its own review);
-  then repair the local Codex install — replace the dangling
-  `plugins/engineering` symlink with a real directory seeded from
-  `git archive HEAD`, then `codex plugin add engineering@local`.
-- non-goals: renaming the plugin (abandoned, see `abandoned.md`); a Claude Code
-  manifest; remote marketplace distribution (own item below); editing skill
-  behavior.
-- acceptance: `codex plugin list` reports `engineering@local` at 0.2.5; the
-  installed content equals the committed source; a changed skill behaves as
-  documented in a fresh Codex session; the README drift fix has an independent
-  acceptance decision.
-- verify: parse `.codex-plugin/plugin.json` and confirm version `0.2.5`;
-  `git diff --check`; `diff -qr` between the `git archive HEAD` snapshot and the
-  reported installed path; a matching skill scenario in a fresh Codex session.
-  The install stage rewrites live Codex config outside this repo and needs the
-  user's explicit go-ahead at that step. README's update procedure cannot run
-  for this first repair: it reads the installed manifest before asserting, and
-  the target directory is empty, so seed it directly.
-- candidate: committed. Head 01afb6d340ef4a740bb75974c0cda6d59b3a96bf on
-  `claude/release-0-2-5`, compared with 3101913; files `README.md` and
-  `.codex-plugin/plugin.json`; patch sha256
-  ab601e65167aeccb30673e9723382938c21da17c7a4832703bca5c2e49f646ca.
-- accepted: independent reviewer agent, ACCEPT, 2026-09-30, on exactly that
-  head and patch hash (re-verified by the reviewer). No Critical or Important
-  findings. It checked the README against the real `marketplace.json`
-  (`local`, plugin `engineering`, `./plugins/engineering`) and `config.toml`,
-  traced the procedure against a healthy marketplace, and confirmed 0.2.5
-  exceeds the installed 0.1.1. Covers source and docs only, not the installed
-  result.
-- minors-deferred: README does not warn that `plugins/engineering` must be a
-  real directory, because `rsync --delete` follows a destination symlink
-  (recorded in `follow-ups.md`, not where an operator reads the procedure);
-  README says to bump above both installed and marketplace versions, but the
-  script enforces only the marketplace-copy comparison (pre-existing).
-- delivery: install stage DONE 2026-09-30 with the owner's go-ahead. Installed
-  from commit b8e615be168eac1e163d6704fdc163a9f3239f41 (branch
-  `claude/release-0-2-5`; differs from the accepted 01afb6d only in
-  `docs/work-ledger/active.md`). The dangling symlink
-  `plugins/engineering -> /Users/danny/Desktop/GitHub/engineering-plugin` was
-  removed (link only) and replaced with a real directory seeded by
-  `git archive`; `codex plugin add engineering@local` reported version 0.2.5,
-  installed path `/Users/danny/.codex/plugins/cache/local/engineering/0.2.5`.
-  Observed: `codex plugin list` shows `engineering@local installed, enabled
-  0.2.5` at the marketplace path; `diff -qr` of the archive against the
-  installed path and against the marketplace copy are both identical; the
-  installed `SKILL.md` contains the bootloader guidance; `config.toml` still
-  enables the plugin. The 0.1.1 cache was replaced, not retained. Codex
-  marketplace upgrade is not needed for a local marketplace.
-- not-verified: a fresh Codex session exercising a changed skill. Nothing
-  is pushed or merged: both `claude/*` branches are local only.
-
 ## remote-marketplace-distribution
 - status: in-progress
 - phase: deliver
@@ -252,21 +181,22 @@ Entry format: `docs/harness/index.md` § Conventions.
   fresh-session smoke test in either agent.
 
 ## release-0-3-1-exercise-update
-- status: planned
+- status: in-progress
 - phase: implement
-- owner: unassigned
+- owner: interactive
 - source: conversation 2026-09-30 — `remote-marketplace-distribution` shipped
   0.3.0 but left three reviewer Minors unaddressed and the two-step update
   unverified against the real remote; a real release is the only way to
   exercise it. Minors and non-reproducible pin claim are recorded in that item.
-- base: main @ 9a740af (independent: nothing here depends on the unmerged
-  `claude/record-remote-delivery` ledger branch)
-- branch: not yet created
+- base: 1b6eaa2 on `claude/record-remote-delivery`, stacked for LEDGER STATE
+  ONLY: that branch is the only place the current ledger lives and is not yet
+  merged. The candidate's code files do not overlap it (its diff against `main`
+  is `docs/work-ledger/` only). Integration order: that branch lands first.
+- branch: claude/release-0-3-1
 - checkout: /Users/danny/dev/GitHub/engineering-plugin
 - blocked-by: none
-- next: create the candidate branch from `main`, apply the scope below, bump
-  both plugin manifests to `0.3.1`, freeze the candidate, dispatch an
-  independent reviewer
+- next: apply the scope, bump both manifests, commit, freeze the candidate and
+  dispatch an independent reviewer
 - updated: 2026-09-30
 - scope: (1) `docs/harness/index.md` § Artifact Adapters names every
   distribution manifest (`.codex-plugin/plugin.json`,
