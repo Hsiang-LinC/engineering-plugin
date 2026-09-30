@@ -72,14 +72,15 @@ codex plugin marketplace add /path/to/codex-local-marketplace
 After the desired source changes are integrated, check `codex plugin list` and
 the marketplace manifest, then bump `.codex-plugin/plugin.json` to a version
 newer than both the installed and marketplace versions. Commit it and run the
-following from that commit in this repository. Find the configured `engineering-local`
-root with `codex plugin marketplace list`; set `marketplace_root` to that path.
+following from that commit in this repository. Find the configured `local`
+marketplace root with `codex plugin marketplace list`; set `marketplace_root`
+to that path.
 The `rsync --delete` target is the dedicated `plugins/engineering/` directory,
 not the marketplace root.
 
 ```bash
 set -euo pipefail
-marketplace_root="/path/to/engineering-local"
+marketplace_root="/path/to/codex-local-marketplace"
 stage_dir="$(mktemp -d)"
 git archive HEAD | tar -x -C "$stage_dir"
 python3 - "$marketplace_root" "$stage_dir" <<'PY'
@@ -89,7 +90,7 @@ import sys
 
 root, stage = map(Path, sys.argv[1:])
 market = json.loads((root / ".agents/plugins/marketplace.json").read_text())
-assert market["name"] == "engineering-local"
+assert market["name"] == "local"
 assert any(p["name"] == "engineering" and
            p["source"] == {"source": "local", "path": "./plugins/engineering"}
            for p in market["plugins"])
@@ -102,7 +103,7 @@ assert version(stage) > version(root / "plugins/engineering")
 PY
 rsync -a --delete "$stage_dir/" "$marketplace_root/plugins/engineering/"
 diff -qr "$stage_dir" "$marketplace_root/plugins/engineering"
-codex plugin add engineering@engineering-local --json
+codex plugin add engineering@local --json
 codex plugin list
 ```
 
