@@ -75,11 +75,9 @@ Explore detections (large repos: read-only subagents per area):
   PRD, issueization, triage skills — which fills the index's Work
   Production pipeline; bootloaders (AGENTS.md/CLAUDE.md/GEMINI.md): which
   exist, mirrored, drifted. Also record, per bootloader, which filenames the
-  running agent auto-loads and whether it can inline another file — the
-  residence choice in § 5 depends on it, and a pointer in a file the agent
-  never loads reaches nobody. Only the running agent is observable, so ask in
-  Propose which other agents the user runs in this repo rather than inferring
-  it from which bootloader files happen to exist.
+  running agent auto-loads and whether it can inline another file (§ 5). Only
+  the running agent is observable: ask in Propose which other agents the user
+  runs, rather than inferring it from which bootloader files exist.
 - **History** — `git log` for milestone-level events.
 - **Workspace lifecycle** — inspect existing branch/worktree conventions,
   integration target, pending PRs and in-use checkouts. Identify unmerged work
@@ -143,12 +141,11 @@ docs during setup: create `CONTEXT.md` / `CONTEXT-MAP.md` lazily when a
 term is resolved, and create ADRs lazily when a decision is hard to
 reverse, surprising without context, and a real trade-off.
 
-**Bootloader reach**: name the block's residence, and ask which agents the
-user runs in this repo — only the running one is observable, and an existing
-bootloader file is not evidence that its agent is in use, nor its absence
-evidence that one is not. Propose the residence plus a pointer, with the
-inlining form, for each agent in use whose auto-loaded file is absent or bare.
-Do not create bootloaders for agents the user does not run.
+**Bootloader reach**: name the block's residence and ask which agents the user
+runs in this repo. An existing bootloader file is not evidence that its agent is
+in use, nor its absence evidence that one is not. For each agent in use with a
+reach gap (§ 5), propose the residence plus the inlining pointer. Do not create
+bootloaders for agents the user does not run.
 
 Route boundary discovery through the detected design skill when new work adds
 or changes a subsystem, persisted state, external dependency, state owner, or
@@ -260,20 +257,17 @@ adapters, Domain Docs routing, and Quality Gates routing in
 
 The harness block lives in exactly **one** file — default `AGENTS.md`; if only
 others exist, ask which hosts it; if none, ask which to create (recommend
-`AGENTS.md`). Every other bootloader gets the one-line pointer. Mirror drift:
-warn in the report, do not fix.
+`AGENTS.md`). Every other bootloader gets a pointer to it, in the form
+[core-templates.md](core-templates.md) gives: the plain pointer, or the inlining
+pointer where the rules there call for it. Mirror drift: warn in the report, do
+not fix.
 
-An agent in use whose auto-loaded bootloader is **absent** needs that file
-created, not just the existing ones patched: a repo holding the block in
-`AGENTS.md` leaves a Claude Code user with nothing loaded until a `CLAUDE.md`
-exists. Create it with the inlining pointer below. This is the same finding
-refresh reports as bootloader reach, applied at setup.
+One residence is not the same as one reader. An agent in use whose auto-loaded
+bootloader is absent, or is neither the residence nor an inliner of it, has a
+**reach gap**. Close it by creating or patching that file with the inlining
+pointer; patching only the files that already exist is not enough. Refresh
+reports the same condition as *bootloader reach*.
 
-One residence is not the same as one reader. A bootloader whose agent
-auto-loads only that filename never receives a block held elsewhere, so its
-pointer must also inline the residence when the agent supports it — the
-inlining pointer in [core-templates.md](core-templates.md). Keep it a pointer,
-not a copy; the residence stays the only place the block body exists.
 Verify the agent's auto-loaded filenames and inlining syntax in the current
 environment, from the installed agent rather than memory; with unverified
 syntax, write the plain pointer and report the gap instead of guessing.
@@ -287,14 +281,17 @@ All hard gates must pass before reporting done. Exercise the scenarios in
 file presence alone does not verify agent behavior:
 
 - [ ] every path referenced in block and index exists
-- [ ] exactly one full harness block; other bootloaders contain pointers only
-      — an inlining import line counts as a pointer, a second block body does
-      not, whatever comment markers surround it
-- [ ] every bootloader an agent in use auto-loads either is the residence or
-      inlines it — unless that agent cannot inline or its syntax is unverified
-      here, in which case the plain pointer passes and the report records the
-      gap; a bare pointer with no recorded reason is a finding, not a pass.
-      Swap mode reports this as a finding and does not repair it
+- [ ] exactly one full harness block: the block body — the `Hard rules:` list
+      from `core-templates.md` § Bootloader block — appears in one file only
+      (`grep -l 'Hard rules'` over the bootloaders lists one); the others
+      contain pointers only. An inlining import line counts as a pointer; a
+      second copy of the body does not, whatever comment markers surround it
+- [ ] no reach gap (§ 5): every bootloader an agent in use auto-loads is the
+      residence or inlines it. A reach gap passes only with a recorded reason —
+      the agent cannot inline, or its syntax is unverified here, so the plain
+      pointer stands and the report records it. A reach gap with no recorded
+      reason fails. Swap mode reports a reach gap, does not repair it, and is
+      not blocked by it
 - [ ] routing skill names resolve in this environment, or are generic fallbacks
 - [ ] harness docs committed (harness paths only — never sweep unrelated dirty files)
 - [ ] tracker-leak: in instruction files (bootloader, `index.md`, split
@@ -369,10 +366,9 @@ promote the current implementation into intended product behavior.
 1. **Drift scan** — module-map vs tree; active items vs git log (finished
    but still listed?); changed factual claims; bootloader pointer
    liveness; **bootloader reach** (re-detect which filenames each agent in use
-   auto-loads; an auto-loaded bootloader that neither hosts nor inlines the
-   residence is drift — propose the inlining pointer. A newly adopted agent
-   with a different bootloader filename, or a missing bootloader for one, is
-   the same finding); **archive backfill gap** (local authoritative archives only);
+   auto-loads; any reach gap (§ 5) is drift — propose the inlining pointer.
+   That includes a newly adopted agent whose bootloader filename differs, or
+   whose bootloader is missing); **archive backfill gap** (local authoritative archives only);
    **orchestrator consistency**
    (state/label names and the transitions the orchestrator performs in
    detected orchestrator config match `tracker.md` — mismatch: warn only);

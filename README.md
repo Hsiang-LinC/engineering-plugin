@@ -88,8 +88,10 @@ which one wins is untested.
 
 ### Update the Engineering plugin
 
-Each agent needs two steps: refresh the marketplace, then update the plugin.
-Running only the second leaves the old version in place.
+Run both steps, in order, for each agent. Do not rely on skipping the first:
+with Codex, running only the second step keeps the old version (measured twice);
+with Claude Code, the second step alone updated against the real GitHub remote
+but did not against a local test remote, and the cause is not established.
 
 Codex:
 
@@ -109,9 +111,10 @@ claude plugin update engineering@engineering-plugin
 
 1. Get the change accepted under the repository harness.
 2. Set `version` to the same new value in both `.codex-plugin/plugin.json` and
-   `.claude-plugin/plugin.json`. Claude Code pins to the version string: changed
-   content under an unchanged version reaches the marketplace clone but not the
-   installed copy. Codex refreshed the installed copy in a test, but do not rely
+   `.claude-plugin/plugin.json`. Claude Code pins to the version string: in one
+   local test, changed content under an unchanged version reached the
+   marketplace clone but not the installed copy (not yet checked against the
+   real remote). Codex refreshed the installed copy in a test, but do not rely
    on that.
 3. Commit, merge to `main` and push.
 4. In each agent, run the update steps above, confirm the reported version, and

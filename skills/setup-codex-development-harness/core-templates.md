@@ -32,7 +32,9 @@ Hard rules:
 <!-- codex-harness:end -->
 ```
 
-## Pointer line (every other detected bootloader)
+## Pointer line (plain form)
+
+The plain form. § Inlining pointer below says when it is the right one.
 
 ```markdown
 <!-- codex-harness:begin -->
@@ -64,7 +66,10 @@ inlined here so it loads with project memory:
 
 Rules:
 
-- The import path is the residence file, relative to the repo root.
+- The import path is the residence file as the importing bootloader resolves
+  it. Observed only for a bootloader at the repo root, where repo-root- and
+  file-relative resolution coincide; for a nested bootloader, verify which
+  applies, as the last rule says, before writing it.
 - This stays a pointer, never a copy: the block body still exists in exactly
   one file, so there is nothing to drift.
 - Use the plain pointer above when the residence *is* that agent's auto-loaded
