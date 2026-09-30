@@ -38,7 +38,7 @@ Entry format: `docs/harness/index.md` § Conventions.
 
 ## release-0-2-5-local-install
 - status: in-progress
-- phase: implement
+- phase: deliver
 - owner: interactive
 - source: conversation 2026-09-30 — the installed `engineering@local` is 0.1.1
   while the repo manifest is 0.2.4, and the marketplace entry is a dangling
@@ -52,8 +52,9 @@ Entry format: `docs/harness/index.md` § Conventions.
   bootloader commits caf2daa and e1cc172, because the version being released
   must carry that content. Integration order: that branch lands first; refresh
   this item's base and verification afterwards.
-- next: independent review of the candidate; on ACCEPT, ask the owner for the
-  go-ahead, then run the install stage
+- next: owner go-ahead for the install stage; then seed `plugins/engineering`
+  as a real directory, `codex plugin add engineering@local`, verify, and
+  smoke-test a skill in a fresh Codex session
 - updated: 2026-09-30
 - scope: manifest version bump to `0.2.5`; independent review of the README
   update-procedure drift fix (committed in e1cc172 without its own review);
@@ -74,6 +75,25 @@ Entry format: `docs/harness/index.md` § Conventions.
   user's explicit go-ahead at that step. README's update procedure cannot run
   for this first repair: it reads the installed manifest before asserting, and
   the target directory is empty, so seed it directly.
+- candidate: committed. Head 01afb6d340ef4a740bb75974c0cda6d59b3a96bf on
+  `claude/release-0-2-5`, compared with 3101913; files `README.md` and
+  `.codex-plugin/plugin.json`; patch sha256
+  ab601e65167aeccb30673e9723382938c21da17c7a4832703bca5c2e49f646ca.
+- accepted: independent reviewer agent, ACCEPT, 2026-09-30, on exactly that
+  head and patch hash (re-verified by the reviewer). No Critical or Important
+  findings. It checked the README against the real `marketplace.json`
+  (`local`, plugin `engineering`, `./plugins/engineering`) and `config.toml`,
+  traced the procedure against a healthy marketplace, and confirmed 0.2.5
+  exceeds the installed 0.1.1. Covers source and docs only, not the installed
+  result.
+- minors-deferred: README does not warn that `plugins/engineering` must be a
+  real directory, because `rsync --delete` follows a destination symlink
+  (recorded in `follow-ups.md`, not where an operator reads the procedure);
+  README says to bump above both installed and marketplace versions, but the
+  script enforces only the marketplace-copy comparison (pre-existing).
+- delivery: source accepted, install not run. `codex plugin marketplace
+  upgrade` refreshes only Git marketplaces, so none is needed for this local
+  one.
 
 ## remote-marketplace-distribution
 - status: planned
