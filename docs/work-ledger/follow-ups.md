@@ -53,4 +53,3 @@ small skill-text or wording edits, none changes a mandate or gate outcome.
   reads Claude-centric.
 - The new swap check was confirmed by reading only; run it once against a
   generated instance when a repo with a bare-pointer bootloader is next swapped.
-
