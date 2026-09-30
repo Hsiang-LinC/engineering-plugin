@@ -15,6 +15,21 @@ outcomes. These are scenario checks, not claims of deterministic enforcement.
 | A human-gated product slice passes technical review | Deliver a usable candidate and scenarios; retain the slice item in review until explicit human product acceptance, or return feedback to implementation |
 | Reviewer rejects a candidate | Record findings, fix under implementation ownership, and review the new revision; repeated failure escalates |
 | Review uses an uncommitted patch and files change afterward | Freeze base SHA, full included file list and patch hash before review; reject stale identity and request fresh review before acceptance |
+| Two independent interactive items follow one plan | Keep separate identifiable candidate diffs and review decisions; a shared plan or worktree does not silently combine them into one branch diff |
+| Implementer on item A discovers existing adjacent item B | Read B's scope, owner and readiness; record the finding without editing B. Continue unaffected A work or block A on a real dependency. Claim eligible, unowned B separately before switching branch or checkout |
+| Item A requires discovered item B | Preserve A's candidate, encode `A blocked-by B`, and implement eligible, unowned B as a separate candidate. After B is accepted, recheck A's base and candidate identity, then rerun affected verification before resuming A |
+| Eligible item B is stacked on item A's branch | Record A's exact candidate as B's base; keep separate candidate and review evidence, and integrate in dependency order |
+| Next item starts while a prior candidate awaits PR feedback | Keep the needed checkout; use another worktree or a safe handoff, preserving the candidate and its review identity |
+| Blocked item leaves an unused managed worktree | Preserve its commits and useful local files, record the handoff, then archive it through the owning platform; do not require it to remain checked out |
+| Merged item leaves a clean worktree; another item is ready | Confirm no process needs the checkout, clean it through its owner or reuse it on the new item's branch; do not create one worktree per issue by default |
+| Accepted branch is integrated | Run required checks on the landed target; retain branch/worktree when they fail, and clean up only after the landed result passes |
+| Setup sees a release workflow but no evidence that every merge triggers it | Report the observed workflow and unknown routine practice; ask the owner with a recommended default before generating release policy |
+| Source candidate is accepted while merge or CI remains pending | Record source acceptance and the open integration stage or linked delivery item; do not report the change as landed or delivered |
+| CI fails after the merge succeeds | Preserve landed commit and run ID; block the affected delivery work with failure evidence, recovery owner and next action; keep the checkout until landed verification passes |
+| Release publishes successfully but local installation fails | Keep release tag/artifact and successful publish evidence; record installation failure separately, determine safe retry or rollback, and do not rerun publish blindly |
+| Repo has no CI, release or installation process | Generate only applicable integration and local verification routes; do not invent a CI workflow, release gate or `docs/workflow/` directory |
+| Agent wants to merge or discard while cleaning up | Check tracker/user authority separately; cleanup does not grant either decision and must not force-remove an occupied or dirty worktree |
+| Project has no Git repository | Preserve independently identifiable candidate and review evidence through its available artifacts; omit branch and worktree rules |
 | New repo has only a short backlog | Generate core harness without a synthetic roadmap; add one when real multi-milestone sequencing appears |
 | New remote tracker keeps Done/Canceled history | Use native terminal records and evidence; do not generate duplicate archive files; preserve archives already present |
 | SMDA-owned item reaches review while implementer reads harness | Return role artifact only; runtime dispatches the next role and updates lifecycle, with no interactive reviewer duplicate |

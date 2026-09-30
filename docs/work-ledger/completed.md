@@ -3,6 +3,36 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## local-plugin-update-runbook
+- done: 2026-09-30
+- summary: documented a versioned local Engineering marketplace update from a committed source snapshot, target validation, installed-cache verification, and recovery with a newer version; this work branched directly from `main`.
+- verified: isolated `CODEX_HOME` rehearsal installed versions 9.9.8 then 9.9.9; `diff -qr` confirmed staged source, marketplace and installed cache trees match; `git diff --check` passed; active Codex installation was untouched.
+- accepted: independent reviewer PASS on 2026-09-30 for README patch SHA-256 `a912d350c128db9efd88f6ee7dc40217dfe22124c97638cb3c20a89c6ee4b379`, committed as `30ee1c224337bd764a4dbc0eba018725164f94e5`; tracker move excluded.
+- delivery: `codex/local-plugin-update-runbook` pushed to origin and remote SHA verified as `30ee1c224337bd764a4dbc0eba018725164f94e5`; merge and active plugin installation remain separate decisions.
+- follow-ups: none
+
+## harness-delivery-lifecycle
+- done: 2026-09-30
+- summary: setup and refresh now detect repo-specific Git, CI, release/install and recovery paths, ask about consequential unknowns with suggested defaults, and generate stage-specific delivery routing; refreshed this repo's harness without treating push as merge or local installation.
+- verified: `git diff --check` and staged whitespace check passed; Engineering refresh has Delivery & Recovery and checkout lifecycle routes, ten tracker sections and no unresolved template braces; matching setup/refresh and nonmatching Q&A scenarios checked; independent reviewer exercised Engineering and SMDA release/CI failure and cleanup cases. SMDA was not refreshed.
+- accepted: independent reviewer PASS on 2026-09-30 for source/template/harness patch SHA-256 `166de6a27e2186a10d9a92129146acb9c172893a0750fdfed2e76759b896a1f0`, committed as `ed151d7d12e20e4c9f22a56c628c717b6aafe5e9`; tracker move excluded.
+- delivery: `codex/harness-delivery-lifecycle` pushed to origin and remote SHA verified as `ed151d7d12e20e4c9f22a56c628c717b6aafe5e9`; merge and local plugin installation are separate decisions.
+- follow-ups: none
+
+## harness-scope-boundaries
+- done: 2026-09-30
+- summary: completed the generated work-item lifecycle from claim through landed verification and cleanup; fenced scope discovered during implementation; clarified Goal-mode and SMDA ownership of one shared project contract; raised Engineering to 0.2.4.
+- verified: a fresh baseline agent applied the existing branch boundary but identified missing scope-crossing clarity; independent scenario review exercised adjacent, blocking, concurrent, sequential, stacked and runtime-owned work; manifest and lifecycle assertions plus `git diff --check` passed.
+- accepted: independent reviewer APPROVE on 2026-09-30 after dependency-resume, stacked-base, tracker-deduplication and SMDA runtime-lifecycle findings were resolved; reviewed the final 0.2.4 candidate.
+- follow-ups: none
+
+## harness-work-item-lifecycle-guidance
+- done: 2026-09-30
+- summary: added Git-aware work-item candidate, worktree reuse, handoff, and cleanup guidance to the generic harness setup skill and raised Engineering to 0.2.3.
+- verified: manifest parse and lifecycle scenario assertions passed; `git diff --check` passed. The generic validator could not run because PyYAML is unavailable locally and offline dependency resolution has no cached PyYAML.
+- accepted: independent reviewer APPROVE on 2026-09-30 for the 0.2.3 candidate after correcting template placement and the non-Git route; reviewed source hashes recorded in the work session; archive move excluded.
+- follow-ups: none
+
 ## pre-implementation-plan-self-check
 - done: 2026-09-29
 - summary: setup template now requires an agent plan self-check before implementation; added a behavioral scenario for plan gaps and new product decisions.

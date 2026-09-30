@@ -32,6 +32,7 @@ document the observed result rather than claiming general enforcement.
 | Bug or regression | failing skill behavior or script, related source | `engineering:diagnose`, then `engineering:tdd` for executable behavior | reproduction and regression check |
 | Approved multi-item plan | approved source and Work Production | `engineering:to-issues` | independently checkable items with dependencies |
 | Completion | `docs/harness/quality-gates.md`, `tracker.md` State Machine | `superpowers:verification-before-completion`, then Codex built-in review on the frozen candidate; if unavailable, `superpowers:requesting-code-review` to dispatch an independent reviewer | verification and independent acceptance for the same candidate |
+| Delivery in scope | Delivery & Recovery below; README installation instructions when relevant | follow the authorized Git or local plugin stage, then verify its result | landed or pushed revision, or installed version and smoke result; failure handoff per tracker |
 
 ## Work Production
 
@@ -48,6 +49,7 @@ starts with design; product-level changes needing a durable approved source use
 | Slice | approved scope needs multiple outputs: `engineering:to-issues` | items with dependencies, acceptance, and verification |
 | Implement | tracker readiness holds: selected skill from Task Routing | candidate revision and criterion-level evidence |
 | Accept | verification passes | independent decision on that candidate per tracker policy |
+| Deliver (when in scope) | source accepted; use Delivery & Recovery under its own authority | applicable Git or install result and post-delivery checks, or a linked open delivery item |
 
 For interactive work, the main agent dispatches an independent reviewer after
 verification. Record a commit SHA, or freeze the base SHA, complete file list,
@@ -55,6 +57,47 @@ and patch hash when uncommitted. Resolve findings and re-review changed
 candidates. Skill invocation or an `in-review` label alone is not acceptance.
 If review cannot run, keep the item in review with a concrete next action.
 This repository has no detected orchestration runtime; do not invent one.
+
+## Interactive Work Item Lifecycle
+
+One independently accepted item owns one identifiable candidate. Plan steps
+within that item may share a branch; another item defaults to a separate branch
+even when both reuse the same worktree. Before switching items, preserve the
+current candidate and check the next item's readiness and owner. Record its
+base, branch and checkout; a stacked base does not waive tracker dependencies.
+Discovering adjacent work permits read-only investigation, not edits to that
+item until separately claimed.
+
+Reuse a free worktree after accounting for its prior changes. Use another
+checkout when simultaneous work, active review or PR feedback needs isolation.
+After landing, explicit abandonment or a safe blocked-work handoff, preserve
+commits and useful local files, confirm no process needs the checkout, and
+archive or remove it through its platform owner. Delete a branch only after
+its work is integrated or explicitly discarded; never force-remove for routine
+cleanup. Run applicable checks on the landed target before cleanup. Cleanup
+does not grant merge or discard authority.
+
+## Delivery & Recovery
+
+Source acceptance, Git integration and local plugin installation are separate
+outcomes. This repo has no detected CI workflow or automated plugin release.
+An accepted source item may close with a linked delivery item when integration
+or installation is scheduled separately. When delivery is part of the same
+item, keep it active with `phase: deliver` until its applicable verification
+passes; retain the recorded source acceptance. A branch push
+does not establish that a change was merged or installed.
+
+| Stage / trigger | Executable source | Authority / owner | Success evidence | Failure handoff / cleanup |
+|---|---|---|---|---|
+| Commit and push, when requested for the item | Git branch and remote; this item records its base and candidate | execution owner under the user's delivery instruction | committed SHA, pushed ref and remote SHA | preserve candidate and failed command; owner records unblock action in tracker; retain checkout until resolved |
+| Merge, when requested | Git target and required checks must be confirmed for that request | designated integration authority; no standing merge grant recorded | landed target SHA and applicable checks from `quality-gates.md` | keep checkout for failed landed checks or PR feedback; use tracker failure rule |
+| Local Engineering plugin update, when separately authorized | `README.md` § Update the local Engineering plugin | release/install owner named in that work item | new version and source, marketplace and installed content agreement plus a matching skill smoke scenario | preserve the prior source revision; record the failed step and recover with a newer version under the same README procedure |
+
+Do not infer that every branch push triggers a plugin update. Record successful
+stage identities before retrying a failed later stage. After integration,
+check the landed target before branch/worktree cleanup under Interactive Work
+Item Lifecycle. If a future CI or release workflow is added, refresh this route
+from the actual workflow and confirm its normal trigger and authority.
 
 ## Artifact Adapters
 
@@ -89,9 +132,13 @@ skips in the item before asking for acceptance.
 - One work item section per slug in `docs/work-ledger/active.md`.
 - Active item fields: `status`, `phase`, `owner`, `source`, `next`, `updated`,
   `acceptance`, `verify`; `blocked-by` only when dependencies exist.
+- For a separate Git candidate, record `base`, `branch`, and `checkout`.
+  For delivery in scope, record `delivery` stage and last successful identity.
 - `status`: `planned`, `in-progress`, `in-review`, or `blocked`.
-- `phase`: `clarify`, `specify`, `slice`, `implement`, or `accept`.
+- `phase`: `clarify`, `specify`, `slice`, `implement`, `accept`, or `deliver`
+  when this item owns later delivery.
 - Completed entry fields: `done`, `summary`, `verified`, `accepted`,
-  `follow-ups`. Keep the reviewed revision and evidence in `accepted`.
+  `follow-ups`, and `delivery` when applicable. Keep the reviewed revision and
+  evidence in `accepted`; record later stage identities separately.
 - Abandoned entry fields: `abandoned`, `why`, and `resume-if`.
 - Keep tracker state in the ledger, not in feature packets or skills.
