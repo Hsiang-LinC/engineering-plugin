@@ -3,6 +3,14 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## harness-base-selection-rule
+- done: 2026-09-30
+- summary: setup and refresh guidance now starts independent items from the verified integration target and records dependency, exact base and integration order for stacked items.
+- verified: five branch-base scenario assertions passed before and after merge; `git diff --check` passed on the candidate and landed merge `f3f1ef25b0cec1dd6f5d22cc7f478ec9b130c0a3`.
+- accepted: user approved source candidate `3acc033ee6a9fb3234373dde4f672af05ef0ed02` on 2026-09-30; ledger acceptance committed as `89e8727`.
+- delivery: merged into `main` at `f3f1ef25b0cec1dd6f5d22cc7f478ec9b130c0a3`; remote push and branch cleanup follow this archive commit.
+- follow-ups: none
+
 ## integrate-harness-and-runbook
 - done: 2026-09-30
 - summary: merged `codex/harness-delivery-lifecycle` and `codex/local-plugin-update-runbook` into `main`, including earlier harness commits; preserved both completion records and updated the harness route to the new README procedure.
