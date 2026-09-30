@@ -37,24 +37,23 @@ Entry format: `docs/harness/index.md` § Conventions.
   gate still reads the same as the accepted revision.
 
 ## release-0-2-5-local-install
-- status: planned
+- status: in-progress
 - phase: implement
-- owner: unassigned
+- owner: interactive
 - source: conversation 2026-09-30 — the installed `engineering@local` is 0.1.1
   while the repo manifest is 0.2.4, and the marketplace entry is a dangling
   symlink (`docs/work-ledger/follow-ups.md` § codex-local-marketplace-unusable).
   Skill content changed since 0.2.4 (bootloader inlining), and README forbids
   reusing a version for changed contents.
-- base: e1cc172 on `claude/bootloader-cc-alignment` (stacked)
-- branch: not yet created
+- base: 29b94bc on `claude/bootloader-cc-alignment` (stacked; contains caf2daa and e1cc172)
+- branch: claude/release-0-2-5
 - checkout: /Users/danny/dev/GitHub/engineering-plugin
 - blocked-by: none. Stacked, not blocked: this item depends on the unmerged
   bootloader commits caf2daa and e1cc172, because the version being released
   must carry that content. Integration order: that branch lands first; refresh
   this item's base and verification afterwards.
-- next: create the candidate branch from the base above, bump
-  `.codex-plugin/plugin.json` to `0.2.5`, freeze the candidate, dispatch an
-  independent reviewer
+- next: independent review of the candidate; on ACCEPT, ask the owner for the
+  go-ahead, then run the install stage
 - updated: 2026-09-30
 - scope: manifest version bump to `0.2.5`; independent review of the README
   update-procedure drift fix (committed in e1cc172 without its own review);
