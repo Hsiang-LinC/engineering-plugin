@@ -91,7 +91,7 @@ does not establish that a change was merged or installed.
 |---|---|---|---|---|
 | Commit and push, when requested for the item | Git branch and remote; this item records its base and candidate | execution owner under the user's delivery instruction | committed SHA, pushed ref and remote SHA | preserve candidate and failed command; owner records unblock action in tracker; retain checkout until resolved |
 | Merge, when requested | Git target and required checks must be confirmed for that request | designated integration authority; no standing merge grant recorded | landed target SHA and applicable checks from `quality-gates.md` | keep checkout for failed landed checks or PR feedback; use tracker failure rule |
-| Local Engineering plugin update, when separately authorized | `README.md` § Installation covers initial marketplace registration; staging and refresh steps are not documented | ask the release/install owner to confirm the staging source and method before acting | source, marketplace and installed version/hash agreement plus a matching skill smoke scenario | preserve source and installed versions; record the missing decision or failed step and safe retry before changing local installation |
+| Local Engineering plugin update, when separately authorized | `README.md` § Update the local Engineering plugin | release/install owner named in that work item | new version and source, marketplace and installed content agreement plus a matching skill smoke scenario | preserve the prior source revision; record the failed step and recover with a newer version under the same README procedure |
 
 Do not infer that every branch push triggers a plugin update. Record successful
 stage identities before retrying a failed later stage. After integration,

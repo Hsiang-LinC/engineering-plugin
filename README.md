@@ -66,3 +66,52 @@ Add the local marketplace that contains this plugin:
 ```bash
 codex plugin marketplace add /path/to/codex-local-marketplace
 ```
+
+### Update the local Engineering plugin
+
+After the desired source changes are integrated, check `codex plugin list` and
+the marketplace manifest, then bump `.codex-plugin/plugin.json` to a version
+newer than both the installed and marketplace versions. Commit it and run the
+following from that commit in this repository. Find the configured `engineering-local`
+root with `codex plugin marketplace list`; set `marketplace_root` to that path.
+The `rsync --delete` target is the dedicated `plugins/engineering/` directory,
+not the marketplace root.
+
+```bash
+set -euo pipefail
+marketplace_root="/path/to/engineering-local"
+stage_dir="$(mktemp -d)"
+git archive HEAD | tar -x -C "$stage_dir"
+python3 - "$marketplace_root" "$stage_dir" <<'PY'
+import json
+from pathlib import Path
+import sys
+
+root, stage = map(Path, sys.argv[1:])
+market = json.loads((root / ".agents/plugins/marketplace.json").read_text())
+assert market["name"] == "engineering-local"
+assert any(p["name"] == "engineering" and
+           p["source"] == {"source": "local", "path": "./plugins/engineering"}
+           for p in market["plugins"])
+for plugin in (root / "plugins/engineering", stage):
+    assert json.loads((plugin / ".codex-plugin/plugin.json").read_text())["name"] == "engineering"
+def version(plugin):
+    value = json.loads((plugin / ".codex-plugin/plugin.json").read_text())["version"]
+    return tuple(map(int, value.split(".")))
+assert version(stage) > version(root / "plugins/engineering")
+PY
+rsync -a --delete "$stage_dir/" "$marketplace_root/plugins/engineering/"
+diff -qr "$stage_dir" "$marketplace_root/plugins/engineering"
+codex plugin add engineering@engineering-local --json
+codex plugin list
+```
+
+Check that `codex plugin add` reports the new version and installed path.
+Compare the complete staged snapshot with that path using
+`diff -qr "$stage_dir" "/reported/installedPath"`, then exercise a changed
+skill in a fresh Codex session. Keep the prior source revision or release tag:
+if verification fails, restore its contents in a new commit with a still newer
+version, then follow this procedure again. Do not reuse a
+version number for changed plugin contents: Codex installs a versioned cache
+copy. This procedure was rehearsed with an isolated `CODEX_HOME` and temporary
+marketplace; it did not update the active installation.

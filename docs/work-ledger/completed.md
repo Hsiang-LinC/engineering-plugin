@@ -3,6 +3,14 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## local-plugin-update-runbook
+- done: 2026-09-30
+- summary: documented a versioned local Engineering marketplace update from a committed source snapshot, target validation, installed-cache verification, and recovery with a newer version; this work branched directly from `main`.
+- verified: isolated `CODEX_HOME` rehearsal installed versions 9.9.8 then 9.9.9; `diff -qr` confirmed staged source, marketplace and installed cache trees match; `git diff --check` passed; active Codex installation was untouched.
+- accepted: independent reviewer PASS on 2026-09-30 for README patch SHA-256 `a912d350c128db9efd88f6ee7dc40217dfe22124c97638cb3c20a89c6ee4b379`, committed as `30ee1c224337bd764a4dbc0eba018725164f94e5`; tracker move excluded.
+- delivery: `codex/local-plugin-update-runbook` pushed to origin and remote SHA verified as `30ee1c224337bd764a4dbc0eba018725164f94e5`; merge and active plugin installation remain separate decisions.
+- follow-ups: none
+
 ## harness-delivery-lifecycle
 - done: 2026-09-30
 - summary: setup and refresh now detect repo-specific Git, CI, release/install and recovery paths, ask about consequential unknowns with suggested defaults, and generate stage-specific delivery routing; refreshed this repo's harness without treating push as merge or local installation.
