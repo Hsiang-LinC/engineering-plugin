@@ -74,7 +74,12 @@ Explore detections (large repos: read-only subagents per area):
   fallbacks); specifically detect the design-workflow chain — grilling,
   PRD, issueization, triage skills — which fills the index's Work
   Production pipeline; bootloaders (AGENTS.md/CLAUDE.md/GEMINI.md): which
-  exist, mirrored, drifted.
+  exist, mirrored, drifted. Also record, per bootloader, which filenames the
+  running agent auto-loads and whether it can inline another file — the
+  residence choice in § 5 depends on it, and a pointer in a file the agent
+  never loads reaches nobody. Only the running agent is observable, so ask in
+  Propose which other agents the user runs in this repo rather than inferring
+  it from which bootloader files happen to exist.
 - **History** — `git log` for milestone-level events.
 - **Workspace lifecycle** — inspect existing branch/worktree conventions,
   integration target, pending PRs and in-use checkouts. Identify unmerged work
@@ -104,7 +109,7 @@ Classify coexisting systems; never rewrite a foreign system's content:
 | Class | Example | Disposition |
 |---|---|---|
 | Orthogonal | workflow/process skills, orchestrator config | compose into index.md; consistency-check against tracker.md |
-| Overlapping | old state notes in CLAUDE.md, memory-bank files, prior tracker/label config, existing `ROADMAP.md` | truth moves to harness; foreign file gets a one-line pointer — ask before editing any foreign file. An existing roadmap doc is either adopted in place (index routes to it) or migrated into `roadmap.md` — user decides |
+| Overlapping | old state notes in CLAUDE.md, memory-bank files, prior tracker/label config, existing `ROADMAP.md` | truth moves to harness; foreign file gets the pointer per § 5 Bootloaders (inlining pointer where its agent requires one) — ask before editing any foreign file. An existing roadmap doc is either adopted in place (index routes to it) or migrated into `roadmap.md` — user decides |
 | Conflicting | rival state system in active use | list differences; user decides which survives |
 
 ### 3. Propose
@@ -137,6 +142,13 @@ confirm the route in `index.md` before writing. Do not create empty domain
 docs during setup: create `CONTEXT.md` / `CONTEXT-MAP.md` lazily when a
 term is resolved, and create ADRs lazily when a decision is hard to
 reverse, surprising without context, and a real trade-off.
+
+**Bootloader reach**: name the block's residence, and ask which agents the
+user runs in this repo — only the running one is observable, and an existing
+bootloader file is not evidence that its agent is in use, nor its absence
+evidence that one is not. Propose the residence plus a pointer, with the
+inlining form, for each agent in use whose auto-loaded file is absent or bare.
+Do not create bootloaders for agents the user does not run.
 
 Route boundary discovery through the detected design skill when new work adds
 or changes a subsystem, persisted state, external dependency, state owner, or
@@ -251,6 +263,23 @@ others exist, ask which hosts it; if none, ask which to create (recommend
 `AGENTS.md`). Every other bootloader gets the one-line pointer. Mirror drift:
 warn in the report, do not fix.
 
+An agent in use whose auto-loaded bootloader is **absent** needs that file
+created, not just the existing ones patched: a repo holding the block in
+`AGENTS.md` leaves a Claude Code user with nothing loaded until a `CLAUDE.md`
+exists. Create it with the inlining pointer below. This is the same finding
+refresh reports as bootloader reach, applied at setup.
+
+One residence is not the same as one reader. A bootloader whose agent
+auto-loads only that filename never receives a block held elsewhere, so its
+pointer must also inline the residence when the agent supports it — the
+inlining pointer in [core-templates.md](core-templates.md). Keep it a pointer,
+not a copy; the residence stays the only place the block body exists.
+Verify the agent's auto-loaded filenames and inlining syntax in the current
+environment, from the installed agent rather than memory; with unverified
+syntax, write the plain pointer and report the gap instead of guessing.
+If no bootloader in the repo is auto-loaded by an agent the user actually runs,
+say so in the report — the harness is then opt-in reading, not a live contract.
+
 ### 6. Validate
 
 All hard gates must pass before reporting done. Exercise the scenarios in
@@ -259,6 +288,13 @@ file presence alone does not verify agent behavior:
 
 - [ ] every path referenced in block and index exists
 - [ ] exactly one full harness block; other bootloaders contain pointers only
+      — an inlining import line counts as a pointer, a second block body does
+      not, whatever comment markers surround it
+- [ ] every bootloader an agent in use auto-loads either is the residence or
+      inlines it — unless that agent cannot inline or its syntax is unverified
+      here, in which case the plain pointer passes and the report records the
+      gap; a bare pointer with no recorded reason is a finding, not a pass.
+      Swap mode reports this as a finding and does not repair it
 - [ ] routing skill names resolve in this environment, or are generic fallbacks
 - [ ] harness docs committed (harness paths only — never sweep unrelated dirty files)
 - [ ] tracker-leak: in instruction files (bootloader, `index.md`, split
@@ -332,7 +368,11 @@ promote the current implementation into intended product behavior.
 
 1. **Drift scan** — module-map vs tree; active items vs git log (finished
    but still listed?); changed factual claims; bootloader pointer
-   liveness; **archive backfill gap** (local authoritative archives only);
+   liveness; **bootloader reach** (re-detect which filenames each agent in use
+   auto-loads; an auto-loaded bootloader that neither hosts nor inlines the
+   residence is drift — propose the inlining pointer. A newly adopted agent
+   with a different bootloader filename, or a missing bootloader for one, is
+   the same finding); **archive backfill gap** (local authoritative archives only);
    **orchestrator consistency**
    (state/label names and the transitions the orchestrator performs in
    detected orchestrator config match `tracker.md` — mismatch: warn only);
@@ -382,8 +422,10 @@ touching.
 
 **v1 migration**: same flow as v2 migration, preceded by v1→v2 steps: move
 routing to its single residence per the approved topology, empty files
-become one-line pointers or are deleted, slim the bootloader to the core
-template, add markers, re-detect skill names, backfill history.
+become pointers per § 5 Bootloaders (preserving an existing inlining
+import rather than slimming it away) or are deleted, slim the bootloader
+to the core template, add markers, re-detect skill names, backfill
+history. v1 and v2 migration both re-run § 6 validation.
 
 ## Topology
 

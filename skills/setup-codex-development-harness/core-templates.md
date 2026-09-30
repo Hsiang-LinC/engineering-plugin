@@ -43,6 +43,36 @@ in `docs/harness/tracker.md`.
 
 (Replace `AGENTS.md` with the actual residence file if the user chose another.)
 
+## Inlining pointer (bootloader whose agent does not auto-load the residence)
+
+Some agents auto-load only their own bootloader filename. A bare pointer then
+reaches that agent, but the hard rules stay one unprompted file-read away —
+exactly the rules meant to apply *before* the first edit. When the agent
+supports inlining another file into its loaded context, the pointer carries an
+import so the block arrives with it. Known case: Claude Code auto-loads only
+`CLAUDE.md` / `CLAUDE.local.md`, and inlines with `@<path>`:
+
+```markdown
+<!-- codex-harness:begin -->
+Development harness: see `AGENTS.md` § Development Harness. Tracker contract
+in `docs/harness/tracker.md`. The block itself lives only in `AGENTS.md` and is
+inlined here so it loads with project memory:
+
+@AGENTS.md
+<!-- codex-harness:end -->
+```
+
+Rules:
+
+- The import path is the residence file, relative to the repo root.
+- This stays a pointer, never a copy: the block body still exists in exactly
+  one file, so there is nothing to drift.
+- Use the plain pointer above when the residence *is* that agent's auto-loaded
+  file, when the agent already auto-loads the residence, or when its inlining
+  syntax is unverified in the current environment. Do not guess a syntax.
+- Verify the syntax against the installed agent rather than from memory; record
+  what was verified in the setup report.
+
 ## `docs/harness/tracker.md`
 
 Generated from the chosen preset in [tracker-adapters.md](tracker-adapters.md)

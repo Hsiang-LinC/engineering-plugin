@@ -3,6 +3,21 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## bootloader-import-templates
+- done: 2026-09-30
+- summary: taught `setup-codex-development-harness` that one residence is not one reader — a bootloader whose agent does not auto-load the residence now gets a pointer that inlines it, an absent bootloader for an agent in use gets created, and refresh detects bootloader reach as drift. The block body still lives in exactly one file.
+- verified: first revision REJECTED by an independent reviewer (base 3101913 / patch 72a2a188) for a § 6 gate with no waiver clause, which deadlocked the fallback § 5 itself sanctions, agents that cannot inline, and swap mode; plus setup mode writing no `CLAUDE.md` at all on the recommended default, leaving the original bug intact. Fixes applied across Explore, Propose, § 5, § 6, § 2 Absorb and v1 migration. Second revision frozen at base 3101913, patch sha256 ec669e42d0de54aa0bd1e40b77b502f3464daf4de80e892010bb1ce583bc61df, files `skills/setup-codex-development-harness/{SKILL.md,core-templates.md,behavioral-checks.md}`; `git diff --check` clean.
+- accepted: independent reviewer agent, ACCEPT, that exact base and patch sha256 (re-verified by the reviewer), all four prior findings confirmed resolved, review recorded in conversation 2026-09-30, 2026-09-30. Both reviewers independently observed the mechanism working live: the harness reached them through this repo's `CLAUDE.md` + `@AGENTS.md`, which is the one scenario the author could not verify.
+- delivery: source change only; no registration or install stage applies.
+- follow-ups: bootloader-guidance-consolidation (Minors 1-9: rationale duplicated across five sites, stale "one-line pointer" wording, overloaded "finding", naming mismatch, untested root-relative import claim, undefined "block body" observable)
+
+## claude-code-bootloader-alignment
+- done: 2026-09-30
+- summary: added a repo-root `CLAUDE.md` that points to `AGENTS.md` and inlines it with `@AGENTS.md`, so Claude Code loads the harness block it previously never saw; `AGENTS.md` stays the single residence of the block body.
+- verified: `git diff --check` clean; `grep -c "Hard rules"` gives `AGENTS.md:1`, `CLAUDE.md:0`, so no second block body exists; user confirmed a fresh Claude Code session in this repo has the harness hard rules in context without reading a file.
+- accepted: user, accepted, working-tree revision of `CLAUDE.md` plus `docs/work-ledger/active.md` entry, confirmation in conversation 2026-09-30, 2026-09-30
+- follow-ups: bootloader-import-templates (generalize into the setup skill)
+
 ## harness-base-selection-rule
 - done: 2026-09-30
 - summary: setup and refresh guidance now starts independent items from the verified integration target and records dependency, exact base and integration order for stacked items.
