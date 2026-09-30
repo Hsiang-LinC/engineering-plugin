@@ -52,9 +52,8 @@ Entry format: `docs/harness/index.md` § Conventions.
   bootloader commits caf2daa and e1cc172, because the version being released
   must carry that content. Integration order: that branch lands first; refresh
   this item's base and verification afterwards.
-- next: owner go-ahead for the install stage; then seed `plugins/engineering`
-  as a real directory, `codex plugin add engineering@local`, verify, and
-  smoke-test a skill in a fresh Codex session
+- next: smoke-test a changed skill in a fresh Codex session (not yet run);
+  on pass, archive this item with the delivery identities below
 - updated: 2026-09-30
 - scope: manifest version bump to `0.2.5`; independent review of the README
   update-procedure drift fix (committed in e1cc172 without its own review);
@@ -91,9 +90,22 @@ Entry format: `docs/harness/index.md` § Conventions.
   (recorded in `follow-ups.md`, not where an operator reads the procedure);
   README says to bump above both installed and marketplace versions, but the
   script enforces only the marketplace-copy comparison (pre-existing).
-- delivery: source accepted, install not run. `codex plugin marketplace
-  upgrade` refreshes only Git marketplaces, so none is needed for this local
-  one.
+- delivery: install stage DONE 2026-09-30 with the owner's go-ahead. Installed
+  from commit b8e615be168eac1e163d6704fdc163a9f3239f41 (branch
+  `claude/release-0-2-5`; differs from the accepted 01afb6d only in
+  `docs/work-ledger/active.md`). The dangling symlink
+  `plugins/engineering -> /Users/danny/Desktop/GitHub/engineering-plugin` was
+  removed (link only) and replaced with a real directory seeded by
+  `git archive`; `codex plugin add engineering@local` reported version 0.2.5,
+  installed path `/Users/danny/.codex/plugins/cache/local/engineering/0.2.5`.
+  Observed: `codex plugin list` shows `engineering@local installed, enabled
+  0.2.5` at the marketplace path; `diff -qr` of the archive against the
+  installed path and against the marketplace copy are both identical; the
+  installed `SKILL.md` contains the bootloader guidance; `config.toml` still
+  enables the plugin. The 0.1.1 cache was replaced, not retained. Codex
+  marketplace upgrade is not needed for a local marketplace.
+- not-verified: a fresh Codex session exercising a changed skill. Nothing
+  is pushed or merged: both `claude/*` branches are local only.
 
 ## remote-marketplace-distribution
 - status: planned
