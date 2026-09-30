@@ -108,56 +108,79 @@ Entry format: `docs/harness/index.md` § Conventions.
   is pushed or merged: both `claude/*` branches are local only.
 
 ## remote-marketplace-distribution
-- status: planned
+- status: in-progress
 - phase: clarify
-- owner: unassigned
+- owner: interactive
 - source: conversation 2026-09-30 — owner decision that development moves to
   local edit -> push to GitHub -> Codex and Claude Code both update from a
   remote marketplace, replacing the per-machine local marketplace.
+- base: c61611c on `claude/release-0-2-5` (stacked: the item text lives only on
+  that chain)
+- branch: claude/remote-marketplace-clarify
+- checkout: /Users/danny/dev/GitHub/engineering-plugin
 - blocked-by: none
-- next: settle the open questions below with the owner before any manifest is
-  written
+- next: owner decides the three questions under "decisions"; then write
+  scope/acceptance/verify and move to `implement`
 - updated: 2026-09-30
-- open questions:
-  1. Name collision in Claude Code. Its bundled `engineering` plugin occupies
-     the `engineering:` prefix and contains none of these skills. The owner
-     reversed the rename (`abandoned.md`), so decide: accept the collision for
-     Claude Code, use a different name only in the Claude Code manifest, or
-     revisit the rename. Tested 2026-09-30 on Claude Code 2.1.116 in an
-     isolated `CLAUDE_CONFIG_DIR`: a marketplace entry named `eng-cc` over a
-     `plugin.json` named `engineering` validates, adds and installs as
-     `eng-cc@testmkt`. But the skill prefix comes from the loaded plugin's
-     name, which the loader takes from `plugin.json` (`name:f.name` in the
-     plugin loader), not from the marketplace entry. So renaming only the
-     entry does NOT avoid the `engineering:` prefix. Renaming only for
-     Claude Code needs a separate `.claude-plugin/plugin.json` with a
-     different `name`, next to the unchanged `.codex-plugin/plugin.json`.
-     Basis is a real install plus static reading of the installed binary; no
-     session could run (not logged in), so the prefix itself is unobserved,
-     and later Claude Code versions may differ. Remaining cost: routing in
-     `docs/harness/index.md` would name a different prefix per agent.
-     RESOLVED 2026-09-30 by the owner: keep the name `engineering` and accept
-     the collision with Claude Code's bundled plugin; no rename and no second
-     `.claude-plugin` name. The owner also uninstalls the `skills` app plugin
-     (`skills@inline`, which duplicated `tdd`, `grill-me`, `write-a-skill` and
-     others) and keeps the bundled Engineering plugin. Latent risk to keep in
-     view: the two `engineering` plugins have no overlapping skill names today
-     (bundled: architecture, code-review, debug, deploy-checklist,
+- resolved:
+  1. Name collision — RESOLVED by the owner: keep `engineering` and accept the
+     collision with Claude Code's bundled plugin; the `skills` app plugin is
+     uninstalled. Tested earlier: the skill prefix comes from `plugin.json`'s
+     `name` (`name:f.name` in the 2.1.116 loader), not the marketplace entry, so
+     renaming only an entry would not have avoided it. Latent risk: a future
+     same-named skill here collides silently with the bundled Engineering
+     plugin (bundled: architecture, code-review, debug, deploy-checklist,
      documentation, incident-response, standup, system-design, tech-debt,
-     testing-strategy), but adding a same-named skill here later would collide
-     silently. Which one wins is untested.
-  2. Layout. Claude Code reads `.claude-plugin/plugin.json` and
-     `.claude-plugin/marketplace.json`; Codex reads `.codex-plugin/plugin.json`
-     and a marketplace manifest. Confirm both can share one repo root, and
-     whether a Codex git-source marketplace can point at this repo directly.
-     Precedent: `[marketplaces.smda]` uses `source_type = "git"`.
-  3. Repository visibility on GitHub, and whether each machine already has
-     access. A private repo needs credentials on every host.
-  4. Versioning. Both agents cache per version, so a release discipline
-     (bump on every content change, tag) must be stated once, in the README.
-  5. Routing prefixes in `docs/harness/index.md` and the roughly 15 references
-     across smda depend on the final name.
-- scope: (to be set after clarification)
-- non-goals: fixing the current local install (`release-0-2-5-local-install`).
-- acceptance: (to be set after clarification)
-- verify: (to be set after clarification)
+     testing-strategy); which wins is untested.
+  2. Repository visibility — PUBLIC (`gh repo view`; unauthenticated
+     `git ls-remote https://github.com/Hsiang-LinC/engineering-plugin.git`
+     answers), so no credentials on any host. GitHub `main` is still 3101913:
+     nothing has been pushed.
+  3. Layout — a plugin at the REPO ROOT installs in both agents with no
+     restructuring. Tested with real repo content in isolated homes
+     (`CLAUDE_CONFIG_DIR`, `CODEX_HOME`): Claude Code 2.1.116 with
+     `.claude-plugin/marketplace.json` `source: "./"`, and Codex 0.149.1 with
+     `.agents/plugins/marketplace.json` `path: "./"`, each installed 18 skills
+     and did not copy `.git`. Precedent: the owner's `smda-plugin-dist` already
+     ships two marketplace manifests and two `plugin.json` files (same name and
+     version) beside a shared `skills/`; it nests the plugin in
+     `plugins/<name>/`, which this repo does not need.
+  4. Update mechanics — measured against a local git remote:
+     - Codex: two steps, `codex plugin marketplace upgrade` then
+       `codex plugin add`; without the upgrade the old version stays. A content
+       change with an UNCHANGED version still refreshed the installed copy in
+       0.149.1 (one test), so Codex does not force a bump.
+     - Claude Code: two steps, `claude plugin marketplace update` then
+       `claude plugin update`. It pins to the version string: a same-version
+       content change reached the marketplace clone but NOT the installed copy
+       (unique-marker test). A bump is mandatory for Claude Code.
+     - Accepted source forms: Codex takes `owner/repo`, git URLs (an `http://`
+       URL to a smart-HTTP git server worked) and local paths, and rejected
+       `file://` and `git://`; a local path is treated as a local marketplace,
+       not a git one. Claude Code takes `owner/repo`, `https://…` and local
+       paths, rejected `git://`, and treats an `http(s)://` URL that does not end
+       in `.git` as a direct marketplace.json URL.
+     - Claude Code 2.1.116 rejects a top-level `description` in
+       `marketplace.json` (`claude plugin validate`: unrecognized key), though
+       it still installs; smda's manifest uses one, so newer versions accept it.
+       Use `metadata.description` or omit it.
+- decisions (owner):
+  A. Marketplace name. It becomes part of the installed id
+     (`engineering@<name>`), and the existing `engineering@local` in Codex is a
+     different id, so both would coexist until `codex plugin remove
+     engineering@local`.
+  B. Drift guard. `name` and `version` would live in two `plugin.json` files.
+     Propose a quality-gates row requiring them equal, rather than trusting
+     memory (smda keeps both at 0.3.2 by hand).
+  C. Landing. Nothing is merged or pushed. Order: `claude/bootloader-cc-alignment`
+     -> `claude/release-0-2-5` -> this branch -> `main`; index.md records no
+     standing merge grant, so merge and push need the owner's instruction.
+- not-verified: a real GitHub remote (nothing pushed); the `owner/repo`
+  shorthand; whether either agent auto-updates without the manual steps; and
+  that Claude Code loads these skills in a running session (no login in the
+  sandbox), only that they install.
+- scope: (to be set after the decisions)
+- non-goals: fixing the current local install (done under
+  `release-0-2-5-local-install`).
+- acceptance: (to be set after the decisions)
+- verify: (to be set after the decisions)
