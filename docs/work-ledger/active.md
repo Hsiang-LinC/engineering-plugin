@@ -109,7 +109,7 @@ Entry format: `docs/harness/index.md` § Conventions.
 
 ## remote-marketplace-distribution
 - status: in-progress
-- phase: clarify
+- phase: implement
 - owner: interactive
 - source: conversation 2026-09-30 — owner decision that development moves to
   local edit -> push to GitHub -> Codex and Claude Code both update from a
@@ -119,8 +119,10 @@ Entry format: `docs/harness/index.md` § Conventions.
 - branch: claude/remote-marketplace-clarify
 - checkout: /Users/danny/dev/GitHub/engineering-plugin
 - blocked-by: none
-- next: owner decides the three questions under "decisions"; then write
-  scope/acceptance/verify and move to `implement`
+- next: add the two `.claude-plugin` manifests and the Codex marketplace manifest,
+  bump both plugin manifests to 0.3.0, add the drift-guard gate, rewrite the
+  README install/update sections and the index Delivery row, verify in
+  isolated homes, then freeze and dispatch an independent reviewer
 - updated: 2026-09-30
 - resolved:
   1. Name collision — RESOLVED by the owner: keep `engineering` and accept the
@@ -164,23 +166,42 @@ Entry format: `docs/harness/index.md` § Conventions.
        `marketplace.json` (`claude plugin validate`: unrecognized key), though
        it still installs; smda's manifest uses one, so newer versions accept it.
        Use `metadata.description` or omit it.
-- decisions (owner):
-  A. Marketplace name. It becomes part of the installed id
-     (`engineering@<name>`), and the existing `engineering@local` in Codex is a
-     different id, so both would coexist until `codex plugin remove
-     engineering@local`.
-  B. Drift guard. `name` and `version` would live in two `plugin.json` files.
-     Propose a quality-gates row requiring them equal, rather than trusting
-     memory (smda keeps both at 0.3.2 by hand).
-  C. Landing. Nothing is merged or pushed. Order: `claude/bootloader-cc-alignment`
-     -> `claude/release-0-2-5` -> this branch -> `main`; index.md records no
-     standing merge grant, so merge and push need the owner's instruction.
+- decided 2026-09-30 by the owner:
+  A. Marketplace name `engineering-plugin`; installed id
+     `engineering@engineering-plugin`. The old Codex `engineering@local` is a
+     different id and coexists until the owner removes it.
+  B. Drift guard: a `docs/harness/quality-gates.md` row requiring both
+     `plugin.json` files to carry the same `name` and `version`; no script.
+  C. Landing: merge the stacked branches in order and push once, after this
+     item is implemented and accepted. Merge and push still need the owner's
+     instruction at that moment; index.md records no standing merge grant.
 - not-verified: a real GitHub remote (nothing pushed); the `owner/repo`
   shorthand; whether either agent auto-updates without the manual steps; and
   that Claude Code loads these skills in a running session (no login in the
   sandbox), only that they install.
-- scope: (to be set after the decisions)
-- non-goals: fixing the current local install (done under
-  `release-0-2-5-local-install`).
-- acceptance: (to be set after the decisions)
-- verify: (to be set after the decisions)
+- scope: `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` and
+  `.agents/plugins/marketplace.json` (plugin at the repo root, `source: "./"`);
+  both plugin manifests at `0.3.0` (a new distribution surface, so a minor
+  bump); a quality-gates row for the manifest pair; README Installation and
+  update sections rewritten around the remote marketplace, replacing the
+  local-marketplace rsync procedure and adding the migration off
+  `engineering@local`; the `docs/harness/index.md` Delivery row and matching
+  quality-gates wording; a superseded note on the follow-up about the broken
+  local marketplace.
+- non-goals: merging or pushing; renaming the plugin; changing any skill's
+  behavior; Claude Code runtime verification of skills; removing the owner's
+  `engineering@local` install or `~/codex-local-marketplace` (owner's machine,
+  documented as a migration step); any smda change.
+- acceptance: both agents install `engineering@engineering-plugin` at the same
+  version from a snapshot of the committed tree in isolated homes, with all 18
+  skills and no `.git`; `claude plugin validate` passes on the repo root; the
+  two plugin manifests agree on name and version; README states the two-step
+  update for each agent and that a version bump is required; index.md and
+  quality-gates.md name the remote route and no longer route through the local
+  marketplace; an independent reviewer accepts the exact candidate.
+- verify: JSON-parse all five manifests; compare name and version across the
+  pair; `claude plugin validate .`; `git archive` the candidate and install it
+  through each agent's local-path marketplace in isolated `CLAUDE_CONFIG_DIR` /
+  `CODEX_HOME`; grep the repo for stale `engineering@local` and `local`
+  marketplace instructions; `git diff --check`. The real GitHub remote and the
+  running-session skill load stay unverified until after push.
