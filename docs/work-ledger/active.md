@@ -171,8 +171,11 @@ Entry format: `docs/harness/index.md` § Conventions.
 - phase: implement
 - owner: unassigned
 - source: `release-0-3-2` reviewer minors and the Claude Code update-timing
-  measurement, both deferred to keep accepted identities unchanged.
-- base: main @ 167620a
+  measurement, both deferred to keep accepted identities unchanged; plus a
+  read-only refresh-style drift scan of this repo's own harness on 2026-09-30
+  (items 7-9), which found small drift and judged a full refresh not worth its
+  cost.
+- base: main @ ac864dd
 - blocked-by: none
 - next: apply the list below in one wording release
 - updated: 2026-09-30
@@ -189,12 +192,44 @@ Entry format: `docs/harness/index.md` § Conventions.
   long refresh bullet. (6) `docs/harness/index.md` § Artifact Adapters: a pointer
   to quality-gates.md instead of a restated rule and four paths. Both plugin
   manifests bump together.
-- non-goals: changing any mandate or gate outcome; the `.git` carried into
-  Codex's installed copy; measuring the Claude Code refresh threshold.
-- acceptance: no mandate or gate outcome changes, shown by the same
-  mandate-by-mandate comparison the 0.3.2 reviewer used; README states the
-  timing finding without claiming a cause it did not measure; both manifests
-  equal; an independent reviewer accepts the exact candidate.
+  From the drift scan, all in this repo's `docs/harness/index.md`: (7)
+  Conventions lists a fixed set of active-entry fields, but the 2026-09-30
+  ledger work used others. Codify the ones that recur on every item
+  (`candidate`, `not-verified`, `minors-deferred`) and decide for each of the
+  rest (`accepted` in an active entry, `resolved`, `reviewer-could-not-reproduce`,
+  and `finding` in a completed entry) whether to add it or stop using it. (8)
+  Task Routing "Completion" names "Codex built-in review" and
+  `superpowers:requesting-code-review`, but every review this session ran
+  through a general-purpose agent because `superpowers:code-reviewer` became
+  unavailable; see the open decision below. (9) Coexisting Systems: register
+  Claude Code and its bundled Engineering plugin, whose ten skills share the
+  `engineering:` prefix with this plugin.
+- non-goals: changing any mandate or gate outcome of the skill; the `.git`
+  carried into Codex's installed copy; measuring the Claude Code refresh
+  threshold; replacing this repo's `AGENTS.md` block with the current template
+  text (it is a deliberate repo-specific condensation and its substance matches;
+  the template's runtime-worker clauses do not apply here); a full refresh-mode
+  run; any smda change (its bootloader is a bare pointer with no `@AGENTS.md`,
+  so Claude Code never loads its hard rules, and its harness dates from
+  2026-06-17; that refresh belongs in smda's own session under its own tracker
+  and needs the owner to put smda in scope).
+- acceptance: for the skill text, no mandate or gate outcome changes, shown by
+  the same mandate-by-mandate comparison the 0.3.2 reviewer used; README states
+  the timing finding without claiming a cause it did not measure; for items 7-9,
+  `docs/harness/index.md` changes only in Conventions, the Completion route and
+  Coexisting Systems, every field Conventions lists is actually used and every
+  field in use is listed or deliberately retired, and the Completion route
+  describes how reviews are really dispatched; both manifests equal; an
+  independent reviewer accepts the exact candidate.
 - verify: re-read the changed files; `claude plugin validate .`; parse and
   compare the manifest pair; `git archive` snapshot install in both agents;
-  `git diff --check`. Merge and push need the owner's instruction.
+  `git diff --check`; for item 7, grep the active and completed ledgers for each
+  field name in Conventions and for any field in use that it omits. Merge and
+  push need the owner's instruction.
+- open decision (owner), item 8: what the Completion route should say. The
+  author's recommendation: an independent reviewer agent dispatched with the
+  frozen candidate identity (base SHA, file list, patch hash, or a commit SHA),
+  preferring `superpowers:requesting-code-review` when its reviewer agent type is
+  available and otherwise a general-purpose agent given the same brief; keep
+  Codex built-in review as the first choice only where the session is Codex. Not
+  edited until the owner confirms.
