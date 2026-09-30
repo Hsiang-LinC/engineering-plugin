@@ -4,11 +4,22 @@
 Entry format: `docs/harness/index.md` § Conventions.
 
 ## bootloader-guidance-consolidation
-- status: planned
+- status: in-progress
 - phase: implement
-- owner: unassigned
+- owner: interactive
 - source: reviewer Minors 1-9 across both reviews of
   `bootloader-import-templates` 2026-09-30, deferred there by agreement.
+- base: 24b01b5 on `claude/record-0-3-1-delivery`, stacked for LEDGER STATE ONLY:
+  the current ledger lives only there and is unmerged. The candidate's files
+  do not overlap it (its diff against `main` is `docs/work-ledger/` only).
+  Integration order: that branch lands first.
+- branch: claude/release-0-3-2 (shared candidate, see `bundled-with`)
+- bundled-with: owner instruction 2026-09-30 to ship
+  `bootloader-guidance-consolidation` and `readme-update-step-wording` in one
+  release, 0.3.2. The default is one candidate per item; this is a deliberate
+  exception. Each item keeps its own acceptance criteria and the reviewer must
+  decide each one separately, so neither item is accepted merely because the
+  other is.
 - blocked-by: none
 - next: single wording pass over the five rationale sites
 - updated: 2026-09-30
@@ -193,12 +204,22 @@ Entry format: `docs/harness/index.md` § Conventions.
   was not exercised on the real remote.
 
 ## readme-update-step-wording
-- status: planned
+- status: in-progress
 - phase: implement
-- owner: unassigned
+- owner: interactive
 - source: `release-0-3-1-exercise-update` (archived) — the first real-remote
   update test contradicted a README claim.
-- base: main @ 28b4801 (the record branch that adds this item is ledger-only)
+- base: 24b01b5 on `claude/record-0-3-1-delivery`, stacked for LEDGER STATE ONLY:
+  the current ledger lives only there and is unmerged. The candidate's files
+  do not overlap it (its diff against `main` is `docs/work-ledger/` only).
+  Integration order: that branch lands first.
+- branch: claude/release-0-3-2 (shared candidate, see `bundled-with`)
+- bundled-with: owner instruction 2026-09-30 to ship
+  `bootloader-guidance-consolidation` and `readme-update-step-wording` in one
+  release, 0.3.2. The default is one candidate per item; this is a deliberate
+  exception. Each item keeps its own acceptance criteria and the reviewer must
+  decide each one separately, so neither item is accepted merely because the
+  other is.
 - blocked-by: none
 - next: reword README § Update so it no longer says running only the second step
   leaves the old version in place for both agents
