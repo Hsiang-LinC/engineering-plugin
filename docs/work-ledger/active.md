@@ -14,11 +14,8 @@ Entry format: `docs/harness/index.md` § Conventions.
   that chain)
 - branch: claude/remote-marketplace-clarify
 - checkout: /Users/danny/dev/GitHub/engineering-plugin
-- blocked-by: none
 - next: owner runs the README migration off `engineering@local` on each machine
-  and smoke-tests a changed skill in a fresh session of each agent; exercise
-  the two-step update for real with the next release (0.3.1, which can carry the
-  deferred minors)
+  and smoke-tests a changed skill in a fresh session of each agent
 - updated: 2026-09-30
 - not-verified: the `owner/repo` shorthand; auto-update; Claude Code loading these
   skills in a running session; the owner's migration off `engineering@local`; a
@@ -174,7 +171,7 @@ Entry format: `docs/harness/index.md` § Conventions.
   is `docs/work-ledger/` only, so it does not overlap the candidate's files.
   Integration order: that branch lands first.
 - branch: claude/release-0-3-3
-- blocked-by: none
+- checkout: /Users/danny/dev/GitHub/engineering-plugin
 - next: apply scope items 1-10, bump both manifests to 0.3.3, freeze the
   candidate and dispatch a same-provider independent reviewer
 - updated: 2026-09-30
@@ -227,7 +224,8 @@ Entry format: `docs/harness/index.md` § Conventions.
   the same mandate-by-mandate comparison the 0.3.2 reviewer used; README states
   the timing finding without claiming a cause it did not measure; for items 7-9,
   `docs/harness/index.md` changes only in Conventions, the Completion route and
-  Coexisting Systems, every field Conventions lists is actually used and every
+  the review paragraph beside it, Coexisting Systems and Artifact Adapters,
+  every field Conventions lists is actually used and every
   field in use is listed or deliberately retired, and the Completion route
   describes how reviews are really dispatched; both manifests equal; an
   independent reviewer accepts the exact candidate.
@@ -239,6 +237,49 @@ Entry format: `docs/harness/index.md` § Conventions.
   For item 8: re-read the route against the feasibility-run facts in notes; the
   candidate for this item is reviewed by the default route, which no longer
   depends on Codex being available.
+- candidate: committed. Head c24c3416b5ae3c184ff374c0a74e06f6680cd040 on
+  `claude/release-0-3-3`, compared with 0a6ee83; eight files
+  (`.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `README.md`,
+  `docs/harness/index.md`, `docs/work-ledger/active.md`, and under
+  `skills/setup-codex-development-harness/`: `SKILL.md`, `behavioral-checks.md`,
+  `core-templates.md`); patch sha256
+  3f95e3bbab844a3b1657dee10adb182b692bfe9eb13730b1c8bf888e45626049.
+- accepted: independent reviewer, 2026-09-30, a general-purpose agent in a fresh
+  context (same provider, therefore the same model family as the author, per the
+  default route), ACCEPT on exactly that head and patch hash (re-verified by the
+  reviewer). Scope items 1-10 all PASS, item 5 only narrowly as a source-line
+  reflow; no Critical or Important findings. Independently verified: fenced
+  templates byte-identical (10 blocks); AGENTS.md and CLAUDE.md unchanged; no
+  other skill changed; a mandate-by-mandate comparison with the only behavioural
+  delta being item 10, whose outcome equals the shipped one; ledger evidence
+  preserved except the two deliberate merges; the ten bundled skill names match
+  the app's Engineering plugin and overlap none of this repo's 18; both
+  manifests 0.3.3; `claude plugin validate .` passes; a `git archive` snapshot
+  installs at 0.3.3 with 18 skills in both agents. Covers source only.
+- minors-deferred: (1) scope item 5 was done as a line-break reflow, not a
+  structural split into sub-bullets; (4) Swap Mode step 5 says "all setup gates"
+  while the swap policy lives only in the § 6 gate, so a pointer such as "a reach
+  gap is reported, not repaired, per the § 6 policy" would be safer; (6) the new
+  swap behavioral check does not say the user runs Claude Code, although a reach
+  gap exists only for an agent in use; nits: the README phrase "the same real
+  remote" has no clear antecedent after the Codex clause, and "a different model
+  family (Codex)" reads Claude-centric. Not changed, to keep the accepted
+  identity. Minors 2, 3 and 5 were ledger hygiene, fixed in the acceptance
+  record. Scope item 4 needed no edit: Propose already says "reach gap (§ 5)", a
+  pointer to the single definition, and restating it would break one fact, one
+  residence.
+- not-verified: the new swap behavioral check was confirmed to yield the stated
+  outcome by reading, not run against a generated instance; the install of 0.3.3
+  from the real remote until after the push; Claude Code's refresh threshold,
+  between about 16 s and 5 min, stays unmeasured; which plugin wins a same-name
+  skill collision with Claude Code's bundled Engineering plugin is untested; the
+  `.git` carried into Codex's installed copy is unchanged.
+- delivery: not started. Nothing is merged or pushed; GitHub `main` is ac864dd.
+  The stack is linear: `main` -> `claude/followups-scope-update` ->
+  `claude/release-0-3-3`. Owner instruction is required for merge and push.
+  After the push, update the existing 0.3.2 baseline homes (Claude home A and
+  the Codex home) by the two-step route and install 0.3.3 fresh from the real
+  remote in both agents.
 - notes:
   - decided 2026-09-30 by the owner, item 8. This SUPERSEDES an earlier decision
     the same day that made a Codex review the default in a Claude Code session; the
