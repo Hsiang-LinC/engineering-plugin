@@ -204,10 +204,14 @@ Entry format: `docs/harness/index.md` § Conventions.
   unavailable; decided below, to be written into the route. (9) Coexisting Systems: register
   Claude Code and its bundled Engineering plugin, whose ten skills share the
   `engineering:` prefix with this plugin. From the Codex feasibility run
-  (see `codex-feasibility-run`): (10) the swap-mode clause in the § 6 reach gate
-  that shipped in 0.3.2, "Swap mode reports a reach gap, does not repair it, and
-  is not blocked by it"; see the open decision at the end of this item.
-- non-goals: changing any mandate or gate outcome of the skill; the `.git`
+  (see `codex-feasibility-run`): (10) in the § 6 reach gate, state the swap-mode rule
+  as an owner policy and not as wording, with its reason: swap mode changes only
+  the tracker and its ledger files, so it cannot repair a bootloader; a reach gap
+  found during a swap is reported, left unrepaired, and does not block the swap,
+  and refresh repairs it. Add a behavioral-checks scenario for it. The outcome is
+  the one already shipped in 0.3.2; see the decision at the end of this item.
+- non-goals: changing any mandate or gate outcome of the skill, except that
+  item 10 records an owner policy whose outcome shipped in 0.3.2 and is kept; the `.git`
   carried into Codex's installed copy; measuring the Claude Code refresh
   threshold; replacing this repo's `AGENTS.md` block with the current template
   text (it is a deliberate repo-specific condensation and its substance matches;
@@ -216,7 +220,11 @@ Entry format: `docs/harness/index.md` § Conventions.
   so Claude Code never loads its hard rules, and its harness dates from
   2026-06-17; that refresh belongs in smda's own session under its own tracker
   and needs the owner to put smda in scope).
-- acceptance: for the skill text, no mandate or gate outcome changes, shown by
+- acceptance: for item 10, the gate text labels the swap-mode rule as a policy
+  and gives its reason, its outcome equals the one shipped in 0.3.2, a
+  behavioral check covers it, and the reviewer judges it as an owner policy
+  rather than as a wording change; for the rest of the skill text, no mandate
+  or gate outcome changes, shown by
   the same mandate-by-mandate comparison the 0.3.2 reviewer used; README states
   the timing finding without claiming a cause it did not measure; for items 7-9,
   `docs/harness/index.md` changes only in Conventions, the Completion route and
@@ -302,15 +310,15 @@ Entry format: `docs/harness/index.md` § Conventions.
   swap clause and, given the brief's post-freeze measurement, the README; it did
   not flag the "no reach gap" title tension the other reviewer raised. Different
   coverage; the two are complementary.
-- open decision (owner), item 10: the swap-mode clause. Two independent
-  reviewers disagree on whether it DISAMBIGUATES the accepted meaning (the
-  same-family reviewer: yes, citing the earlier rejection for a gate that
-  deadlocked swap mode, recorded in completed.md under `bootloader-import-
-  templates`) or CHANGES a gate outcome against this work's own "no pass/fail
-  change" non-goal (Codex, reading the diff and brief only). The pre-change
-  wording supports both readings, and the clause was written by the author and
-  ratified by a same-family reviewer. Decide whether swap mode may complete with
-  an unrepaired reach gap: keep the clause and say it is a deliberate policy
-  (not wording), or remove it and state swap-mode handling some other way. It is
-  already shipped in 0.3.2.
-\n
+- decided 2026-09-30 by the owner, item 10: KEEP the swap-mode clause and state
+  it as a deliberate policy. Swap mode may complete with an unrepaired reach gap:
+  it reports the gap, does not repair it, and is not blocked by it, because swap
+  mode changes only the tracker and its ledger files and a bootloader is outside
+  that. This settles the disagreement between two independent reviewers by an
+  owner decision rather than by reading the pre-change wording, which supported
+  both readings and stays ambiguous as history. Nothing needs reverting: the
+  text shipped in 0.3.2 already behaves this way. This release only relabels it
+  as policy with its reason and adds the check. A behavioral check to add: a
+  tracker-swap request in a repo whose `CLAUDE.md` is a bare pointer completes,
+  the report lists the reach gap and tells the user to run refresh, and no
+  bootloader is edited.
