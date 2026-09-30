@@ -203,7 +203,10 @@ Entry format: `docs/harness/index.md` § Conventions.
   through a general-purpose agent because `superpowers:code-reviewer` became
   unavailable; decided below, to be written into the route. (9) Coexisting Systems: register
   Claude Code and its bundled Engineering plugin, whose ten skills share the
-  `engineering:` prefix with this plugin.
+  `engineering:` prefix with this plugin. From the Codex feasibility run
+  (see `codex-feasibility-run`): (10) the swap-mode clause in the § 6 reach gate
+  that shipped in 0.3.2, "Swap mode reports a reach gap, does not repair it, and
+  is not blocked by it"; see the open decision at the end of this item.
 - non-goals: changing any mandate or gate outcome of the skill; the `.git`
   carried into Codex's installed copy; measuring the Claude Code refresh
   threshold; replacing this repo's `AGENTS.md` block with the current template
@@ -258,3 +261,54 @@ Entry format: `docs/harness/index.md` § Conventions.
 - verify (item 8 addition): the candidate for this item is reviewed through the
   new route itself where it can run, which doubles as the feasibility test;
   otherwise by the fallback, with the reason recorded.
+
+- codex-feasibility-run 2026-09-30, at the owner's instruction, on the already
+  public 0.3.2 candidate (`35f15fc..8746995`, 15.5 KB review document). Answers
+  to item 8 constraint 2:
+  1. Runs non-interactively and is logged in: `codex login status` reports a
+     ChatGPT login; `codex exec -s read-only -o <file>` ran to completion, model
+     `gpt-5.6-terra` (Codex default, reasoning medium, approval never), about
+     4 min 3 s, 78,262 tokens, a 1.6 KB answer and a 167 KB progress log.
+  2. The `codex-review:code` skill reviews only the WORKING-TREE diff (`git diff`
+     plus `git diff --cached`), not a committed range. A frozen candidate
+     works if the review document carries `git diff <base> <head>` and the
+     prompt tells Codex to read old and new content with `git show`.
+  3. Findings can be tied to the frozen identity: Codex computed the head SHA
+     and the patch sha256 itself and they matched the frozen values.
+  4. It kept to the constraints it was given. Its commands were three
+     `git show`, two `git diff`, one `git rev-parse` and a read of the review
+     document; nothing outside the repo was read and the repo was unchanged.
+  5. A hang that cost ten minutes: `codex exec` given a prompt argument waits on
+     stdin when stdin is open ("Reading additional input from stdin...") and
+     never starts. Always pass `< /dev/null`. The skill does not say so.
+  6. Before stopping a stuck Codex, check whose process it is: the ChatGPT app
+     runs its own long-lived `codex exec-server` processes. Only the process this
+     review started (identified by its command line and parent) may be stopped.
+  7. Side effects: the run persists a session under `~/.codex/sessions/`
+     containing the reviewed diff, and the diff left the machine. The skill's
+     Step 6 auto-fix loop edits code between rounds, which would change the
+     candidate under review; the route must either not use it or re-freeze each
+     round. The skill's default prompt is a generic bug/security/performance
+     checklist; the route needs the harness brief instead.
+  8. The brief must hold only evidence that existed at the freeze, and the same
+     evidence the same-family reviewer gets. In this run the author's brief
+     included a measurement made after the candidate was pushed, so one of
+     Codex's two findings was an artefact of the brief (it re-found follow-up
+     (1)).
+- codex-vs-same-family, one sample, not a general claim: same-family reviewer
+  ACCEPT with four minors; Codex REVISE with two WARNINGs. Codex flagged the
+  swap clause and, given the brief's post-freeze measurement, the README; it did
+  not flag the "no reach gap" title tension the other reviewer raised. Different
+  coverage; the two are complementary.
+- open decision (owner), item 10: the swap-mode clause. Two independent
+  reviewers disagree on whether it DISAMBIGUATES the accepted meaning (the
+  same-family reviewer: yes, citing the earlier rejection for a gate that
+  deadlocked swap mode, recorded in completed.md under `bootloader-import-
+  templates`) or CHANGES a gate outcome against this work's own "no pass/fail
+  change" non-goal (Codex, reading the diff and brief only). The pre-change
+  wording supports both readings, and the clause was written by the author and
+  ratified by a same-family reviewer. Decide whether swap mode may complete with
+  an unrepaired reach gap: keep the clause and say it is a deliberate policy
+  (not wording), or remove it and state swap-mode handling some other way. It is
+  already shipped in 0.3.2.
+\n
