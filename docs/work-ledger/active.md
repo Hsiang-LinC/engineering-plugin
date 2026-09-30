@@ -119,8 +119,10 @@ Entry format: `docs/harness/index.md` § Conventions.
 - branch: claude/remote-marketplace-clarify
 - checkout: /Users/danny/dev/GitHub/engineering-plugin
 - blocked-by: none
-- next: owner instruction to merge the stacked branches into `main` in order and
-  push once; then run the post-push verification and the smoke test below
+- next: owner runs the README migration off `engineering@local` on each machine
+  and smoke-tests a changed skill in a fresh session of each agent; exercise
+  the two-step update for real with the next release (0.3.1, which can carry the
+  deferred minors)
 - updated: 2026-09-30
 - resolved:
   1. Name collision — RESOLVED by the owner: keep `engineering` and accept the
@@ -229,15 +231,22 @@ Entry format: `docs/harness/index.md` § Conventions.
   shallow clone). The author's unique-marker test showed it; the README states
   it as fact and the gate makes always-bump the rule, which is harmless if the
   pinning claim were wrong. Re-check on the real remote.
-- delivery: not started. Nothing is merged or pushed. Plan agreed with the
-  owner: merge `claude/bootloader-cc-alignment`, `claude/release-0-2-5` and this
-  branch into `main` in that order (they are linear on an unmoved `main`, so
-  fast-forward), push once, then verify against the real GitHub remote. Owner
-  instruction is still required for merge and push; index.md records no standing
-  grant.
-- post-push verification (not yet run): in isolated homes add
-  `https://github.com/Hsiang-LinC/engineering-plugin.git` to each agent and
-  install `engineering@engineering-plugin` at 0.3.0; then bump to a test version
-  on a scratch branch or fork to exercise the two-step update for real; on the
-  owner's machines run the README migration off `engineering@local`; smoke-test
-  a changed skill in a fresh session of each agent.
+- delivery: merge and push DONE 2026-09-30 on the owner's instruction. `main`
+  fast-forwarded 3101913 -> 9a740af through `claude/bootloader-cc-alignment`,
+  `claude/release-0-2-5` and `claude/remote-marketplace-clarify` (linear, no
+  merge commits) and pushed once; `git ls-remote` and an unauthenticated HTTPS
+  `ls-remote` both report 9a740af. The three branches still exist locally.
+- post-push verification, RUN against the real remote: in isolated homes
+  (`CLAUDE_CONFIG_DIR`, `CODEX_HOME`), each agent added
+  `https://github.com/Hsiang-LinC/engineering-plugin.git` and installed
+  `engineering@engineering-plugin`; both reported 0.3.0, installed 18 skills and
+  contained the bootloader guidance. No real config was touched.
+- finding: Codex's installed copy includes the whole marketplace clone,
+  including `.git` (404K of 792K, 70 commits, origin URL, not shallow), because
+  the plugin is the repo root. Claude Code's copy has no `.git` (388K). Harmless
+  in function; a nested `plugins/engineering/` layout, as smda uses, would avoid
+  it at the cost of restructuring. Not addressed.
+- still NOT verified: the two-step update against the real remote (needs a new
+  published version); the `owner/repo` shorthand; auto-update; Claude Code
+  loading these skills in a running session; the owner's migration and a
+  fresh-session smoke test in either agent.
