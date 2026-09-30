@@ -92,9 +92,29 @@ Entry format: `docs/harness/index.md` § Conventions.
      the `engineering:` prefix and contains none of these skills. The owner
      reversed the rename (`abandoned.md`), so decide: accept the collision for
      Claude Code, use a different name only in the Claude Code manifest, or
-     revisit the rename. Unverified: whether a marketplace entry name may
-     differ from its `plugin.json` name — 34 of 34 local-source entries in the
-     official marketplace are equal, so do not assume it.
+     revisit the rename. Tested 2026-09-30 on Claude Code 2.1.116 in an
+     isolated `CLAUDE_CONFIG_DIR`: a marketplace entry named `eng-cc` over a
+     `plugin.json` named `engineering` validates, adds and installs as
+     `eng-cc@testmkt`. But the skill prefix comes from the loaded plugin's
+     name, which the loader takes from `plugin.json` (`name:f.name` in the
+     plugin loader), not from the marketplace entry. So renaming only the
+     entry does NOT avoid the `engineering:` prefix. Renaming only for
+     Claude Code needs a separate `.claude-plugin/plugin.json` with a
+     different `name`, next to the unchanged `.codex-plugin/plugin.json`.
+     Basis is a real install plus static reading of the installed binary; no
+     session could run (not logged in), so the prefix itself is unobserved,
+     and later Claude Code versions may differ. Remaining cost: routing in
+     `docs/harness/index.md` would name a different prefix per agent.
+     RESOLVED 2026-09-30 by the owner: keep the name `engineering` and accept
+     the collision with Claude Code's bundled plugin; no rename and no second
+     `.claude-plugin` name. The owner also uninstalls the `skills` app plugin
+     (`skills@inline`, which duplicated `tdd`, `grill-me`, `write-a-skill` and
+     others) and keeps the bundled Engineering plugin. Latent risk to keep in
+     view: the two `engineering` plugins have no overlapping skill names today
+     (bundled: architecture, code-review, debug, deploy-checklist,
+     documentation, incident-response, standup, system-design, tech-debt,
+     testing-strategy), but adding a same-named skill here later would collide
+     silently. Which one wins is untested.
   2. Layout. Claude Code reads `.claude-plugin/plugin.json` and
      `.claude-plugin/marketplace.json`; Codex reads `.codex-plugin/plugin.json`
      and a marketplace manifest. Confirm both can share one repo root, and
