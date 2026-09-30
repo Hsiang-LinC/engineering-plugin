@@ -167,17 +167,22 @@ Entry format: `docs/harness/index.md` § Conventions.
   refreshed on `plugin add` alone, in any test.
 
 ## wording-followups-after-0-3-2
-- status: planned
+- status: in-progress
 - phase: implement
-- owner: unassigned
+- owner: interactive
 - source: `release-0-3-2` reviewer minors and the Claude Code update-timing
   measurement, both deferred to keep accepted identities unchanged; plus a
   read-only refresh-style drift scan of this repo's own harness on 2026-09-30
   (items 7-9), which found small drift and judged a full refresh not worth its
   cost.
-- base: main @ ac864dd
+- base: c5f58af on `claude/followups-scope-update`, stacked for LEDGER STATE ONLY:
+  that branch holds the current ledger and is unmerged; its diff against `main`
+  is `docs/work-ledger/` only, so it does not overlap the candidate's files.
+  Integration order: that branch lands first.
+- branch: claude/release-0-3-3
 - blocked-by: none
-- next: apply the list below in one wording release
+- next: apply scope items 1-10, bump both manifests to 0.3.3, freeze the
+  candidate and dispatch a same-provider independent reviewer
 - updated: 2026-09-30
 - scope: (1) README § Update: replace "did not against a local test remote, and
   the cause is not established" with the measured finding, that Claude Code's
