@@ -229,39 +229,41 @@ Entry format: `docs/harness/index.md` § Conventions.
   `git diff --check`; for item 7, grep the active and completed ledgers for each
   field name in Conventions and for any field in use that it omits. Merge and
   push need the owner's instruction.
-- decided 2026-09-30 by the owner, item 8: a mixed route whose default in a
-  Claude Code session is a Codex review. The author's reading of "mixed plus
-  default to Codex in Claude Code": in a Claude Code session, every change is
-  reviewed by Codex by default (a different model family from the author, which
-  is stronger independence than a second Claude agent); a same-family
-  independent agent is the fallback only when a Codex review cannot run or the
-  owner declines it, using `superpowers:requesting-code-review` when its
+- decided 2026-09-30 by the owner, item 8. This SUPERSEDES an earlier decision
+  the same day that made a Codex review the default in a Claude Code session; the
+  owner reversed it after the feasibility run below. The default reviewer stays
+  an independent agent of the same provider in a fresh context: it has no access
+  to the author's conversation, which is the independence the harness needs. A
+  different model family (Codex) is used only when one is actually required, for
+  review or for implementation, not by default. The independence rule is
+  unchanged: the reviewer is not the author and reviews the exact frozen
+  candidate (commit SHA, or base SHA plus file list plus patch hash), and the
+  acceptance record names the reviewer and its model family.
+- item 8 route text to write (implementation; ships with the next release):
+  (a) Completion: dispatch an independent reviewer agent in a fresh context with
+  the frozen identity, using `superpowers:requesting-code-review` when its
   reviewer agent type is available and otherwise a general-purpose agent given
-  the same brief; in a Codex session the route stays Codex built-in review with
-  the same fallback. The independence rule does not change: the reviewer is not
-  the author and reviews the exact frozen candidate (commit SHA, or base SHA
-  plus file list plus patch hash). The acceptance record must name which
-  reviewer ran and its model family.
-- item 8 constraints, stated so the route does not over-promise:
-  1. A Codex review from Claude Code sends the diff to OpenAI through the Codex
-     CLI, which is an external transfer. The route is this repo's policy and
-     this repo is public; it does not bind other repositories. A private
-     consumer such as smda (its dist repo is described as private) decides for
-     itself in its own harness.
-  2. Feasibility is unverified. The `codex-review:code` skill was listed in the
-     session but never run here. Before the route is written, run it once on
-     this item's own committed candidate and record: whether the CLI is logged
-     in and runs non-interactively; whether it can review a committed range or a
-     frozen patch rather than only a working-tree diff; what it returns; and
-     whether its findings can be tied to the frozen identity. Write the route
-     to match what it actually supports. If it cannot review a frozen candidate,
-     the route must say how the candidate is presented to it.
-  3. If Codex review is unavailable, fails, or is declined, the fallback above
-     applies and the acceptance record says why.
-- verify (item 8 addition): the candidate for this item is reviewed through the
-  new route itself where it can run, which doubles as the feasibility test;
-  otherwise by the fallback, with the reason recorded.
-
+  the same brief; in a Codex session built-in review stays the first choice.
+  (b) Brief hygiene: the brief holds only evidence that existed at the freeze,
+  and every reviewer of one candidate gets the same brief. (c) When a different
+  model family is required, a short recipe: from the repo root
+  `codex exec -s read-only -o <file> "<prompt>" < /dev/null`, where the
+  `< /dev/null` is mandatory; a review document carrying `git diff <base> <head>`
+  plus an instruction to read content with `git show` and not the working tree;
+  have Codex compute and report the head SHA and patch hash; do not use the
+  `codex-review:code` skill's auto-fix loop on a frozen candidate; stop only a
+  process this review started; the diff leaves the machine and a session file is
+  written under `~/.codex/sessions/`; and the route binds this repo only, not
+  private consumers.
+- item 8 placement: the recipe is about eight lines and matters only when Codex
+  is used, so it goes in `docs/harness/index.md` beside the Completion route, not
+  in a skill. `codex-review:code` and `codex-dispatch` are app-managed
+  third-party plugins that an update overwrites, and this repo's own skills never
+  invoke Codex. Every recipe line must trace to a numbered fact in
+  `codex-feasibility-run`.
+- verify (item 8 addition): re-read the route against the feasibility-run facts;
+  the candidate for this item is reviewed by the default route, which no longer
+  depends on Codex being available.
 - codex-feasibility-run 2026-09-30, at the owner's instruction, on the already
   public 0.3.2 candidate (`35f15fc..8746995`, 15.5 KB review document). Answers
   to item 8 constraint 2:
