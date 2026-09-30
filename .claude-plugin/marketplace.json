@@ -1,0 +1,17 @@
+{
+  "name": "engineering-plugin",
+  "owner": {
+    "name": "Danny"
+  },
+  "metadata": {
+    "description": "Engineering workflow skills and a development harness."
+  },
+  "plugins": [
+    {
+      "name": "engineering",
+      "description": "Engineering workflow skills and a development harness.",
+      "source": "./",
+      "category": "developer-tools"
+    }
+  ]
+}

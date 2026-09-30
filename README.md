@@ -61,58 +61,75 @@ The plugin also includes focused utilities for communication, repository setup, 
 
 ## Installation
 
-Add the local marketplace that contains this plugin:
+This repository is a marketplace that both Codex and Claude Code read, published
+from `main` on GitHub. The plugin is named `engineering`; the marketplace is
+`engineering-plugin`, so it installs as `engineering@engineering-plugin`.
+
+Codex:
 
 ```bash
-codex plugin marketplace add /path/to/codex-local-marketplace
+codex plugin marketplace add https://github.com/Hsiang-LinC/engineering-plugin.git
+codex plugin add engineering@engineering-plugin
 ```
 
-### Update the local Engineering plugin
-
-After the desired source changes are integrated, check `codex plugin list` and
-the marketplace manifest, then bump `.codex-plugin/plugin.json` to a version
-newer than both the installed and marketplace versions. Commit it and run the
-following from that commit in this repository. Find the configured `local`
-marketplace root with `codex plugin marketplace list`; set `marketplace_root`
-to that path.
-The `rsync --delete` target is the dedicated `plugins/engineering/` directory,
-not the marketplace root.
+Claude Code:
 
 ```bash
-set -euo pipefail
-marketplace_root="/path/to/codex-local-marketplace"
-stage_dir="$(mktemp -d)"
-git archive HEAD | tar -x -C "$stage_dir"
-python3 - "$marketplace_root" "$stage_dir" <<'PY'
-import json
-from pathlib import Path
-import sys
-
-root, stage = map(Path, sys.argv[1:])
-market = json.loads((root / ".agents/plugins/marketplace.json").read_text())
-assert market["name"] == "local"
-assert any(p["name"] == "engineering" and
-           p["source"] == {"source": "local", "path": "./plugins/engineering"}
-           for p in market["plugins"])
-for plugin in (root / "plugins/engineering", stage):
-    assert json.loads((plugin / ".codex-plugin/plugin.json").read_text())["name"] == "engineering"
-def version(plugin):
-    value = json.loads((plugin / ".codex-plugin/plugin.json").read_text())["version"]
-    return tuple(map(int, value.split(".")))
-assert version(stage) > version(root / "plugins/engineering")
-PY
-rsync -a --delete "$stage_dir/" "$marketplace_root/plugins/engineering/"
-diff -qr "$stage_dir" "$marketplace_root/plugins/engineering"
-codex plugin add engineering@local --json
-codex plugin list
+claude plugin marketplace add https://github.com/Hsiang-LinC/engineering-plugin.git
+claude plugin install engineering@engineering-plugin
 ```
 
-Check that `codex plugin add` reports the new version and installed path.
-Compare the complete staged snapshot with that path using
-`diff -qr "$stage_dir" "/reported/installedPath"`, then exercise a changed
-skill in a fresh Codex session. Keep the prior source revision or release tag:
-if verification fails, restore its contents in a new commit with a still newer
-version, then follow this procedure again. Do not reuse a
-version number for changed plugin contents: Codex installs a versioned cache
-copy. This procedure was rehearsed with an isolated `CODEX_HOME` and temporary
-marketplace; it did not update the active installation.
+Claude Code also ships a bundled Engineering plugin that uses the same
+`engineering:` prefix. The two share no skill names today, but a skill added here
+with the same name as one of its ten (`architecture`, `code-review`, `debug`,
+`deploy-checklist`, `documentation`, `incident-response`, `standup`,
+`system-design`, `tech-debt`, `testing-strategy`) would collide silently, and
+which one wins is untested.
+
+### Update the Engineering plugin
+
+Each agent needs two steps: refresh the marketplace, then update the plugin.
+Running only the second leaves the old version in place.
+
+Codex:
+
+```bash
+codex plugin marketplace upgrade
+codex plugin add engineering@engineering-plugin
+```
+
+Claude Code, then restart the session:
+
+```bash
+claude plugin marketplace update engineering-plugin
+claude plugin update engineering@engineering-plugin
+```
+
+### Release
+
+1. Get the change accepted under the repository harness.
+2. Set `version` to the same new value in both `.codex-plugin/plugin.json` and
+   `.claude-plugin/plugin.json`. Claude Code pins to the version string: changed
+   content under an unchanged version reaches the marketplace clone but not the
+   installed copy. Codex refreshed the installed copy in a test, but do not rely
+   on that.
+3. Commit, merge to `main` and push.
+4. In each agent, run the update steps above, confirm the reported version, and
+   exercise a changed skill in a fresh session.
+
+If a release is bad, revert it in a new commit with a still newer version in both
+manifests, then follow the same steps.
+
+### Migrating from the local marketplace
+
+An earlier setup installed this plugin from a local directory marketplace as
+`engineering@local`. That id is different from `engineering@engineering-plugin`,
+so both would stay installed and every skill would appear twice. Remove the old
+one after the new one works:
+
+```bash
+codex plugin remove engineering@local
+codex plugin marketplace remove local
+```
+
+Delete the old marketplace directory afterwards if it holds nothing else.

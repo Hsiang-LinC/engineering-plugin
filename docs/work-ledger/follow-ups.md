@@ -28,3 +28,9 @@ Worth fixing whenever the local plugin next needs updating. The durable fix is
 a git dist marketplace, as `smda` already uses
 (`git@github.com:Hsiang-LinC/smda-plugin-dist.git`), which removes per-machine
 marketplace maintenance entirely.
+
+Superseded 2026-09-30 by `remote-marketplace-distribution`: the README no
+longer documents the rsync update procedure, so the `--delete` hazard above no
+longer applies to it. The broken local marketplace itself remains on the
+owner's machine until the migration step in README § Migrating from the local
+marketplace is run. Kept for history.

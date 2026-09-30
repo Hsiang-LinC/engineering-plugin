@@ -1,0 +1,9 @@
+{
+  "name": "engineering",
+  "version": "0.3.0",
+  "description": "Engineering workflow skills and a development harness.",
+  "author": {
+    "name": "Danny"
+  },
+  "repository": "https://github.com/Hsiang-LinC/engineering-plugin"
+}

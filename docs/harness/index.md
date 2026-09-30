@@ -32,7 +32,7 @@ document the observed result rather than claiming general enforcement.
 | Bug or regression | failing skill behavior or script, related source | `engineering:diagnose`, then `engineering:tdd` for executable behavior | reproduction and regression check |
 | Approved multi-item plan | approved source and Work Production | `engineering:to-issues` | independently checkable items with dependencies |
 | Completion | `docs/harness/quality-gates.md`, `tracker.md` State Machine | `superpowers:verification-before-completion`, then Codex built-in review on the frozen candidate; if unavailable, `superpowers:requesting-code-review` to dispatch an independent reviewer | verification and independent acceptance for the same candidate |
-| Delivery in scope | Delivery & Recovery below; README installation instructions when relevant | follow the authorized Git or local plugin stage, then verify its result | landed or pushed revision, or installed version and smoke result; failure handoff per tracker |
+| Delivery in scope | Delivery & Recovery below; README installation instructions when relevant | follow the authorized Git or plugin-release stage, then verify its result | landed or pushed revision, or installed version and smoke result; failure handoff per tracker |
 
 ## Work Production
 
@@ -84,7 +84,7 @@ does not grant merge or discard authority.
 
 ## Delivery & Recovery
 
-Source acceptance, Git integration and local plugin installation are separate
+Source acceptance, Git integration and plugin release are separate
 outcomes. This repo has no detected CI workflow or automated plugin release.
 An accepted source item may close with a linked delivery item when integration
 or installation is scheduled separately. When delivery is part of the same
@@ -96,7 +96,7 @@ does not establish that a change was merged or installed.
 |---|---|---|---|---|
 | Commit and push, when requested for the item | Git branch and remote; this item records its base and candidate | execution owner under the user's delivery instruction | committed SHA, pushed ref and remote SHA | preserve candidate and failed command; owner records unblock action in tracker; retain checkout until resolved |
 | Merge, when requested | Git target and required checks must be confirmed for that request | designated integration authority; no standing merge grant recorded | landed target SHA and applicable checks from `quality-gates.md` | keep checkout for failed landed checks or PR feedback; use tracker failure rule |
-| Local Engineering plugin update, when separately authorized | `README.md` § Update the local Engineering plugin | release/install owner named in that work item | new version and source, marketplace and installed content agreement plus a matching skill smoke scenario | preserve the prior source revision; record the failed step and recover with a newer version under the same README procedure |
+| Plugin release through the remote marketplace, when separately authorized | `README.md` § Release and § Update; `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json` | release owner named in that work item; needs merge and push authority for `main`, which is not standing | pushed `main` SHA, then for each agent the marketplace refresh and plugin update reporting the new version, plus a matching skill smoke scenario in a fresh session | preserve the prior release; record the failed step and the last successful stage; recover with a newer version in both plugin manifests under the same README procedure |
 
 Do not infer that every branch push triggers a plugin update. Record successful
 stage identities before retrying a failed later stage. After integration,
