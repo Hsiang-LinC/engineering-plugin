@@ -106,6 +106,24 @@ in the selected spec; place confirmed contracts through Domain Docs. Ask the
 product owner about behavior trade-offs; the agent resolves local technical
 choices. No boundary change means no extra document or phase.
 
+## Interactive Work Item Lifecycle
+
+An independently accepted tracker item needs an identifiable candidate.
+Account for its review state and local changes before switching items. Merge
+and discard remain separate authority decisions under `tracker.md`.
+
+In Git repositories, plan tasks within one item may share a branch; default
+to a separate branch for another item unless an explicit repo integration
+policy says otherwise. A stacked Git base never waives tracker dependencies.
+Reuse an available worktree after accounting for its prior work; create
+another when simultaneous work or an active candidate needs a separate
+checkout. Keep in-use checkouts and those needed for active review or PR
+feedback. After landing, explicit abandonment or a safe blocked-work handoff,
+preserve commits and useful local files, then archive/remove an unused
+worktree through the platform that owns it. Delete a branch only after its
+work is integrated or explicitly discarded; do not force-remove a worktree
+for routine cleanup. Omit these Git mechanics when the project has no Git repo.
+
 ## Work Production
 
 One phase contract serves interactive and runtime execution. The execution

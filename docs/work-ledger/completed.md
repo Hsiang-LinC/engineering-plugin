@@ -3,6 +3,13 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## harness-work-item-lifecycle-guidance
+- done: 2026-09-30
+- summary: added Git-aware work-item candidate, worktree reuse, handoff, and cleanup guidance to the generic harness setup skill and raised Engineering to 0.2.3.
+- verified: manifest parse and lifecycle scenario assertions passed; `git diff --check` passed. The generic validator could not run because PyYAML is unavailable locally and offline dependency resolution has no cached PyYAML.
+- accepted: independent reviewer APPROVE on 2026-09-30 for the 0.2.3 candidate after correcting template placement and the non-Git route; reviewed source hashes recorded in the work session; archive move excluded.
+- follow-ups: none
+
 ## pre-implementation-plan-self-check
 - done: 2026-09-29
 - summary: setup template now requires an agent plan self-check before implementation; added a behavioral scenario for plan gaps and new product decisions.

@@ -35,6 +35,9 @@ orchestrator config or per-skill shadow config.
   A single backlog needs no synthetic roadmap.
 - Keep direction, specs/decisions and work-item state at their respective
   write cadences; do not create a residence for facts the repo does not have.
+- Keep work-item review boundaries and checkout lifecycle in the repo harness;
+  leave worktree commands to the platform/skills and merge authority to the
+  tracker and human decisions. Do not mandate one worktree per issue.
 
 ## Mode Selection
 
@@ -73,6 +76,9 @@ Six detections (large repos: read-only subagents per area):
   Production pipeline; bootloaders (AGENTS.md/CLAUDE.md/GEMINI.md): which
   exist, mirrored, drifted.
 - **History** — `git log` for milestone-level events.
+- **Workspace lifecycle** — inspect existing branch/worktree conventions,
+  pending PRs and in-use checkouts. Identify where independent tracker items
+  share a branch or where completed work leaves unused worktrees behind.
 - **Tracker** — candidates in order: existing `tracker.md`; live GitHub
   issues; Linear/custom-tracker traces (configs, issue-ref formats, prior docs);
   existing `docs/work-ledger/`. Also detect the access path
@@ -163,6 +169,18 @@ separate permissions. With a runtime, reference its checked project acceptance
 artifact from `tracker.md` as the single residence of executable values; without
 one, keep the same policy in `tracker.md`. Never install a scheduler-specific
 workflow engine into the generic harness. Refuse unsupported policy mappings.
+
+For interactive work, propose a minimal lifecycle rule in `index.md`: each
+independently accepted item needs an identifiable candidate. In Git repos,
+plan tasks within one item may share a branch; prefer a branch per item unless
+the repo has an explicit integration policy. Reuse a free worktree after
+accounting for prior work; keep one while a process, active review or PR
+feedback needs it. Omit Git mechanics for projects without a Git repo.
+Before reuse or cleanup, preserve commits and useful local files. Managed
+worktrees use their platform owner for archival/removal. Cleanup follows
+landing, explicit abandonment or a safe blocked-work handoff; it does not
+itself authorize merge, discard or force removal. Existing repo policy wins
+when it preserves these review and data boundaries.
 
 **Wait for approval before writing.**
 
@@ -280,6 +298,9 @@ promote the current implementation into intended product behavior.
    routing, artifact adapters, Domain Docs, or Quality Gates); **tracker
    label drift** (workflow skills present but `tracker.md` lacks their
    category/state roles); **tracker-leak scan**.
+   Check whether interactive work-item boundaries and checkout cleanup guidance
+   are missing or contradict the repo's tracker/skills. Preserve explicit
+   project decisions; propose only the missing rule.
 2. **Present drift summary** with evidence, proposed changes and retained
    project decisions. Existing explicit authorization to refresh covers these
    changes; ask only for unresolved scope or authority decisions.
