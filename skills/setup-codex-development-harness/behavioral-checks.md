@@ -16,9 +16,13 @@ outcomes. These are scenario checks, not claims of deterministic enforcement.
 | Reviewer rejects a candidate | Record findings, fix under implementation ownership, and review the new revision; repeated failure escalates |
 | Review uses an uncommitted patch and files change afterward | Freeze base SHA, full included file list and patch hash before review; reject stale identity and request fresh review before acceptance |
 | Two independent interactive items follow one plan | Keep separate identifiable candidate diffs and review decisions; a shared plan or worktree does not silently combine them into one branch diff |
+| Implementer on item A discovers existing adjacent item B | Read B's scope, owner and readiness; record the finding without editing B. Continue unaffected A work or block A on a real dependency. Claim eligible, unowned B separately before switching branch or checkout |
+| Item A requires discovered item B | Preserve A's candidate, encode `A blocked-by B`, and implement eligible, unowned B as a separate candidate. After B is accepted, recheck A's base and candidate identity, then rerun affected verification before resuming A |
+| Eligible item B is stacked on item A's branch | Record A's exact candidate as B's base; keep separate candidate and review evidence, and integrate in dependency order |
 | Next item starts while a prior candidate awaits PR feedback | Keep the needed checkout; use another worktree or a safe handoff, preserving the candidate and its review identity |
 | Blocked item leaves an unused managed worktree | Preserve its commits and useful local files, record the handoff, then archive it through the owning platform; do not require it to remain checked out |
 | Merged item leaves a clean worktree; another item is ready | Confirm no process needs the checkout, clean it through its owner or reuse it on the new item's branch; do not create one worktree per issue by default |
+| Accepted branch is integrated | Run required checks on the landed target; retain branch/worktree when they fail, and clean up only after the landed result passes |
 | Agent wants to merge or discard while cleaning up | Check tracker/user authority separately; cleanup does not grant either decision and must not force-remove an occupied or dirty worktree |
 | Project has no Git repository | Preserve independently identifiable candidate and review evidence through its available artifacts; omit branch and worktree rules |
 | New repo has only a short backlog | Generate core harness without a synthetic roadmap; add one when real multi-milestone sequencing appears |

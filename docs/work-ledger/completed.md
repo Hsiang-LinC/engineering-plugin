@@ -3,6 +3,13 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## harness-scope-boundaries
+- done: 2026-09-30
+- summary: completed the generated work-item lifecycle from claim through landed verification and cleanup; fenced scope discovered during implementation; clarified Goal-mode and SMDA ownership of one shared project contract; raised Engineering to 0.2.4.
+- verified: a fresh baseline agent applied the existing branch boundary but identified missing scope-crossing clarity; independent scenario review exercised adjacent, blocking, concurrent, sequential, stacked and runtime-owned work; manifest and lifecycle assertions plus `git diff --check` passed.
+- accepted: independent reviewer APPROVE on 2026-09-30 after dependency-resume, stacked-base, tracker-deduplication and SMDA runtime-lifecycle findings were resolved; reviewed the final 0.2.4 candidate.
+- follow-ups: none
+
 ## harness-work-item-lifecycle-guidance
 - done: 2026-09-30
 - summary: added Git-aware work-item candidate, worktree reuse, handoff, and cleanup guidance to the generic harness setup skill and raised Engineering to 0.2.3.

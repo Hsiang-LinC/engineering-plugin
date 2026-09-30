@@ -111,10 +111,22 @@ choices. No boundary change means no extra document or phase.
 An independently accepted tracker item needs an identifiable candidate.
 Account for its review state and local changes before switching items. Merge
 and discard remain separate authority decisions under `tracker.md`.
+A candidate is bounded by its item's approved scope and acceptance criteria.
+Discovering another item permits read-only investigation; it does not
+authorize claiming or modifying that item's scope. Record a real dependency
+on the current item or notify the existing item's owner. Create a follow-up
+only when no tracker item already owns the discovered work.
 
 In Git repositories, plan tasks within one item may share a branch; default
 to a separate branch for another item unless an explicit repo integration
 policy says otherwise. A stacked Git base never waives tracker dependencies.
+Before switching to that branch, confirm the other item is dispatch-eligible
+and unowned, then claim it through `tracker.md` and record its base, candidate
+branch and checkout; otherwise report it to its execution owner and stop at
+the smallest affected boundary. If the current item requires the discovered
+item, preserve its candidate, encode the dependency and block only affected
+work. After the dependency is accepted, recheck the base, candidate identity
+and required verification before resuming.
 Reuse an available worktree after accounting for its prior work; create
 another when simultaneous work or an active candidate needs a separate
 checkout. Keep in-use checkouts and those needed for active review or PR
@@ -122,12 +134,18 @@ feedback. After landing, explicit abandonment or a safe blocked-work handoff,
 preserve commits and useful local files, then archive/remove an unused
 worktree through the platform that owns it. Delete a branch only after its
 work is integrated or explicitly discarded; do not force-remove a worktree
-for routine cleanup. Omit these Git mechanics when the project has no Git repo.
+for routine cleanup. After integration, run the required checks on the landed
+target before cleanup. Omit these Git mechanics when the project has no Git repo.
 
 ## Work Production
 
 One phase contract serves interactive and runtime execution. The execution
 owner advances it; skills supply the method, not a second controller.
+This harness is the common software-development contract. Interactive Goal
+mode carries a work item end to end; SMDA schedules and decomposes roles that
+consume the same contract while its runtime workflow refines the shared phases
+and owns runtime execution state. It does not create a competing project phase
+contract or parallel tracker lifecycle.
 
 | Responsibility | Interactive execution | Runtime execution |
 |---|---|---|

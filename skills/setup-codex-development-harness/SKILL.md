@@ -176,11 +176,25 @@ plan tasks within one item may share a branch; prefer a branch per item unless
 the repo has an explicit integration policy. Reuse a free worktree after
 accounting for prior work; keep one while a process, active review or PR
 feedback needs it. Omit Git mechanics for projects without a Git repo.
+Bind every candidate to one item's approved scope and acceptance criteria.
+Discovering another item permits read-only investigation. Record a dependency
+on the current item or notify the existing owner; create a follow-up only when
+no item exists. Edits wait until that item is eligible, unowned and separately
+claimed, with its base, candidate branch and checkout recorded. Only then may
+the agent switch to it. A required dependency blocks only affected work; after
+it is accepted, refresh the dependent candidate identity and verification.
 Before reuse or cleanup, preserve commits and useful local files. Managed
 worktrees use their platform owner for archival/removal. Cleanup follows
 landing, explicit abandonment or a safe blocked-work handoff; it does not
 itself authorize merge, discard or force removal. Existing repo policy wins
 when it preserves these review and data boundaries.
+Require the landed target to pass its applicable checks before cleanup.
+
+State the execution relationship once in Work Production: the harness is the
+common development contract. Interactive Goal mode owns an item end to end;
+an orchestrator such as SMDA schedules role attempts against the same contract,
+refines shared phases and owns runtime state. It must not define a competing
+project phase contract or parallel tracker lifecycle.
 
 **Wait for approval before writing.**
 
