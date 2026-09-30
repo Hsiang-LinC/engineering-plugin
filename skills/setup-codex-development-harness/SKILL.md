@@ -58,7 +58,7 @@ only applicable risks to design examples and verification (for example, UI
 cancel/undo, retry/idempotency for integrations, dry-run/rollback for scripts).
 Use observed evidence; distinguish unknowns from confirmed requirements.
 
-Six detections (large repos: read-only subagents per area):
+Explore detections (large repos: read-only subagents per area):
 
 - **Structure** — source tree, build/test commands, module and runtime boundaries.
 - **Docs** — classify each doc (spec, PRD, ADR, CONTEXT, dev logs,
@@ -79,6 +79,12 @@ Six detections (large repos: read-only subagents per area):
 - **Workspace lifecycle** — inspect existing branch/worktree conventions,
   pending PRs and in-use checkouts. Identify where independent tracker items
   share a branch or where completed work leaves unused worktrees behind.
+- **Delivery** — inspect Git integration conventions, CI workflows and branch
+  protection, release/deployment jobs, package distribution, local installation
+  instructions, and recent delivery/failure evidence. Record each applicable
+  stage's trigger, executable source, actor/authority, success proof, recovery
+  owner and cleanup condition. A workflow file proves capability, not that
+  every change normally invokes it. Mark missing or conflicting facts unknown.
 - **Tracker** — candidates in order: existing `tracker.md`; live GitHub
   issues; Linear/custom-tracker traces (configs, issue-ref formats, prior docs);
   existing `docs/work-ledger/`. Also detect the access path
@@ -170,6 +176,18 @@ artifact from `tracker.md` as the single residence of executable values; without
 one, keep the same policy in `tracker.md`. Never install a scheduler-specific
 workflow engine into the generic harness. Refuse unsupported policy mappings.
 
+Present the observed delivery path and consequential unknowns during Propose.
+Ask the user when repository evidence cannot establish normal practice,
+authority, target, required post-delivery checks, or recovery ownership. Include
+a recommended default with its evidence and trade-off; group related questions
+and do not turn an absent workflow into an assumed policy. Record confirmed
+answers in the generated harness and leave unresolved stages explicitly
+undetermined. Do not authorize an external side effect from an inference.
+Route executable commands to their existing README, operations/workflow docs,
+or native configuration. Create a new operations document only when real steps
+need a home; architecture docs explain system boundaries, not the runbook.
+Generate only stages the repo actually uses or explicitly chooses.
+
 For interactive work, propose a minimal lifecycle rule in `index.md`: each
 independently accepted item needs an identifiable candidate. In Git repos,
 plan tasks within one item may share a branch; prefer a branch per item unless
@@ -189,6 +207,12 @@ landing, explicit abandonment or a safe blocked-work handoff; it does not
 itself authorize merge, discard or force removal. Existing repo policy wins
 when it preserves these review and data boundaries.
 Require the landed target to pass its applicable checks before cleanup.
+For delivery in scope, distinguish accepted source changes from completed
+integration, release/deployment and local installation. Record stage-specific
+identities and observed outcomes in the work item, or link a separate delivery
+item when delivery has its own acceptance or timing. Preserve successful stages
+on later failure; block the affected delivery work with its recovery owner and
+precise next action. Never repeat a potentially non-idempotent publish blindly.
 
 State the execution relationship once in Work Production: the harness is the
 common development contract. Interactive Goal mode owns an item end to end;
@@ -248,7 +272,12 @@ file presence alone does not verify agent behavior:
       current node names a defined milestone
 - [ ] `docs/harness/quality-gates.md` exists and is routed from `index.md`
 - [ ] `index.md` contains Work Production, Artifact Adapters, Domain Docs,
-      and Quality Gates routing
+      Quality Gates, and applicable Delivery & Recovery routing
+- [ ] delivery routes name observed executable sources, authority, proof,
+      failure handoff and cleanup; unknown practice is marked unresolved, not
+      inferred from a workflow's presence
+- [ ] a source acceptance is not reported as merge, release or install success;
+      delivery in scope has post-delivery evidence or a linked open delivery item
 - [ ] workflow skills detected ⇒ `tracker.md` § Labels carries the
       category/state vocabulary those skills apply, mapped to real tracker
       labels/states
@@ -313,8 +342,11 @@ promote the current implementation into intended product behavior.
    label drift** (workflow skills present but `tracker.md` lacks their
    category/state roles); **tracker-leak scan**.
    Check whether interactive work-item boundaries and checkout cleanup guidance
-   are missing or contradict the repo's tracker/skills. Preserve explicit
-   project decisions; propose only the missing rule.
+   are missing or contradict the repo's tracker/skills. Re-detect Git, CI,
+   release/deployment, installation and recovery sources; compare the recorded
+   delivery route, authority and evidence with current practice. Ask with a
+   suggested default when consequential practice remains unknown. Preserve
+   explicit project decisions; propose only the missing or stale rule.
 2. **Present drift summary** with evidence, proposed changes and retained
    project decisions. Existing explicit authorization to refresh covers these
    changes; ask only for unresolved scope or authority decisions.
@@ -329,7 +361,7 @@ remote availability.
 
 **v2 migration**: markers exist but no `tracker.md`. Extract tracker facts
 from `index.md` § Conventions into a generated `tracker.md` (matching
-preset, else custom); run the six Explore detections first; replace the
+preset, else custom); run the Explore detections first; replace the
 bootloader block with the v3 template; regenerate `index.md` in full — the
 entire file is generated content; the file-level header is its marker
 (tracker-agnostic wording); demote live ledger files if the mode is remote;

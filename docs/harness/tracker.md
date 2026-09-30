@@ -61,13 +61,18 @@ clarification may start earlier.
 List changed files, candidate commit or frozen patch identity, criterion-level
 results, commands/scenarios and outcomes, skips and remaining risks. Record
 the independent acceptance actor, decision, reviewed identity, evidence
-reference, and date. Silence or casual acknowledgment is not acceptance.
+reference, and date. For delivery in scope, record pushed or landed revision,
+CI/run, release or installed identity and post-delivery checks as applicable.
+When later delivery is separately scoped, link its open item. Source acceptance alone is not proof of
+merge or installation. Silence or casual acknowledgment is not acceptance.
 
 ## Failure Handling
 
-On worker or verification failure, record the failing check/output and
-suspected cause, set `status: blocked`, and make `next:` the precise unblock
-action. Never leave a finished worker's item `in-progress`. Anyone may restore
+On worker, verification or delivery failure, record the last successful stage,
+failing command/run and output, suspected cause, and recovery owner; set
+`status: blocked` and make `next:` the precise safe retry or unblock action.
+Do not repeat a potentially non-idempotent publish without checking its result.
+Never leave a finished worker's item `in-progress`. Anyone may restore
 `planned` after recording what changed; scope or authority changes require the
 appropriate human decision and invalidate affected approval/evidence.
 

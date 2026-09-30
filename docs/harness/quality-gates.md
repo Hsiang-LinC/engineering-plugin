@@ -11,10 +11,13 @@ Run the checks relevant to the changed artifact before completion.
 | Executable script | Run the changed script's smallest meaningful test or self-check; record command and output |
 | Manifest or release metadata | Parse `.codex-plugin/plugin.json` and verify referenced paths exist |
 | README or other prose | Check changed links/paths and claims against the repository |
+| Git delivery in scope | Verify the pushed ref; after actual integration, verify the landed target SHA and run applicable landed checks before cleanup |
+| Local plugin installation in scope | Compare source, marketplace and installed version/hash; exercise a matching skill scenario from the installed copy |
 
 No repository-wide build, linter, or test suite was detected at setup. Do not
 claim a check ran merely because it is listed here. For every item, report
 applicable checks, outcomes, skipped checks with reasons, criterion-level
 evidence, and residual risk. A failed required check blocks completion; use
 `docs/harness/tracker.md` § Failure Handling. Review and acceptance are
-separate from passing checks.
+separate from passing checks. A source acceptance does not establish delivery;
+record post-delivery checks when Git integration or installation is in scope.

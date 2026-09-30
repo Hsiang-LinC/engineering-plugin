@@ -23,6 +23,11 @@ outcomes. These are scenario checks, not claims of deterministic enforcement.
 | Blocked item leaves an unused managed worktree | Preserve its commits and useful local files, record the handoff, then archive it through the owning platform; do not require it to remain checked out |
 | Merged item leaves a clean worktree; another item is ready | Confirm no process needs the checkout, clean it through its owner or reuse it on the new item's branch; do not create one worktree per issue by default |
 | Accepted branch is integrated | Run required checks on the landed target; retain branch/worktree when they fail, and clean up only after the landed result passes |
+| Setup sees a release workflow but no evidence that every merge triggers it | Report the observed workflow and unknown routine practice; ask the owner with a recommended default before generating release policy |
+| Source candidate is accepted while merge or CI remains pending | Record source acceptance and the open integration stage or linked delivery item; do not report the change as landed or delivered |
+| CI fails after the merge succeeds | Preserve landed commit and run ID; block the affected delivery work with failure evidence, recovery owner and next action; keep the checkout until landed verification passes |
+| Release publishes successfully but local installation fails | Keep release tag/artifact and successful publish evidence; record installation failure separately, determine safe retry or rollback, and do not rerun publish blindly |
+| Repo has no CI, release or installation process | Generate only applicable integration and local verification routes; do not invent a CI workflow, release gate or `docs/workflow/` directory |
 | Agent wants to merge or discard while cleaning up | Check tracker/user authority separately; cleanup does not grant either decision and must not force-remove an occupied or dirty worktree |
 | Project has no Git repository | Preserve independently identifiable candidate and review evidence through its available artifacts; omit branch and worktree rules |
 | New repo has only a short backlog | Generate core harness without a synthetic roadmap; add one when real multi-milestone sequencing appears |

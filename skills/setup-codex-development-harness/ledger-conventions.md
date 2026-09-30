@@ -17,10 +17,14 @@ tracker per `docs/harness/tracker.md`.
 ```markdown
 ## <kebab-slug>
 - status: planned | in-progress | in-review | blocked
-- phase: clarify | specify | slice | implement | accept (interactive); runtime:<ledger-ref> (runtime-owned)
+- phase: clarify | specify | slice | implement | accept | deliver (interactive, deliver only when in scope); runtime:<ledger-ref> (runtime-owned)
 - owner: unassigned | interactive | runtime:<assignment-ref>
 - parent: <roadmap node slug, if this belongs to a node>
 - source: <spec / plan / conversation ref>
+- base: <Git base revision, when a separate candidate branch is used>
+- branch: <candidate branch, when used>
+- checkout: <checkout/worktree path or identity, when used>
+- delivery: <current stage and last successful identity, when delivery is in scope>
 - next: <single concrete next action>
 - updated: YYYY-MM-DD
 ```
@@ -42,6 +46,7 @@ Format.
 - verified: <test command run / evidence; "backfilled from git history" or
   "backfilled from <tracker> <id>" for backfill entries>
 - accepted: <actor, decision, object/revision, evidence reference and date; unknown for historical backfill>
+- delivery: <applicable landed/run/release/install identities and post-delivery checks, or linked open delivery item>
 - follow-ups: <ref into follow-ups.md (local mode) or the tracker (remote modes), or none>
 ```
 

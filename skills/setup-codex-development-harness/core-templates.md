@@ -92,7 +92,7 @@ and operational risks; applicable design examples and verification routes only}
 | Bug / regression | `quality-gates.md`; {repo-specific docs/tests} | {detected debugging skill, else "reproduce before fixing"} | regression test; tracker update per `tracker.md` |
 | Unfamiliar area | {architecture docs if extended, else key source dirs} | {detected exploration skill, else targeted reading} | index/map update if stable knowledge gained |
 | Architecture decision | Domain Docs | {detected decision skill, else "write an ADR"} | the decision doc; tracker update per `tracker.md` |
-| Completion check | `docs/harness/quality-gates.md` | {detected verification skill, else "run required checks"} | completion evidence per `tracker.md` |
+| Completion check | `docs/harness/quality-gates.md`; Delivery & Recovery when applicable | {detected verification skill, else "run required checks"} | acceptance and applicable delivery evidence per `tracker.md` |
 
 Rows are a starting set — keep only the ones meaningful for this repo, add
 repo-specific ones found during exploration.
@@ -137,6 +137,29 @@ work is integrated or explicitly discarded; do not force-remove a worktree
 for routine cleanup. After integration, run the required checks on the landed
 target before cleanup. Omit these Git mechanics when the project has no Git repo.
 
+## Delivery & Recovery
+
+Source acceptance, integration, release/deployment and local installation are
+distinct outcomes. Apply only the stages this repo uses. A source item may
+close after acceptance when later delivery has a separate linked work item;
+when delivery belongs to the same item's acceptance, keep it open until its
+applicable post-delivery checks pass. Do not infer routine release or merge
+authority from a workflow file. An unresolved authority or required check is a
+question for the decision maker, with a suggested default grounded in evidence.
+
+| Stage / trigger | Executable source | Authority / owner | Success evidence | Failure handoff / cleanup |
+|---|---|---|---|---|
+| {observed Git integration, or omit} | {existing repo instructions / platform} | {who may integrate} | {target, candidate and landed revision; required checks} | {blocked owner and retry condition; checkout/branch rule} |
+| {observed CI or publish/release, or omit} | {workflow/config/runbook} | {who may trigger and approve} | {run ID, result, artifact/tag/target revision} | {logs, recovery owner, safe retry/rollback rule} |
+| {observed deploy or local install/update, or omit} | {existing install/runbook source} | {who may perform it} | {environment, version/hash and smoke result} | {partial-success state, recovery owner and next action} |
+
+Never copy executable steps from their native source into this table. If no
+delivery stage exists, say so in one line rather than keeping placeholder rows.
+After a partial success, preserve completed stage identities and check whether
+retrying an external action is safe before rerunning it. The execution owner
+records proof and handoff in `tracker.md`; runtime-owned work follows its
+runtime's authoritative lifecycle.
+
 ## Work Production
 
 One phase contract serves interactive and runtime execution. The execution
@@ -172,7 +195,14 @@ and evidence deliverable; unknowns do not make exploration impossible.
 | Specify | Product behavior understood → {one installed PRD skill, else scoped written plan} | Reviewed behavior examples or prototype when useful; approved source revision and remaining assumptions distinguished |
 | Slice | Approved scope → {one installed issueization skill, else tracker work-item format} | Verifiable slices, source revision, dependencies, acceptance/verification; triage before readiness |
 | Implement | Tracker eligibility holds; agent checks that the plan covers approved acceptance, affected boundaries and verification before using {one installed implementation/debugging skill, else reproduce/test/change/check} | Changed artifact revision and criterion-level evidence |
-| Accept | Implementation evidence exists → {one installed review/verification skill, else documented review} | Authorized decision per tracker; passing tests alone do not accept work |
+| Accept | Implementation evidence exists → {one installed review/verification skill, else documented review} | Authorized decision on the source candidate per tracker; passing tests alone do not accept work |
+| Deliver (when in scope) | Source accepted; use Delivery & Recovery under its separate authority | Applicable integration, release or installation result and post-delivery checks, or a linked open delivery item |
+
+After Accept, follow Delivery & Recovery for stages within scope. Keep the item
+active with `phase: deliver` while this item owns unfinished delivery; the
+reviewer's source acceptance remains recorded. A separate delivery item may
+own later integration, release or installation; link it so the accepted source
+is not described as already delivered.
 
 Fix plan gaps before implementation. Return new product decisions or scope changes
 to the designated decision maker; a bounded plan within approved scope needs
@@ -257,8 +287,9 @@ The harness owns these outputs; workflow skills only help produce them.
 
 ## Quality Gates
 
-Read `docs/harness/quality-gates.md` before claiming completion. The tracker
-completion evidence must name which required checks ran and what happened.
+Read `docs/harness/quality-gates.md` before claiming acceptance or applicable
+delivery completion. The tracker evidence must name which stage checks ran and
+what happened.
 
 ## Coexisting Systems
 
@@ -332,7 +363,8 @@ node alone.
 <!-- codex-harness: generated {DATE} -->
 # Quality Gates
 
-Required before completion evidence is posted.
+Run applicable checks at their stated stage. Source acceptance, landed-target
+verification, release and installation can require different evidence.
 
 ## Checks
 
@@ -343,6 +375,8 @@ Required before completion evidence is posted.
 | Typecheck | {command or "none detected"} | {typed code changed / always / none} |
 | Tests | {command or "none detected"} | {code changed / touched area} |
 | Build / smoke | {command or "none detected"} | {user-facing or integration change} |
+| Landed target | {command/evidence or "none detected"} | {after integration, before checkout cleanup} |
+| Release / install | {command/evidence or "not applicable"} | {when release, deployment or local installation is in scope} |
 
 ## Evidence Format
 
@@ -354,6 +388,9 @@ Completion evidence must include:
 - checks intentionally skipped, with the reason;
 - remaining risk or "none";
 - follow-up refs or "none".
+- when delivery is in scope: stage, source/candidate/landed identity as
+  applicable, CI run or release/install identity, outcome, and recovery owner
+  for any incomplete stage; link a separate delivery item when used.
 
 Repository quality gates are the shared definition of done; each item’s
 acceptance criteria define its behavior. Acceptance authority is a separate
@@ -361,7 +398,7 @@ tracker decision. Evidence from an older revision must be rechecked for impact.
 
 ## Failure Rule
 
-If a required gate fails, do not claim completion. Follow
+If a required gate fails, do not claim that stage completed. Follow
 `docs/harness/tracker.md` § Failure Handling.
 ```
 
