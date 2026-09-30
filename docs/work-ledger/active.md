@@ -3,99 +3,6 @@
 
 Entry format: `docs/harness/index.md` § Conventions.
 
-## bootloader-guidance-consolidation
-- status: in-progress
-- phase: deliver
-- owner: interactive
-- source: reviewer Minors 1-9 across both reviews of
-  `bootloader-import-templates` 2026-09-30, deferred there by agreement.
-- base: 24b01b5 on `claude/record-0-3-1-delivery`, stacked for LEDGER STATE ONLY:
-  the current ledger lives only there and is unmerged. The candidate's files
-  do not overlap it (its diff against `main` is `docs/work-ledger/` only).
-  Integration order: that branch lands first.
-- branch: claude/release-0-3-2 (shared candidate, see `bundled-with`)
-- bundled-with: owner instruction 2026-09-30 to ship
-  `bootloader-guidance-consolidation` and `readme-update-step-wording` in one
-  release, 0.3.2. The default is one candidate per item; this is a deliberate
-  exception. Each item keeps its own acceptance criteria and the reviewer must
-  decide each one separately, so neither item is accepted merely because the
-  other is.
-- blocked-by: none
-- next: owner instruction to merge and push 0.3.2; then the update test below
-- updated: 2026-09-30
-- scope: `skills/setup-codex-development-harness/` only. (a) The rationale for
-  the inlining pointer now appears five times — `SKILL.md` Explore, Propose,
-  § 5 twice, and `core-templates.md`; keep one residence and let the others
-  point, per the skill's own "one fact, one residence". (b) `SKILL.md` § 5
-  still calls it "the one-line pointer" and `core-templates.md` still heads
-  the plain template "every other detected bootloader" — both state the
-  pre-change rule as universal, and "one-line" is false for the inlining
-  form. (c) "finding" is overloaded in the § 6 gate: gate failure in one
-  sentence, report-only in the next. (d) `behavioral-checks.md` says
-  "unreachable-bootloader finding" while the drift scan says "bootloader
-  reach" — neither greppable from the other. (e) `core-templates.md` asserts
-  the import path resolves repo-root-relative; both files sit at the repo
-  root here, so root- and file-relative are indistinguishable and the general
-  claim is untested — scope it to what was observed. (f) Define the
-  observable for "block body" in the § 6 gate; the evidence used
-  `grep -c "Hard rules"`.
-- non-goals: changing any mandate or gate outcome; this is wording and
-  de-duplication only.
-- acceptance: no generated artifact changes; the rationale has one residence;
-  no section states the plain pointer as the universal rule; the two names
-  for the same finding are unified.
-- verify: re-read the changed files end to end; confirm every mandate and
-  gate still reads the same as the accepted revision.
-- candidate: committed, shared by both items (see `bundled-with`). Head
-  874699513cc72d5c2ccd6ed830ee6ff6c7adb6d1 on `claude/release-0-3-2`, compared
-  with 35f15fc; six files (`.claude-plugin/plugin.json`,
-  `.codex-plugin/plugin.json`, `README.md`, and under
-  `skills/setup-codex-development-harness/`: `SKILL.md`, `core-templates.md`,
-  `behavioral-checks.md`); patch sha256
-  bf8b51b16cd89123b0ef79be7e9a7c3640dcb82840c037d7dfdeb80b6f4ff2e4.
-- accepted: independent reviewer agent, 2026-09-30, on exactly that head and
-  patch hash (re-verified by the reviewer), decided PER ITEM: ACCEPT
-  `bootloader-guidance-consolidation`, ACCEPT `readme-update-step-wording`, and
-  ACCEPT the 0.3.2 candidate as a whole. No Critical or Important findings. The
-  reviewer produced a mandate-by-mandate comparison of the old and new skill
-  text: no obligation lost or added and no gate outcome changed; the fenced
-  templates are byte-identical (sha256 of the extracted fences equal at both
-  commits); AGENTS.md and CLAUDE.md unchanged; `grep -l 'Hard rules'` lists
-  only `AGENTS.md`; every README claim is no stronger than the recorded
-  evidence; both manifests equal at 0.3.2; a snapshot installs at 0.3.2 with 18
-  skills in both agents. Covers source only, not the published result.
-- minors-deferred: (1) Propose's trigger moved from "absent or bare" to the
-  refresh definition "neither residence nor inliner", which marginally widens
-  it to an existing auto-loaded file with no pointer at all (refresh already
-  covered that; harmless unification); (2) core-templates' import-path rule says
-  "as the last rule says", but the last rule is about verifying syntax and only
-  loosely covers path resolution; (3) the § 6 gate is titled "no reach gap" yet
-  says a gap with a recorded reason passes, a wording tension with unchanged
-  outcomes (retitle to "every reach gap has a recorded reason" or "no unwaived
-  reach gap"); (4) a long run-on line in the refresh bullet. Not changed, to
-  keep the accepted identity; fold into the next release.
-- reviewer-judgment: the added clause "Swap mode ... is not blocked by it"
-  DISAMBIGUATES the accepted meaning rather than changing a gate outcome, on
-  the evidence that the earlier rejection of this guidance was for a gate that
-  deadlocked swap mode (see `bootloader-import-templates` in completed.md). The
-  reviewer notes it is now an explicit rule; confirm it if swap ever needs to
-  gate on a reach gap.
-- delivery: not started. Nothing is merged or pushed; GitHub `main` is 28b4801.
-  The stack is linear: `main` -> `claude/record-0-3-1-delivery` ->
-  `claude/release-0-3-2`. Owner instruction is required for merge and push;
-  index.md records no standing grant.
-- update-test-design: the 0.3.1 run left Claude Code's "second step alone"
-  behaviour unexplained (it updated on the real remote about six minutes after
-  install, but did not on a local remote seconds after install). To tell a
-  staleness window from GitHub-specific handling, baselines are installed from
-  the real remote at 0.3.1 BEFORE the push: Claude home A at
-  2026-09-30T17:32:40Z (long gap), a Codex home at the same time, and Claude
-  home B to be installed immediately before pushing (short gap). After the push,
-  run `claude plugin update` alone in A and in B at once and record elapsed
-  times; run Codex's second step alone, then its two steps. Also record
-  whether the marketplace clone's `lastUpdated` moved.
-
-
 ## remote-marketplace-distribution
 - status: in-progress
 - phase: deliver
@@ -251,73 +158,43 @@ Entry format: `docs/harness/index.md` § Conventions.
   `engineering@engineering-plugin` in either agent. Claude Code's version-pin
   claim rests on one local-remote test that the reviewer could not reproduce and
   was not exercised on the real remote.
+- update-timing-found 2026-09-30 (via `release-0-3-2`, archived): against the
+  SAME real remote, Claude Code's `plugin update` alone did not update when the
+  marketplace clone was about 16 s old and did update, refreshing the clone, when
+  it was about 4 min 54 s old. That supports a staleness window and rules out
+  GitHub-specific handling as the explanation of the 0.3.1 contradiction. The
+  threshold lies between those two ages and is not measured. Codex never
+  refreshed on `plugin add` alone, in any test.
 
-## readme-update-step-wording
-- status: in-progress
-- phase: deliver
-- owner: interactive
-- source: `release-0-3-1-exercise-update` (archived) — the first real-remote
-  update test contradicted a README claim.
-- base: 24b01b5 on `claude/record-0-3-1-delivery`, stacked for LEDGER STATE ONLY:
-  the current ledger lives only there and is unmerged. The candidate's files
-  do not overlap it (its diff against `main` is `docs/work-ledger/` only).
-  Integration order: that branch lands first.
-- branch: claude/release-0-3-2 (shared candidate, see `bundled-with`)
-- bundled-with: owner instruction 2026-09-30 to ship
-  `bootloader-guidance-consolidation` and `readme-update-step-wording` in one
-  release, 0.3.2. The default is one candidate per item; this is a deliberate
-  exception. Each item keeps its own acceptance criteria and the reviewer must
-  decide each one separately, so neither item is accepted merely because the
-  other is.
+## wording-followups-after-0-3-2
+- status: planned
+- phase: implement
+- owner: unassigned
+- source: `release-0-3-2` reviewer minors and the Claude Code update-timing
+  measurement, both deferred to keep accepted identities unchanged.
+- base: main @ 167620a
 - blocked-by: none
-- next: owner instruction to merge and push 0.3.2; then the update test below
+- next: apply the list below in one wording release
 - updated: 2026-09-30
-- scope: README § Update the Engineering plugin and § Release step 2, plus a
-  both-manifests version bump, since any change to plugin content bumps the
-  pair. Suggested wording: always run both steps in order; for Codex the second
-  step alone keeps the old version (measured twice); for Claude Code the second
-  step alone updated against the real remote but did not against a local one,
-  so the first step must not be skipped. If `bootloader-guidance-consolidation`
-  is accepted first it can ride in the same release.
-- non-goals: changing what the commands do; explaining the cause, which is
-  unestablished; the `.git` carried into Codex's installed copy.
-- acceptance: README no longer states the Claude Code claim as fact; it still
-  tells the reader to run both steps; both manifests carry the same new version;
-  an independent reviewer accepts the exact candidate.
-- verify: re-read README § Update and § Release against the two measured
-  behaviours recorded in the archived entry; `claude plugin validate .`; parse
-  both plugin manifests and compare the pair; `git diff --check`. Merge and push
-  need the owner's instruction.
-- candidate: committed, shared by both items (see `bundled-with`). Head
-  874699513cc72d5c2ccd6ed830ee6ff6c7adb6d1 on `claude/release-0-3-2`, compared
-  with 35f15fc; six files (`.claude-plugin/plugin.json`,
-  `.codex-plugin/plugin.json`, `README.md`, and under
-  `skills/setup-codex-development-harness/`: `SKILL.md`, `core-templates.md`,
-  `behavioral-checks.md`); patch sha256
-  bf8b51b16cd89123b0ef79be7e9a7c3640dcb82840c037d7dfdeb80b6f4ff2e4.
-- accepted: independent reviewer agent, 2026-09-30, on exactly that head and
-  patch hash (re-verified by the reviewer), decided PER ITEM: ACCEPT
-  `bootloader-guidance-consolidation`, ACCEPT `readme-update-step-wording`, and
-  ACCEPT the 0.3.2 candidate as a whole. No Critical or Important findings. The
-  reviewer produced a mandate-by-mandate comparison of the old and new skill
-  text: no obligation lost or added and no gate outcome changed; the fenced
-  templates are byte-identical (sha256 of the extracted fences equal at both
-  commits); AGENTS.md and CLAUDE.md unchanged; `grep -l 'Hard rules'` lists
-  only `AGENTS.md`; every README claim is no stronger than the recorded
-  evidence; both manifests equal at 0.3.2; a snapshot installs at 0.3.2 with 18
-  skills in both agents. Covers source only, not the published result.
-- minors-deferred: none specific to this item.
-- delivery: not started. Nothing is merged or pushed; GitHub `main` is 28b4801.
-  The stack is linear: `main` -> `claude/record-0-3-1-delivery` ->
-  `claude/release-0-3-2`. Owner instruction is required for merge and push;
-  index.md records no standing grant.
-- update-test-design: the 0.3.1 run left Claude Code's "second step alone"
-  behaviour unexplained (it updated on the real remote about six minutes after
-  install, but did not on a local remote seconds after install). To tell a
-  staleness window from GitHub-specific handling, baselines are installed from
-  the real remote at 0.3.1 BEFORE the push: Claude home A at
-  2026-09-30T17:32:40Z (long gap), a Codex home at the same time, and Claude
-  home B to be installed immediately before pushing (short gap). After the push,
-  run `claude plugin update` alone in A and in B at once and record elapsed
-  times; run Codex's second step alone, then its two steps. Also record
-  whether the marketplace clone's `lastUpdated` moved.
+- scope: (1) README § Update: replace "did not against a local test remote, and
+  the cause is not established" with the measured finding, that Claude Code's
+  `plugin update` alone updated when the marketplace clone was about 4 min 54 s
+  old and did not when it was about 16 s old, against the same remote, with the
+  threshold unmeasured; keep "run both steps in order". (2) The § 6 gate title
+  "no reach gap" versus its waiver sentence: retitle to "every reach gap has a
+  recorded reason" or "no unwaived reach gap". (3) core-templates import-path
+  rule: make "as the last rule says" accurate, by adding path resolution to the
+  verify rule or dropping the back-reference. (4) Propose's trigger wording:
+  note that it now follows the refresh definition of a reach gap. (5) Split the
+  long refresh bullet. (6) `docs/harness/index.md` § Artifact Adapters: a pointer
+  to quality-gates.md instead of a restated rule and four paths. Both plugin
+  manifests bump together.
+- non-goals: changing any mandate or gate outcome; the `.git` carried into
+  Codex's installed copy; measuring the Claude Code refresh threshold.
+- acceptance: no mandate or gate outcome changes, shown by the same
+  mandate-by-mandate comparison the 0.3.2 reviewer used; README states the
+  timing finding without claiming a cause it did not measure; both manifests
+  equal; an independent reviewer accepts the exact candidate.
+- verify: re-read the changed files; `claude plugin validate .`; parse and
+  compare the manifest pair; `git archive` snapshot install in both agents;
+  `git diff --check`. Merge and push need the owner's instruction.
