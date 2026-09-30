@@ -7,6 +7,7 @@ outcomes. These are scenario checks, not claims of deterministic enforcement.
 | Scenario | Expected behavior |
 |---|---|
 | Repo hosts the block in `AGENTS.md`; the user also runs an agent that auto-loads only `CLAUDE.md` | That agent starts a session and already has the hard rules, without being asked to read a file; `AGENTS.md` still holds the only block body, and `CLAUDE.md` holds a pointer plus an inlining import |
+| Tracker swap is requested in a repo whose `CLAUDE.md` is a bare pointer with no import | Swap completes; the report lists the reach gap and tells the user to run refresh; no bootloader is edited (owner policy: swap cannot repair a bootloader and is not blocked by the gap) |
 | Refresh runs after the user adopts a second agent with a different bootloader filename | Report the bootloader reach gap and propose the inlining pointer for the new file; do not copy the block or rewrite the existing residence |
 | App edit/cancel behavior unresolved; next session says continue | Read saved phase/questions; use selected design skill automatically; do not implement undecided behavior |
 | Tests pass; author receives “thanks” | Post evidence; stay in review until explicit authorized acceptance identifies revision |

@@ -20,61 +20,13 @@ Entry format: `docs/harness/index.md` § Conventions.
   the two-step update for real with the next release (0.3.1, which can carry the
   deferred minors)
 - updated: 2026-09-30
-- resolved:
-  1. Name collision — RESOLVED by the owner: keep `engineering` and accept the
-     collision with Claude Code's bundled plugin; the `skills` app plugin is
-     uninstalled. Tested earlier: the skill prefix comes from `plugin.json`'s
-     `name` (`name:f.name` in the 2.1.116 loader), not the marketplace entry, so
-     renaming only an entry would not have avoided it. Latent risk: a future
-     same-named skill here collides silently with the bundled Engineering
-     plugin (bundled: architecture, code-review, debug, deploy-checklist,
-     documentation, incident-response, standup, system-design, tech-debt,
-     testing-strategy); which wins is untested.
-  2. Repository visibility — PUBLIC (`gh repo view`; unauthenticated
-     `git ls-remote https://github.com/Hsiang-LinC/engineering-plugin.git`
-     answers), so no credentials on any host. GitHub `main` is still 3101913:
-     nothing has been pushed.
-  3. Layout — a plugin at the REPO ROOT installs in both agents with no
-     restructuring. Tested with real repo content in isolated homes
-     (`CLAUDE_CONFIG_DIR`, `CODEX_HOME`): Claude Code 2.1.116 with
-     `.claude-plugin/marketplace.json` `source: "./"`, and Codex 0.149.1 with
-     `.agents/plugins/marketplace.json` `path: "./"`, each installed 18 skills
-     and did not copy `.git`. Precedent: the owner's `smda-plugin-dist` already
-     ships two marketplace manifests and two `plugin.json` files (same name and
-     version) beside a shared `skills/`; it nests the plugin in
-     `plugins/<name>/`, which this repo does not need.
-  4. Update mechanics — measured against a local git remote:
-     - Codex: two steps, `codex plugin marketplace upgrade` then
-       `codex plugin add`; without the upgrade the old version stays. A content
-       change with an UNCHANGED version still refreshed the installed copy in
-       0.149.1 (one test), so Codex does not force a bump.
-     - Claude Code: two steps, `claude plugin marketplace update` then
-       `claude plugin update`. It pins to the version string: a same-version
-       content change reached the marketplace clone but NOT the installed copy
-       (unique-marker test). A bump is mandatory for Claude Code.
-     - Accepted source forms: Codex takes `owner/repo`, git URLs (an `http://`
-       URL to a smart-HTTP git server worked) and local paths, and rejected
-       `file://` and `git://`; a local path is treated as a local marketplace,
-       not a git one. Claude Code takes `owner/repo`, `https://…` and local
-       paths, rejected `git://`, and treats an `http(s)://` URL that does not end
-       in `.git` as a direct marketplace.json URL.
-     - Claude Code 2.1.116 rejects a top-level `description` in
-       `marketplace.json` (`claude plugin validate`: unrecognized key), though
-       it still installs; smda's manifest uses one, so newer versions accept it.
-       Use `metadata.description` or omit it.
-- decided 2026-09-30 by the owner:
-  A. Marketplace name `engineering-plugin`; installed id
-     `engineering@engineering-plugin`. The old Codex `engineering@local` is a
-     different id and coexists until the owner removes it.
-  B. Drift guard: a `docs/harness/quality-gates.md` row requiring both
-     `plugin.json` files to carry the same `name` and `version`; no script.
-  C. Landing: merge the stacked branches in order and push once, after this
-     item is implemented and accepted. Merge and push still need the owner's
-     instruction at that moment; index.md records no standing merge grant.
-- not-verified: a real GitHub remote (nothing pushed); the `owner/repo`
-  shorthand; whether either agent auto-updates without the manual steps; and
-  that Claude Code loads these skills in a running session (no login in the
-  sandbox), only that they install.
+- not-verified: the `owner/repo` shorthand; auto-update; Claude Code loading these
+  skills in a running session; the owner's migration off `engineering@local`; a
+  fresh-session smoke test of `engineering@engineering-plugin` in either agent;
+  and Claude Code's version-pin claim, which rests on one local-remote test that
+  the reviewer could not reproduce and was never exercised on the real remote.
+  Verified since the first pass, see notes: the two-step update against the real
+  remote.
 - scope: `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` and
   `.agents/plugins/marketplace.json` (plugin at the repo root, `source: "./"`);
   both plugin manifests at `0.3.0` (a new distribution surface, so a minor
@@ -122,49 +74,91 @@ Entry format: `docs/harness/index.md` § Conventions.
   `.codex-plugin/plugin.json` `interface.longDescription` still says "A local
   Codex plugin" (pre-existing wording). Left out to keep the accepted identity
   unchanged; fix in a follow-up item.
-- reviewer-could-not-reproduce: Claude Code's version pinning. The reviewer's
-  local test was inconclusive (its dumb-HTTP server cannot serve Claude Code's
-  shallow clone). The author's unique-marker test showed it; the README states
-  it as fact and the gate makes always-bump the rule, which is harmless if the
-  pinning claim were wrong. Re-check on the real remote.
 - delivery: merge and push DONE 2026-09-30 on the owner's instruction. `main`
   fast-forwarded 3101913 -> 9a740af through `claude/bootloader-cc-alignment`,
   `claude/release-0-2-5` and `claude/remote-marketplace-clarify` (linear, no
   merge commits) and pushed once; `git ls-remote` and an unauthenticated HTTPS
   `ls-remote` both report 9a740af. The three branches still exist locally.
-- post-push verification, RUN against the real remote: in isolated homes
-  (`CLAUDE_CONFIG_DIR`, `CODEX_HOME`), each agent added
-  `https://github.com/Hsiang-LinC/engineering-plugin.git` and installed
-  `engineering@engineering-plugin`; both reported 0.3.0, installed 18 skills and
-  contained the bootloader guidance. No real config was touched.
-- finding: Codex's installed copy includes the whole marketplace clone,
-  including `.git` (404K of 792K, 70 commits, origin URL, not shallow), because
-  the plugin is the repo root. Claude Code's copy has no `.git` (388K). Harmless
-  in function; a nested `plugins/engineering/` layout, as smda uses, would avoid
-  it at the cost of restructuring. Not addressed.
-- still NOT verified: the two-step update against the real remote (needs a new
-  published version); the `owner/repo` shorthand; auto-update; Claude Code
-  loading these skills in a running session; the owner's migration and a
-  fresh-session smoke test in either agent.
-- update-verified 2026-09-30 (via `release-0-3-1-exercise-update`, now archived):
-  the two-step update was exercised against the real remote from baselines
-  installed before the push. Codex: `marketplace upgrade` then `plugin add`,
-  0.3.0 -> 0.3.1, and `plugin add` alone left 0.3.0. Claude Code: reached 0.3.1,
-  but through `plugin update` alone, contradicting the README; see the archived
-  entry and `readme-update-step-wording`.
-- still NOT verified: the `owner/repo` shorthand; auto-update; Claude Code
-  loading these skills in a running session; the owner's migration off
-  `engineering@local`; a fresh-session smoke test of
-  `engineering@engineering-plugin` in either agent. Claude Code's version-pin
-  claim rests on one local-remote test that the reviewer could not reproduce and
-  was not exercised on the real remote.
-- update-timing-found 2026-09-30 (via `release-0-3-2`, archived): against the
-  SAME real remote, Claude Code's `plugin update` alone did not update when the
-  marketplace clone was about 16 s old and did update, refreshing the clone, when
-  it was about 4 min 54 s old. That supports a staleness window and rules out
-  GitHub-specific handling as the explanation of the 0.3.1 contradiction. The
-  threshold lies between those two ages and is not measured. Codex never
-  refreshed on `plugin add` alone, in any test.
+- notes:
+  - resolved:
+    1. Name collision — RESOLVED by the owner: keep `engineering` and accept the
+       collision with Claude Code's bundled plugin; the `skills` app plugin is
+       uninstalled. Tested earlier: the skill prefix comes from `plugin.json`'s
+       `name` (`name:f.name` in the 2.1.116 loader), not the marketplace entry, so
+       renaming only an entry would not have avoided it. Latent risk: a future
+       same-named skill here collides silently with the bundled Engineering
+       plugin (bundled: architecture, code-review, debug, deploy-checklist,
+       documentation, incident-response, standup, system-design, tech-debt,
+       testing-strategy); which wins is untested.
+    2. Repository visibility — PUBLIC (`gh repo view`; unauthenticated
+       `git ls-remote https://github.com/Hsiang-LinC/engineering-plugin.git`
+       answers), so no credentials on any host. GitHub `main` is still 3101913:
+       nothing has been pushed.
+    3. Layout — a plugin at the REPO ROOT installs in both agents with no
+       restructuring. Tested with real repo content in isolated homes
+       (`CLAUDE_CONFIG_DIR`, `CODEX_HOME`): Claude Code 2.1.116 with
+       `.claude-plugin/marketplace.json` `source: "./"`, and Codex 0.149.1 with
+       `.agents/plugins/marketplace.json` `path: "./"`, each installed 18 skills
+       and did not copy `.git`. Precedent: the owner's `smda-plugin-dist` already
+       ships two marketplace manifests and two `plugin.json` files (same name and
+       version) beside a shared `skills/`; it nests the plugin in
+       `plugins/<name>/`, which this repo does not need.
+    4. Update mechanics — measured against a local git remote:
+       - Codex: two steps, `codex plugin marketplace upgrade` then
+         `codex plugin add`; without the upgrade the old version stays. A content
+         change with an UNCHANGED version still refreshed the installed copy in
+         0.149.1 (one test), so Codex does not force a bump.
+       - Claude Code: two steps, `claude plugin marketplace update` then
+         `claude plugin update`. It pins to the version string: a same-version
+         content change reached the marketplace clone but NOT the installed copy
+         (unique-marker test). A bump is mandatory for Claude Code.
+       - Accepted source forms: Codex takes `owner/repo`, git URLs (an `http://`
+         URL to a smart-HTTP git server worked) and local paths, and rejected
+         `file://` and `git://`; a local path is treated as a local marketplace,
+         not a git one. Claude Code takes `owner/repo`, `https://…` and local
+         paths, rejected `git://`, and treats an `http(s)://` URL that does not end
+         in `.git` as a direct marketplace.json URL.
+       - Claude Code 2.1.116 rejects a top-level `description` in
+         `marketplace.json` (`claude plugin validate`: unrecognized key), though
+         it still installs; smda's manifest uses one, so newer versions accept it.
+         Use `metadata.description` or omit it.
+  - decided 2026-09-30 by the owner:
+    A. Marketplace name `engineering-plugin`; installed id
+       `engineering@engineering-plugin`. The old Codex `engineering@local` is a
+       different id and coexists until the owner removes it.
+    B. Drift guard: a `docs/harness/quality-gates.md` row requiring both
+       `plugin.json` files to carry the same `name` and `version`; no script.
+    C. Landing: merge the stacked branches in order and push once, after this
+       item is implemented and accepted. Merge and push still need the owner's
+       instruction at that moment; index.md records no standing merge grant.
+  - reviewer-could-not-reproduce: Claude Code's version pinning. The reviewer's
+    local test was inconclusive (its dumb-HTTP server cannot serve Claude Code's
+    shallow clone). The author's unique-marker test showed it; the README states
+    it as fact and the gate makes always-bump the rule, which is harmless if the
+    pinning claim were wrong. Re-check on the real remote.
+  - post-push verification, RUN against the real remote: in isolated homes
+    (`CLAUDE_CONFIG_DIR`, `CODEX_HOME`), each agent added
+    `https://github.com/Hsiang-LinC/engineering-plugin.git` and installed
+    `engineering@engineering-plugin`; both reported 0.3.0, installed 18 skills and
+    contained the bootloader guidance. No real config was touched.
+  - finding: Codex's installed copy includes the whole marketplace clone,
+    including `.git` (404K of 792K, 70 commits, origin URL, not shallow), because
+    the plugin is the repo root. Claude Code's copy has no `.git` (388K). Harmless
+    in function; a nested `plugins/engineering/` layout, as smda uses, would avoid
+    it at the cost of restructuring. Not addressed.
+  - update-verified 2026-09-30 (via `release-0-3-1-exercise-update`, now archived):
+    the two-step update was exercised against the real remote from baselines
+    installed before the push. Codex: `marketplace upgrade` then `plugin add`,
+    0.3.0 -> 0.3.1, and `plugin add` alone left 0.3.0. Claude Code: reached 0.3.1,
+    but through `plugin update` alone, contradicting the README; see the archived
+    entry and `readme-update-step-wording`.
+  - update-timing-found 2026-09-30 (via `release-0-3-2`, archived): against the
+    SAME real remote, Claude Code's `plugin update` alone did not update when the
+    marketplace clone was about 16 s old and did update, refreshing the clone, when
+    it was about 4 min 54 s old. That supports a staleness window and rules out
+    GitHub-specific handling as the explanation of the 0.3.1 contradiction. The
+    threshold lies between those two ages and is not measured. Codex never
+    refreshed on `plugin add` alone, in any test.
 
 ## wording-followups-after-0-3-2
 - status: in-progress
@@ -242,88 +236,89 @@ Entry format: `docs/harness/index.md` § Conventions.
   `git diff --check`; for item 7, grep the active and completed ledgers for each
   field name in Conventions and for any field in use that it omits. Merge and
   push need the owner's instruction.
-- decided 2026-09-30 by the owner, item 8. This SUPERSEDES an earlier decision
-  the same day that made a Codex review the default in a Claude Code session; the
-  owner reversed it after the feasibility run below. The default reviewer stays
-  an independent agent of the same provider in a fresh context: it has no access
-  to the author's conversation, which is the independence the harness needs. A
-  different model family (Codex) is used only when one is actually required, for
-  review or for implementation, not by default. The independence rule is
-  unchanged: the reviewer is not the author and reviews the exact frozen
-  candidate (commit SHA, or base SHA plus file list plus patch hash), and the
-  acceptance record names the reviewer and its model family.
-- item 8 route text to write (implementation; ships with the next release):
-  (a) Completion: dispatch an independent reviewer agent in a fresh context with
-  the frozen identity, using `superpowers:requesting-code-review` when its
-  reviewer agent type is available and otherwise a general-purpose agent given
-  the same brief; in a Codex session built-in review stays the first choice.
-  (b) Brief hygiene: the brief holds only evidence that existed at the freeze,
-  and every reviewer of one candidate gets the same brief. (c) When a different
-  model family is required, a short recipe: from the repo root
-  `codex exec -s read-only -o <file> "<prompt>" < /dev/null`, where the
-  `< /dev/null` is mandatory; a review document carrying `git diff <base> <head>`
-  plus an instruction to read content with `git show` and not the working tree;
-  have Codex compute and report the head SHA and patch hash; do not use the
-  `codex-review:code` skill's auto-fix loop on a frozen candidate; stop only a
-  process this review started; the diff leaves the machine and a session file is
-  written under `~/.codex/sessions/`; and the route binds this repo only, not
-  private consumers.
-- item 8 placement: the recipe is about eight lines and matters only when Codex
-  is used, so it goes in `docs/harness/index.md` beside the Completion route, not
-  in a skill. `codex-review:code` and `codex-dispatch` are app-managed
-  third-party plugins that an update overwrites, and this repo's own skills never
-  invoke Codex. Every recipe line must trace to a numbered fact in
-  `codex-feasibility-run`.
-- verify (item 8 addition): re-read the route against the feasibility-run facts;
-  the candidate for this item is reviewed by the default route, which no longer
+  For item 8: re-read the route against the feasibility-run facts in notes; the
+  candidate for this item is reviewed by the default route, which no longer
   depends on Codex being available.
-- codex-feasibility-run 2026-09-30, at the owner's instruction, on the already
-  public 0.3.2 candidate (`35f15fc..8746995`, 15.5 KB review document). Answers
-  to item 8 constraint 2:
-  1. Runs non-interactively and is logged in: `codex login status` reports a
-     ChatGPT login; `codex exec -s read-only -o <file>` ran to completion, model
-     `gpt-5.6-terra` (Codex default, reasoning medium, approval never), about
-     4 min 3 s, 78,262 tokens, a 1.6 KB answer and a 167 KB progress log.
-  2. The `codex-review:code` skill reviews only the WORKING-TREE diff (`git diff`
-     plus `git diff --cached`), not a committed range. A frozen candidate
-     works if the review document carries `git diff <base> <head>` and the
-     prompt tells Codex to read old and new content with `git show`.
-  3. Findings can be tied to the frozen identity: Codex computed the head SHA
-     and the patch sha256 itself and they matched the frozen values.
-  4. It kept to the constraints it was given. Its commands were three
-     `git show`, two `git diff`, one `git rev-parse` and a read of the review
-     document; nothing outside the repo was read and the repo was unchanged.
-  5. A hang that cost ten minutes: `codex exec` given a prompt argument waits on
-     stdin when stdin is open ("Reading additional input from stdin...") and
-     never starts. Always pass `< /dev/null`. The skill does not say so.
-  6. Before stopping a stuck Codex, check whose process it is: the ChatGPT app
-     runs its own long-lived `codex exec-server` processes. Only the process this
-     review started (identified by its command line and parent) may be stopped.
-  7. Side effects: the run persists a session under `~/.codex/sessions/`
-     containing the reviewed diff, and the diff left the machine. The skill's
-     Step 6 auto-fix loop edits code between rounds, which would change the
-     candidate under review; the route must either not use it or re-freeze each
-     round. The skill's default prompt is a generic bug/security/performance
-     checklist; the route needs the harness brief instead.
-  8. The brief must hold only evidence that existed at the freeze, and the same
-     evidence the same-family reviewer gets. In this run the author's brief
-     included a measurement made after the candidate was pushed, so one of
-     Codex's two findings was an artefact of the brief (it re-found follow-up
-     (1)).
-- codex-vs-same-family, one sample, not a general claim: same-family reviewer
-  ACCEPT with four minors; Codex REVISE with two WARNINGs. Codex flagged the
-  swap clause and, given the brief's post-freeze measurement, the README; it did
-  not flag the "no reach gap" title tension the other reviewer raised. Different
-  coverage; the two are complementary.
-- decided 2026-09-30 by the owner, item 10: KEEP the swap-mode clause and state
-  it as a deliberate policy. Swap mode may complete with an unrepaired reach gap:
-  it reports the gap, does not repair it, and is not blocked by it, because swap
-  mode changes only the tracker and its ledger files and a bootloader is outside
-  that. This settles the disagreement between two independent reviewers by an
-  owner decision rather than by reading the pre-change wording, which supported
-  both readings and stays ambiguous as history. Nothing needs reverting: the
-  text shipped in 0.3.2 already behaves this way. This release only relabels it
-  as policy with its reason and adds the check. A behavioral check to add: a
-  tracker-swap request in a repo whose `CLAUDE.md` is a bare pointer completes,
-  the report lists the reach gap and tells the user to run refresh, and no
-  bootloader is edited.
+- notes:
+  - decided 2026-09-30 by the owner, item 8. This SUPERSEDES an earlier decision
+    the same day that made a Codex review the default in a Claude Code session; the
+    owner reversed it after the feasibility run below. The default reviewer stays
+    an independent agent of the same provider in a fresh context: it has no access
+    to the author's conversation, which is the independence the harness needs. A
+    different model family (Codex) is used only when one is actually required, for
+    review or for implementation, not by default. The independence rule is
+    unchanged: the reviewer is not the author and reviews the exact frozen
+    candidate (commit SHA, or base SHA plus file list plus patch hash), and the
+    acceptance record names the reviewer and its model family.
+  - item 8 route text to write (implementation; ships with the next release):
+    (a) Completion: dispatch an independent reviewer agent in a fresh context with
+    the frozen identity, using `superpowers:requesting-code-review` when its
+    reviewer agent type is available and otherwise a general-purpose agent given
+    the same brief; in a Codex session built-in review stays the first choice.
+    (b) Brief hygiene: the brief holds only evidence that existed at the freeze,
+    and every reviewer of one candidate gets the same brief. (c) When a different
+    model family is required, a short recipe: from the repo root
+    `codex exec -s read-only -o <file> "<prompt>" < /dev/null`, where the
+    `< /dev/null` is mandatory; a review document carrying `git diff <base> <head>`
+    plus an instruction to read content with `git show` and not the working tree;
+    have Codex compute and report the head SHA and patch hash; do not use the
+    `codex-review:code` skill's auto-fix loop on a frozen candidate; stop only a
+    process this review started; the diff leaves the machine and a session file is
+    written under `~/.codex/sessions/`; and the route binds this repo only, not
+    private consumers.
+  - item 8 placement: the recipe is about eight lines and matters only when Codex
+    is used, so it goes in `docs/harness/index.md` beside the Completion route, not
+    in a skill. `codex-review:code` and `codex-dispatch` are app-managed
+    third-party plugins that an update overwrites, and this repo's own skills never
+    invoke Codex. Every recipe line must trace to a numbered fact in
+    `codex-feasibility-run`.
+  - codex-feasibility-run 2026-09-30, at the owner's instruction, on the already
+    public 0.3.2 candidate (`35f15fc..8746995`, 15.5 KB review document). Answers
+    to item 8 constraint 2:
+    1. Runs non-interactively and is logged in: `codex login status` reports a
+       ChatGPT login; `codex exec -s read-only -o <file>` ran to completion, model
+       `gpt-5.6-terra` (Codex default, reasoning medium, approval never), about
+       4 min 3 s, 78,262 tokens, a 1.6 KB answer and a 167 KB progress log.
+    2. The `codex-review:code` skill reviews only the WORKING-TREE diff (`git diff`
+       plus `git diff --cached`), not a committed range. A frozen candidate
+       works if the review document carries `git diff <base> <head>` and the
+       prompt tells Codex to read old and new content with `git show`.
+    3. Findings can be tied to the frozen identity: Codex computed the head SHA
+       and the patch sha256 itself and they matched the frozen values.
+    4. It kept to the constraints it was given. Its commands were three
+       `git show`, two `git diff`, one `git rev-parse` and a read of the review
+       document; nothing outside the repo was read and the repo was unchanged.
+    5. A hang that cost ten minutes: `codex exec` given a prompt argument waits on
+       stdin when stdin is open ("Reading additional input from stdin...") and
+       never starts. Always pass `< /dev/null`. The skill does not say so.
+    6. Before stopping a stuck Codex, check whose process it is: the ChatGPT app
+       runs its own long-lived `codex exec-server` processes. Only the process this
+       review started (identified by its command line and parent) may be stopped.
+    7. Side effects: the run persists a session under `~/.codex/sessions/`
+       containing the reviewed diff, and the diff left the machine. The skill's
+       Step 6 auto-fix loop edits code between rounds, which would change the
+       candidate under review; the route must either not use it or re-freeze each
+       round. The skill's default prompt is a generic bug/security/performance
+       checklist; the route needs the harness brief instead.
+    8. The brief must hold only evidence that existed at the freeze, and the same
+       evidence the same-family reviewer gets. In this run the author's brief
+       included a measurement made after the candidate was pushed, so one of
+       Codex's two findings was an artefact of the brief (it re-found follow-up
+       (1)).
+  - codex-vs-same-family, one sample, not a general claim: same-family reviewer
+    ACCEPT with four minors; Codex REVISE with two WARNINGs. Codex flagged the
+    swap clause and, given the brief's post-freeze measurement, the README; it did
+    not flag the "no reach gap" title tension the other reviewer raised. Different
+    coverage; the two are complementary.
+  - decided 2026-09-30 by the owner, item 10: KEEP the swap-mode clause and state
+    it as a deliberate policy. Swap mode may complete with an unrepaired reach gap:
+    it reports the gap, does not repair it, and is not blocked by it, because swap
+    mode changes only the tracker and its ledger files and a bootloader is outside
+    that. This settles the disagreement between two independent reviewers by an
+    owner decision rather than by reading the pre-change wording, which supported
+    both readings and stays ambiguous as history. Nothing needs reverting: the
+    text shipped in 0.3.2 already behaves this way. This release only relabels it
+    as policy with its reason and adds the check. A behavioral check to add: a
+    tracker-swap request in a repo whose `CLAUDE.md` is a bare pointer completes,
+    the report lists the reach gap and tells the user to run refresh, and no
+    bootloader is edited.

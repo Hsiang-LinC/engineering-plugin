@@ -286,12 +286,14 @@ file presence alone does not verify agent behavior:
       (`grep -l 'Hard rules'` over the bootloaders lists one); the others
       contain pointers only. An inlining import line counts as a pointer; a
       second copy of the body does not, whatever comment markers surround it
-- [ ] no reach gap (§ 5): every bootloader an agent in use auto-loads is the
-      residence or inlines it. A reach gap passes only with a recorded reason —
-      the agent cannot inline, or its syntax is unverified here, so the plain
-      pointer stands and the report records it. A reach gap with no recorded
-      reason fails. Swap mode reports a reach gap, does not repair it, and is
-      not blocked by it
+- [ ] every reach gap has a recorded reason (§ 5): every bootloader an agent in
+      use auto-loads is the residence or inlines it, or the gap is recorded. A
+      reach gap passes only with a recorded reason — the agent cannot inline, or
+      its syntax is unverified here, so the plain pointer stands and the report
+      records it. A reach gap with no recorded reason fails.
+      Policy (owner decision): swap mode changes only the tracker and its ledger
+      files, so it cannot repair a bootloader. A reach gap found during a swap is
+      reported, left unrepaired, and does not block the swap; refresh repairs it
 - [ ] routing skill names resolve in this environment, or are generic fallbacks
 - [ ] harness docs committed (harness paths only — never sweep unrelated dirty files)
 - [ ] tracker-leak: in instruction files (bootloader, `index.md`, split
@@ -365,10 +367,12 @@ promote the current implementation into intended product behavior.
 
 1. **Drift scan** — module-map vs tree; active items vs git log (finished
    but still listed?); changed factual claims; bootloader pointer
-   liveness; **bootloader reach** (re-detect which filenames each agent in use
+   liveness;
+   **bootloader reach** (re-detect which filenames each agent in use
    auto-loads; any reach gap (§ 5) is drift — propose the inlining pointer.
    That includes a newly adopted agent whose bootloader filename differs, or
-   whose bootloader is missing); **archive backfill gap** (local authoritative archives only);
+   whose bootloader is missing);
+   **archive backfill gap** (local authoritative archives only);
    **orchestrator consistency**
    (state/label names and the transitions the orchestrator performs in
    detected orchestrator config match `tracker.md` — mismatch: warn only);

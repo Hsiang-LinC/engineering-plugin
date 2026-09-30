@@ -90,8 +90,10 @@ which one wins is untested.
 
 Run both steps, in order, for each agent. Do not rely on skipping the first:
 with Codex, running only the second step keeps the old version (measured twice);
-with Claude Code, the second step alone updated against the real GitHub remote
-but did not against a local test remote, and the cause is not established.
+with Claude Code, against the same real remote, the second step alone updated
+when the marketplace clone was about five minutes old (refreshing the clone as a
+side effect) and did not when it was about sixteen seconds old; the threshold
+between them was not measured.
 
 Codex:
 

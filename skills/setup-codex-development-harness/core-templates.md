@@ -69,14 +69,15 @@ Rules:
 - The import path is the residence file as the importing bootloader resolves
   it. Observed only for a bootloader at the repo root, where repo-root- and
   file-relative resolution coincide; for a nested bootloader, verify which
-  applies, as the last rule says, before writing it.
+  applies (last rule) before writing it.
 - This stays a pointer, never a copy: the block body still exists in exactly
   one file, so there is nothing to drift.
 - Use the plain pointer above when the residence *is* that agent's auto-loaded
   file, when the agent already auto-loads the residence, or when its inlining
   syntax is unverified in the current environment. Do not guess a syntax.
-- Verify the syntax against the installed agent rather than from memory; record
-  what was verified in the setup report.
+- Verify the syntax, and for a nested bootloader the path resolution, against
+  the installed agent rather than from memory; record what was verified in the
+  setup report.
 
 ## `docs/harness/tracker.md`
 
