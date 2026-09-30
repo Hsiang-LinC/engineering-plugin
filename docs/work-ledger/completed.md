@@ -3,6 +3,15 @@
 
 Archive — newest first. Entry format: `docs/harness/index.md` § Conventions.
 
+## release-0-3-1-exercise-update
+- done: 2026-09-30
+- summary: released 0.3.1 — both plugin manifests at 0.3.1 and equal, the harness index lists the full distribution manifest surface, and the Codex long description no longer says "local" — and used it as the first real-remote update exercise.
+- verified: four manifests parse and the pair is equal; `claude plugin validate .` passes; a `git archive` snapshot installs at 0.3.1 with 18 skills in both agents in isolated homes; no other file states the version; `git diff --check` clean. Post-publish, against baselines installed from the real remote at 0.3.0 BEFORE the push: Codex `marketplace upgrade` then `plugin add` moved 0.3.0 -> 0.3.1 (the 0.3.0 cache was replaced; installed manifest, new description and index line present); running only `plugin add` first left it at 0.3.0. Claude Code reached 0.3.1 after `plugin update` alone; afterwards `marketplace update` and `plugin update` reported already at 0.3.1.
+- accepted: independent reviewer agent, ACCEPT, head 833efa263d3154aa004f45ac87884dc7480f40f4, patch sha256 6dd4529335b052d169d9111c34696652795daf048aeb9dc2f0739a0769c68893 (re-verified by the reviewer), no Critical or Important findings, 2026-09-30.
+- delivery: merged and pushed on the owner's instruction: `main` fast-forwarded 9a740af -> 28b4801 through `claude/record-remote-delivery` and `claude/release-0-3-1`; `git ls-remote` over SSH and unauthenticated HTTPS both report 28b4801. The 0.3.0 baselines and the update runs were in isolated homes; no real config was touched.
+- contradiction found: the README (and this item's acceptance text) said running only the second step leaves the old version in place. That held for Codex in both tests. It did NOT hold for Claude Code against the real remote: `plugin update` alone updated, and the marketplace clone's `lastUpdated` moved within 0.1 s of the plugin's, so `plugin update` refreshed the marketplace itself. An earlier local-remote test, seconds after install, did not refresh. The cause is not established (a staleness window and GitHub-versus-generic-URL handling are both plausible); do not rely on either behaviour.
+- follow-ups: readme-update-step-wording (correct the overstated claim); deferred nit: the index manifest list restates a rule that lives in quality-gates.md
+
 ## release-0-2-5-local-install
 - done: 2026-09-30
 - summary: repaired the stale local Codex install — the marketplace entry was a dangling symlink to a path that no longer existed and the installed plugin was 0.1.1 — by bumping the manifest to 0.2.5, replacing the symlink with a seeded real directory and installing `engineering@local`. Superseded as the install route by `remote-marketplace-distribution`.
